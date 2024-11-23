@@ -20,10 +20,14 @@ Cyclistic Executive Team: This group of senior executives will be reviewing the 
 
 Cyclistic Finance Team: The finance team will assess the potential revenue and profitability impacts of converting casual riders to annual members. While they aren’t directly involved in the analysis, their insights may help shape the financial viability of any marketing recommendations.
 
+or
 
 Lily Moreno (Director of Marketing): Oversees the marketing strategy and aims to increase annual memberships by converting casual riders.
+
 Cyclistic Marketing Analytics Team: Responsible for analyzing the data and providing insights to guide the marketing strategy.
+
 Cyclistic Executive Team: Reviews the analysis and makes decisions on whether to approve marketing recommendations.
+
 Cyclistic Finance Team: Assesses the financial implications of converting casual riders to annual members.
 
 
