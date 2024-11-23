@@ -76,3 +76,37 @@ The dataset does not include information on the payment type or pricing plan (e.
 
 Summary:
 These limitations are important to consider when interpreting the findings. While the dataset provides valuable insights into trip behaviors, the absence of certain contextual and demographic information, the anonymization of user data, and other data quality concerns may limit the depth of analysis we can perform in certain areas. Despite these constraints, the analysis still provides valuable insights into the general trends in how casual riders and annual members use Cyclistic bikes.
+
+
+
+
+
+or
+
+
+Data Limitations and Constraints
+Data Privacy and Anonymization
+The dataset has been anonymized to protect personally identifiable information (PII), meaning that rider-specific data is not available. This limits the ability to track individual rider behavior across trips, restricting analysis to general patterns rather than individual-level insights.
+Lack of Demographic Information
+The dataset does not include demographic data (e.g., age, gender, or income). Without this information, we are unable to analyze how different demographic segments use Cyclistic bikes or to tailor marketing strategies based on specific rider characteristics.
+Null Station Names and IDs
+The dataset contains null values in station names and station IDs, likely due to dockless rides, where bikes are picked up and dropped off at locations not tied to fixed stations. While this reflects the flexibility of the system, it limits station-level analysis, such as identifying popular stations or routes.
+Handling Duplicate or Inconsistent Station Names
+A number of station IDs were found to have multiple station names associated with them, likely due to multiple locations sharing the same station ID. For example, Station ID 514 was associated with two different locations: "Ridge Blvd & Howard St" and "Public Rack - Hamlin Ave & Grand Ave". These locations are geographically distinct, but share the same station ID. In these cases, both station names were kept in the dataset, along with their valid latitude and longitude coordinates, to preserve the integrity of the data. This ensures that each unique station location is considered correctly in the analysis of popular locations and ride patterns.
+Missing End Latitude and Longitude
+Around 0.1% of the trips in the dataset have missing end_lat or end_lng values. These trips also have null values for end_station_name and end_station_id. While this is a small fraction of the data, it does represent rides where the destination location is not available. These missing values were filtered out during data cleaning to ensure that only trips with complete geographic information were included in the analysis, preserving the integrity of spatial analyses.
+Filtering Invalid Coordinates
+To ensure the accuracy of the geographic data, trips with invalid latitude and longitude coordinates outside of Chicago and surrounding areas were filtered out. This step removed erroneous data points and ensured that only trips within the relevant geographic boundaries were included in the analysis.
+Distance Filtering
+Using the ST_Distance() function, trips with a distance less than 10 meters were filtered out. These trips likely represent data entry errors or unrealistic movements (e.g., bikes being moved without actually being ridden). This step ensured that only valid, meaningful trips were included in the dataset.
+No Context on Rider Motivation
+The dataset does not include any information about why riders use Cyclistic bikes (e.g., commuting, exercise, leisure). This lack of rider motivation data makes it difficult to assess how motivations may influence a rider's decision to purchase an annual membership.
+Geographic and Temporal Limitations
+The dataset contains 12 months of trip data from Cyclistic’s service area in Chicago. As a result, the analysis is limited to trends and patterns within this geographic and time frame and may not fully capture seasonal or long-term variations, or data from outside the service area.
+Consistent Data in Key Fields
+There are no missing values in started_at, ended_at, start_lat, or start_lng, ensuring that key data required for trip duration and spatial analysis is complete and reliable.
+Why This Works:
+Clarifies Handling of Multiple Station Names: You're explaining that you've kept both station names for stations with multiple locations, preserving the data integrity for popular locations or route analysis.
+Transparency in Station Handling: It’s clear to your readers that you’ve carefully considered the implications of the multiple station names per ID and that you’ve kept the locations in their original form, based on geographic coordinates.
+Reflects Geographic Focus: You're reinforcing that since your analysis is focused on locations and coordinates, the potential ambiguity in station names doesn't significantly impact the findings for station popularity or location-based analysis.
+
