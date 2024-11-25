@@ -4,9 +4,10 @@ Date created: 22 November 2024
 
 ## Company Background
 Cyclistic is a bike-share program in Chicago, launched in 2016 with a mission to provide a sustainable, accessible, and flexible transportation option for the city’s residents and visitors. The company operates a fleet of over 5,800 bikes across 692 docking stations, offering a variety of bikes including traditional bikes, reclining bikes, hand tricycles, and cargo bikes. These options make the program inclusive, catering to people with disabilities and riders who need a non-traditional bike.
+
 Cyclistic’s growth has been driven by its flexible pricing plans, including single-ride passes, full-day passes, and annual memberships. The company’s marketing efforts have focused on building broad awareness and attracting casual riders. However, Cyclistic’s financial analysts have identified that annual members are significantly more profitable than casual riders, making it a priority for the company to find ways to convert casual riders into members for sustainable growth.
 
-## Project Overview
+## Business Task Statement
 This analysis aims to identify how annual members and casual riders use Cyclistic bikes differently, focusing on trip frequency, duration, bike type preferences, and the most popular routes and stations. The insights will help the marketing team develop targeted strategies to convert casual riders into annual members, driving revenue and improving customer retention.
 
 ## Key Stakeholders
