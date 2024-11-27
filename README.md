@@ -3,12 +3,12 @@ Author: Siow Hui Hui
 Date created: 22 November 2024
 
 ## Company Background
-Cyclistic is a bike-share program in Chicago, launched in 2016 with a mission to provide a sustainable, accessible, and flexible transportation option for the city’s residents and visitors. The company operates a fleet of over 5,800 bikes across 692 docking stations, offering a variety of bikes including traditional bikes, reclining bikes, hand tricycles, and cargo bikes. These options make the program inclusive, catering to people with disabilities and riders who need a non-traditional bike.
+Cyclistic is a bike-share program in Chicago, offering a fleet of over 5,800 bikes across 692 stations. Since its launch in 2016, Cyclistic has grown rapidly, providing a range of bike options, including traditional bikes, reclining bikes, hand tricycles, and cargo bikes, to meet the diverse needs of its riders. Approximately 30% of Cyclistic’s users commute to work, while others use the bikes for leisure.
 
-Cyclistic’s growth has been driven by its flexible pricing plans, including single-ride passes, full-day passes, and annual memberships. The company’s marketing efforts have focused on building broad awareness and attracting casual riders. However, Cyclistic’s financial analysts have identified that annual members are significantly more profitable than casual riders, making it a priority for the company to find ways to convert casual riders into members for sustainable growth.
+Cyclistic offers three pricing plans: single-ride passes, full-day passes, and annual memberships. While annual memberships are the most profitable for the company, casual riders—those using single-ride or full-day passes—make up a large portion of the customer base. Cyclistic’s marketing strategy has traditionally focused on broad awareness and attracting casual riders. However, the company’s financial analysts have found that annual members are significantly more profitable than casual riders. As a result, Cyclistic is shifting its focus to increasing the number of annual memberships, believing that converting casual riders into members will be key to achieving long-term, sustainable growth.
 
 ## Business Task Statement
-This analysis aims to identify how annual members and casual riders use Cyclistic bikes differently, focusing on trip frequency, duration, bike type preferences, and the most popular routes and stations. The insights will help the marketing team develop targeted strategies to convert casual riders into annual members, driving revenue and improving customer retention.
+This analysis will identify key differences in how annual members and casual riders use Cyclistic bikes, focusing on trip frequency, duration, bike type preferences, and popular routes and stations. The insights will help the marketing team develop targeted strategies to convert casual riders into annual members, boosting revenue and improving customer retention.
 
 ## Key Stakeholders
 The following stakeholders are critical to this analysis and will be involved in reviewing and acting upon the findings:
@@ -59,5 +59,5 @@ The dataset does not include any information about why riders use Cyclistic bike
 ### No Payment Data
 The dataset does not include information on the payment type or pricing plan (e.g., single rides vs. annual memberships), except for the member_casual indicator. As a result, we cannot investigate the impact of pricing models or specific promotions on the conversion of casual riders into annual members.
 
-### Geographic and Temporal Limitations
-The dataset contains 12 months of trip data from Cyclistic’s service area in Chicago. As a result, the analysis is limited to trends and patterns within this geographic and time frame and may not fully capture seasonal or long-term variations, or data from outside the service area.
+### Geographic and Timeframe Limitations
+The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
