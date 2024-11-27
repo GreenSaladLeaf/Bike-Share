@@ -20,7 +20,7 @@ Cyclistic Marketing Analytics Team: The team, including myself, is responsible f
 Cyclistic Executive Team: This group of senior executives will be reviewing the final recommendations to determine whether the proposed marketing strategies will be approved. Their primary focus is on maximizing the company’s profitability by increasing the number of annual memberships.
 
 ## Description of Data Sources Used
-For this analysis, we used Cyclistic's historical trip data from the previous 12 months, which is publicly available and provided by Motivate International Inc. under a specific license. The dataset contains detailed information about each bike trip, including ride timestamps, trip duration, bike type, and station information.
+For this analysis, we used Cyclistic's publicly available historical trip data from July 2023 to June 2024, provided by Motivate International Inc. under a specific license. The dataset includes detailed information about each bike trip, such as ride timestamps, user type, bike type, and station information. This data enabled an in-depth analysis of bike usage patterns, including trip duration, bike preferences, station usage, and geographic trends.
 
 ### Key Data Columns:
 ride_id: A unique identifier for each trip, ensuring each ride is distinct in the dataset.
@@ -60,4 +60,4 @@ The dataset does not include any information about why riders use Cyclistic bike
 The dataset does not include information on the payment type or pricing plan (e.g., single rides vs. annual memberships), except for the member_casual indicator. As a result, we cannot investigate the impact of pricing models or specific promotions on the conversion of casual riders into annual members.
 
 ### Geographic and Timeframe Limitations
-The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
+The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
