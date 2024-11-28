@@ -124,7 +124,7 @@ The dataset includes 12 months of trip data from Cyclistic’s service area in C
 - **No Payment Data**: The dataset lacks information on payment types or pricing models, preventing an analysis of how pricing impacts conversion from casual riders to members.
 - **Geographic and Timeframe Limitations**: The data is limited to Cyclistic’s service area in Chicago from July 2023 to June 2024, which may not fully capture seasonal trends or external factors that affect bike usage.
 
-### Licensing, Privacy, and Security
+### Security, Privacy, and Licensing
 - **Licensing**: The dataset is publicly available under [specific license or terms of use], allowing unrestricted use for analysis and research purposes. No explicit usage restrictions were identified.
 - **Privacy and Security**: The data is anonymized to protect PII, ensuring no individual rider can be identified. It is stored securely in Google Cloud Storage and is accessible to authorized users for analysis.
 
