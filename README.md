@@ -115,7 +115,9 @@ The dataset includes 12 months of trip data from Cyclistic’s service area in C
 - **Null Station Names and IDs**: Some trips have missing station data due to dockless bike usage. This limits station-level analysis.
 - **Duplicate or Inconsistent Station Data**: Inconsistencies in station names/IDs were addressed through data cleaning.
 - **Missing End Latitude and Longitude**: About 0.1% of trips have missing destination data, and these were excluded from spatial analyses.
-
+- **Invalid Trip Durations**: Negative or zero trip durations were found when the ended_at timestamp was earlier than or equal to the started_at timestamp. These records were removed from the analysis to ensure data integrity.
+- **Negative or Zero Distances**: Some trips had negative or zero distances based on the ST_DISTANCE() calculation between the start and end coordinates (start_lat, start_lng, end_lat, end_lng). These values likely resulted from data entry errors. Additionally, trips with a distance traveled of less than 10 meters were excluded, as these were deemed too short to be considered valid trips for analysis.
+  
 ### Bias in the Data
 - **Lack of Demographic Information**: The dataset does not contain demographic information (e.g., age, gender, income), which limits analysis on how specific groups use Cyclistic bikes and could skew marketing strategies.
 - **No Context on Rider Motivation**: Without data on why people use the bikes (e.g., commuting vs. leisure), it’s difficult to analyze how motivations might influence membership conversions.
