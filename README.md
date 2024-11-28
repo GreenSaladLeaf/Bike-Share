@@ -61,3 +61,13 @@ The dataset does not include information on the payment type or pricing plan (e.
 
 ### Geographic and Timeframe Limitations
 The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
+
+## Data Cleaning and Manipulation
+### Tools Used
+The dataset was cleaned and processed using SQL for efficient handling of large datasets and complex queries. Tableau was used for visualizing the results and gaining insights from the cleaned data.
+
+### Handling Multiple Large CSV Files 
+The dataset, consisting of 12 months of trip data in separate CSV files, was uploaded to a Google Cloud Storage bucket. A consolidated SQL table was then created by combining all 12 months of data, ensuring consistency across the files, as they shared the same column structure.
+
+### 
+
