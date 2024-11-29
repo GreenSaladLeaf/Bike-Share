@@ -1,6 +1,7 @@
 # Case Study: Bike_share  
-Author: Siow Hui Hui
-Date created: 22 November 2024
+**Author**: Siow Hui Hui
+
+**Date created**: 22 November 2024
 
 ## Company Background
 Cyclistic is a bike-share program in Chicago, offering a fleet of over 5,800 bikes across 692 stations. Since its launch in 2016, Cyclistic has grown rapidly, providing a range of bike options, including traditional bikes, reclining bikes, hand tricycles, and cargo bikes, to meet the diverse needs of its riders. Approximately 30% of Cyclistic’s users commute to work, while others use the bikes for leisure.
