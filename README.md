@@ -76,21 +76,5 @@ The dataset was cleaned and processed using SQL for efficient handling of large 
 ### Handling Multiple Large CSV Files 
 The dataset, consisting of 12 months of trip data in separate CSV files, was uploaded to a Google Cloud Storage bucket. A consolidated SQL table was then created by combining all 12 months of data, ensuring consistency across the files, as they shared the same column structure.
 
-Original: The data is original, containing raw trip-level records from the bike-share system.
 
-Comprehensive: The dataset is comprehensive in terms of trip-level data, but lacks demographic and motivational details.
-
-Current: The dataset covers 12 months of recent data, providing insights into current usage patterns.
-
-Cited: The dataset is sourced from Cyclistic’s bike-share program, and its origin is noted in the documentation.
-
-### licensing, privacy, security, and accessibility?
-Licensing: The dataset is publicly available, so there are no restrictions on its use for analysis.
-
-Privacy: The dataset has been anonymized to remove personally identifiable information (PII). This ensures that no personal details about riders are exposed, preserving privacy.
-
-Security: The data is stored in a Google Cloud Storage bucket, which provides secure, encrypted storage to protect the data from unauthorized access.
-
-Accessibility: The data is easily accessible within the Google Cloud Storage bucket, and proper permissions are set to allow for authorized access for analysis.
-### 
 
