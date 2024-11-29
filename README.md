@@ -67,7 +67,7 @@ The files are structured to facilitate merging into a single dataset without los
 - **Geographic and Timeframe Limitations**: The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
 
 ### Security, Privacy, and Licensing
-- **Licensing**: The dataset is publicly available under this [license]([https://pages.github.com/](https://divvybikes.com/data-license-agreement)), allowing unrestricted use for analysis and research purposes. No explicit usage restrictions were identified.
+- **Licensing**: The dataset is publicly available under this [license](https://divvybikes.com/data-license-agreement), allowing unrestricted use for analysis and research purposes. No explicit usage restrictions were identified.
 - **Privacy and Security**: The data is anonymized to protect PII, ensuring no individual rider can be identified. It is stored securely in Google Cloud Storage and is accessible to authorized users for analysis.
 
 ## Data Cleaning and Manipulation
