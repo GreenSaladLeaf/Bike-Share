@@ -14,11 +14,11 @@ This analysis will identify key differences in how annual members and casual rid
 ## Key Stakeholders
 The following stakeholders are critical to this analysis and will be involved in reviewing and acting upon the findings:
 
-Lily Moreno (Director of Marketing): Lily is responsible for the development of Cyclistic’s marketing strategies. She has tasked the analytics team with providing insights into how casual riders and annual members use the bikes differently, with the goal of converting more casual riders to annual memberships.
+- **Lily Moreno (Director of Marketing)**: Lily is responsible for the development of Cyclistic’s marketing strategies. She has tasked the analytics team with providing insights into how casual riders and annual members use the bikes differently, with the goal of converting more casual riders to annual memberships.
 
-Cyclistic Marketing Analytics Team: The team, including myself, is responsible for collecting, analyzing, and interpreting the data. We will use this analysis to support marketing strategies aimed at increasing annual memberships.
+- **Cyclistic Marketing Analytics Team**: The team, including myself, is responsible for collecting, analyzing, and interpreting the data. We will use this analysis to support marketing strategies aimed at increasing annual memberships.
 
-Cyclistic Executive Team: This group of senior executives will be reviewing the final recommendations to determine whether the proposed marketing strategies will be approved. Their primary focus is on maximizing the company’s profitability by increasing the number of annual memberships.
+- **Cyclistic Executive Team**: This group of senior executives will be reviewing the final recommendations to determine whether the proposed marketing strategies will be approved. Their primary focus is on maximizing the company’s profitability by increasing the number of annual memberships.
 
 ## Description of Data Sources Used
 For this analysis, Cyclistic's publicly available historical trip data from July 2023 to June 2024 was used. The data was provided by Motivate International Inc. under a specific license. It includes detailed information about each bike trip, such as ride timestamps, user type, bike type, and station information. This dataset allows for an in-depth analysis of bike usage patterns, including trip duration, bike preferences, station usage, and geographic trends.
@@ -26,19 +26,19 @@ For this analysis, Cyclistic's publicly available historical trip data from July
 ### Key Data Columns:
 The dataset is structured as a series of trip-level records, with each record representing a single bike trip. The columns across all 12 CSV files are consistent and include:
 
-ride_id: A unique identifier for each trip, ensuring each ride is distinct in the dataset.
+- **ride_id**: A unique identifier for each trip, ensuring each ride is distinct in the dataset.
 
-rideable_type: The type of bike used, allowing for comparison of bike preferences between annual members and casual riders.
+- **rideable_type**: The type of bike used, allowing for comparison of bike preferences between annual members and casual riders.
 
-started_at and ended_at: Timestamps marking the start and end of each trip, useful for calculating trip duration and analyzing peak usage times.
+- **started_at** and **ended_at**: Timestamps marking the start and end of each trip, useful for calculating trip duration and analyzing peak usage times.
 
-start_station_name and end_station_name: The names of the stations where trips began and ended, providing insights into popular stations and bike routes.
+- **start_station_name** and **end_station_name**: The names of the stations where trips began and ended, providing insights into popular stations and bike routes.
 
-start_station_id and end_station_id: The unique station identifiers, used during data cleaning to check for inconsistencies and ensure correct matching between station IDs and names (e.g., identifying and correcting typos).
+- **start_station_id** and **end_station_id**: The unique station identifiers, used during data cleaning to check for inconsistencies and ensure correct matching between station IDs and names (e.g., identifying and correcting typos).
 
-member_casual: Indicates whether the rider is a casual rider or annual member, which is crucial for segmenting the data.
+- **member_casual**: Indicates whether the rider is a casual rider or annual member, which is crucial for segmenting the data.
 
-start_lat, start_lng, end_lat, and end_lng: Geographic coordinates of trip start and end locations, useful for spatial analysis and understanding rider flow between stations.
+- **start_lat, start_lng, end_lat**, and **end_lng**: Geographic coordinates of trip start and end locations, useful for spatial analysis and understanding rider flow between stations.
 
 The files are structured to facilitate merging into a single dataset without losing important details.
 
@@ -67,7 +67,7 @@ The files are structured to facilitate merging into a single dataset without los
 - **Geographic and Timeframe Limitations**: The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
 
 ### Security, Privacy, and Licensing
-- **Licensing**: The dataset is publicly available under [specific license or terms of use], allowing unrestricted use for analysis and research purposes. No explicit usage restrictions were identified.
+- **Licensing**: The dataset is publicly available under this [license]([https://pages.github.com/](https://divvybikes.com/data-license-agreement)), allowing unrestricted use for analysis and research purposes. No explicit usage restrictions were identified.
 - **Privacy and Security**: The data is anonymized to protect PII, ensuring no individual rider can be identified. It is stored securely in Google Cloud Storage and is accessible to authorized users for analysis.
 
 ## Data Cleaning and Manipulation
