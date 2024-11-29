@@ -41,90 +41,29 @@ start_lat, start_lng, end_lat, and end_lng: Geographic coordinates of trip start
 
 The files are structured to facilitate merging into a single dataset without losing important details.
 
-## Data Quality
-### Null Station Names and IDs
-The dataset contains null values in station names and station IDs, likely due to dockless rides, where bikes are picked up and dropped off at locations not tied to fixed stations. While this reflects the flexibility of the system, it limits station-level analysis, such as identifying popular stations or routes.
+### Data Quality:
+- **Complete Data**: The following columns have no null values: ride_id, rideable_type, member_casual, started_at, ended_at, start_lat, start_lng. These columns were fully populated, ensuring the integrity of ride-specific and timestamp-based analyses.
 
-### Duplicate or Inconsistent Station Data
-Some station IDs are associated with multiple names due to factors such as typos, station renaming, relocations, or cases where different locations share the same ID. While these inconsistencies are relatively minor, they do not significantly affect the overall analysis of station popularity and rider patterns. These issues were addressed through data cleaning procedures to ensure the integrity of the results.
+- **Duplicate Ride IDs**: A total of 211 duplicate ride IDs were identified and removed to avoid skewing trip counts and other derived metrics.
 
-### Missing End Latitude and Longitude
-Around 0.1% of the trips in the dataset have missing end_lat or end_lng values. These trips also have null values for end_station_name and end_station_id. While this is a small fraction of the data, it does represent rides where the destination location is not available. These records were excluded from the analysis to ensure that only trips with complete geographic data were included, preserving the integrity of spatial analyses.
+- **Station Data Issues**:
+  - **Missing Station Names and IDs**: A total of 933,003 rows have missing start station names and IDs, while 980,556 rows have missing end station names and IDs. These gaps are primarily due to dockless bike trips, where bikes are picked up and dropped off at locations not associated with fixed stations.Missing station names were replaced using the COALESCE() function, substituting with corresponding latitude and longitude values to enable location-based analysis.
+  - **Duplicate or Inconsistent Station Data**: Inconsistencies in station names and IDs were addressed through data cleaning procedures. 
 
-## Bias or credibility 
-### Bias: 
-The dataset includes data on both casual riders and annual members, so it is representative of users of the Cyclistic bike-share program. However, bias could be introduced if, for example, certain types of users (e.g., seasonal riders or specific demographic groups) are underrepresented. This data does not include demographic details (such as age, income, or geography), which could limit some aspects of analysis related to these groups.
+- **Spatial Data Quality**:
+  - **Missing End Latitude and Longitude**: Around 0.1% of trips had missing destination data, which were excluded from spatial analyses.
+  - **Negative or Zero Distances**: Some trips had negative or zero distances calculated using the ST_DISTANCE() function between the start and end coordinates (start_lat, start_lng, end_lat, end_lng). These values were likely caused by data entry errors. Additionally, trips with a distance traveled of less than 10 meters were excluded, as they were considered too short to be valid for analysis.
+  - **Geographic Filtering**: Rows with latitude and longitude coordinates outside the expected service area of Chicago and its surroundings were filtered out to ensure all data points were geographically relevant.
 
-#### Lack of Demographic Information
-The dataset does not include demographic data (e.g., age, gender, or income). Without this information, we are unable to analyze how different demographic segments use Cyclistic bikes or to tailor marketing strategies based on specific rider characteristics.
-
-#### No Context on Rider Motivation
-The dataset does not include any information about why riders use Cyclistic bikes (e.g., commuting, exercise, leisure). This lack of rider motivation data makes it difficult to assess how motivations may influence a rider's decision to purchase an annual membership.
-
-### Credibility: 
-The data comes directly from Cyclistic’s bike-share program, making it credible for the purpose of analyzing rider behavior. The data is comprehensive in terms of trip details but lacks some demographic or motivational context.
-
-### licensing, privacy, security, and accessibility
-Licensing: The dataset is publicly available, so there are no restrictions on its use for analysis.
-
-Privacy: The dataset has been anonymized to protect personally identifiable information (PII), such as names, credit card numbers, and addresses. As a result, it is impossible to link specific bike trips to individual riders or track their behavior across multiple trips. 
-
-Security: The data is stored in a Google Cloud Storage bucket, which provides secure, encrypted storage to protect the data from unauthorized access.
-
-Accessibility: The data is easily accessible within the Google Cloud Storage bucket, and proper permissions are set to allow for authorized access for analysis.
-
-## Data Limitations 
-### No Payment Data
-The dataset does not include information on the payment type or pricing plan (e.g., single rides vs. annual memberships), except for the member_casual indicator. As a result, we cannot investigate the impact of pricing models or specific promotions on the conversion of casual riders into annual members.
-
-### Geographic and Timeframe Limitations
-The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
-
-
-
-OR this?:
-
-## Data Limitations and Constraints
-### Data Privacy and Anonymization
-The dataset has been anonymized to protect personally identifiable information (PII), such as names, credit card numbers, and addresses. As a result, it is impossible to link specific bike trips to individual riders or track their behavior across multiple trips. This limitation prevents us from analyzing certain aspects of rider behavior, such as identifying whether casual riders are frequent users or whether they live within the service area.
-
-### Lack of Demographic Information
-The dataset does not include demographic data (e.g., age, gender, or income). Without this information, we are unable to analyze how different demographic segments use Cyclistic bikes or to tailor marketing strategies based on specific rider characteristics.
-
-### Null Station Names and IDs
-The dataset contains null values in station names and station IDs, likely due to dockless rides, where bikes are picked up and dropped off at locations not tied to fixed stations. While this reflects the flexibility of the system, it limits station-level analysis, such as identifying popular stations or routes.
-
-### Duplicate or Inconsistent Station Data
-Some station IDs are associated with multiple names due to factors such as typos, station renaming, relocations, or cases where different locations share the same ID. While these inconsistencies are relatively minor, they do not significantly affect the overall analysis of station popularity and rider patterns. These issues were addressed through data cleaning procedures to ensure the integrity of the results.
-
-### Missing End Latitude and Longitude
-Around 0.1% of the trips in the dataset have missing end_lat or end_lng values. These trips also have null values for end_station_name and end_station_id. While this is a small fraction of the data, it does represent rides where the destination location is not available. These records were excluded from the analysis to ensure that only trips with complete geographic data were included, preserving the integrity of spatial analyses.
-
-### No Context on Rider Motivation
-The dataset does not include any information about why riders use Cyclistic bikes (e.g., commuting, exercise, leisure). This lack of rider motivation data makes it difficult to assess how motivations may influence a rider's decision to purchase an annual membership.
-
-### No Payment Data
-The dataset does not include information on the payment type or pricing plan (e.g., single rides vs. annual memberships), except for the member_casual indicator. As a result, we cannot investigate the impact of pricing models or specific promotions on the conversion of casual riders into annual members.
-
-### Geographic and Timeframe Limitations
-The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
-
-## Data Limitations and Constraints
-
-### Data Quality Issues
-- **Null Station Names and IDs**: Some trips have missing station data due to dockless bike usage. This limits station-level analysis.
-- **Duplicate or Inconsistent Station Data**: Inconsistencies in station names/IDs were addressed through data cleaning.
-- **Missing End Latitude and Longitude**: About 0.1% of trips have missing destination data, and these were excluded from spatial analyses.
-- **Invalid Trip Durations**: Negative or zero trip durations were found when the ended_at timestamp was earlier than or equal to the started_at timestamp. These records were removed from the analysis to ensure data integrity.
-- **Negative or Zero Distances**: Some trips had negative or zero distances based on the ST_DISTANCE() calculation between the start and end coordinates (start_lat, start_lng, end_lat, end_lng). These values likely resulted from data entry errors. Additionally, trips with a distance traveled of less than 10 meters were excluded, as these were deemed too short to be considered valid trips for analysis.
+- **Invalid Trip Durations**: Negative or zero trip durations (where ended_at was earlier than or equal to started_at) were removed from the dataset.
   
 ### Bias in the Data
 - **Lack of Demographic Information**: The dataset does not contain demographic information (e.g., age, gender, income), which limits analysis on how specific groups use Cyclistic bikes and could skew marketing strategies.
 - **No Context on Rider Motivation**: Without data on why people use the bikes (e.g., commuting vs. leisure), it’s difficult to analyze how motivations might influence membership conversions.
 
 ### Data Scope Limitations
-- **No Payment Data**: The dataset lacks information on payment types or pricing models, preventing an analysis of how pricing impacts conversion from casual riders to members.
-- **Geographic and Timeframe Limitations**: The data is limited to Cyclistic’s service area in Chicago from July 2023 to June 2024, which may not fully capture seasonal trends or external factors that affect bike usage.
+- **No Payment Data**: The dataset does not include information on the payment type or pricing plan (e.g., single rides vs. annual memberships), except for the member_casual indicator. As a result, we cannot investigate the impact of pricing models or specific promotions on the conversion of casual riders into annual members.
+- **Geographic and Timeframe Limitations**: The dataset includes 12 months of trip data from Cyclistic’s service area in Chicago, from July 2023 to June 2024. As a result, the analysis is limited to trends and patterns within this specific geographic area and time frame. This may not fully capture seasonal, long-term, or external factors (such as unusual events or weather conditions) that could affect bike usage beyond this period.
 
 ### Security, Privacy, and Licensing
 - **Licensing**: The dataset is publicly available under [specific license or terms of use], allowing unrestricted use for analysis and research purposes. No explicit usage restrictions were identified.
@@ -136,8 +75,6 @@ The dataset was cleaned and processed using SQL for efficient handling of large 
 
 ### Handling Multiple Large CSV Files 
 The dataset, consisting of 12 months of trip data in separate CSV files, was uploaded to a Google Cloud Storage bucket. A consolidated SQL table was then created by combining all 12 months of data, ensuring consistency across the files, as they shared the same column structure.
-### ROCCC:
-Reliable: The data comes directly from Cyclistic’s system, which is a trusted source.
 
 Original: The data is original, containing raw trip-level records from the bike-share system.
 
