@@ -85,9 +85,10 @@ The following steps were taken to ensure the data was clean and suitable for ana
 - **Step 1**: Review the Data
 The first step involved reviewing the dataset to understand its structure and assess the quality of the data. This was done by performing an initial query to inspect a sample of rows. The goal was to identify any obvious issues such as missing values, formatting inconsistencies, or incorrect data types.
 ```SQL
-SELECT
-  *
+SELECT  *
 FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 LIMIT 10
 ```
-
+|ride_id|started_at|
+|---|---|
+|ddddd|ddddd|
