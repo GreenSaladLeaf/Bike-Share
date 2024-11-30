@@ -71,8 +71,10 @@ The files are structured to facilitate merging into a single dataset without los
 - **Privacy and Security**: The data is anonymized to protect PII, ensuring no individual rider can be identified. It is stored securely in Google Cloud Storage and is accessible to authorized users for analysis.
 
 ## Data Cleaning and Manipulation
-### Tools Used
-The dataset was cleaned and processed using SQL for efficient handling of large datasets and complex queries. Tableau was used for visualizing the results and gaining insights from the cleaned data.
+### Tools and Techniques Used
+To clean and process the dataset efficiently, I used a combination of SQL and Tableau. The tools were selected for the following reasons:
+- **SQL**: Given the size of the dataset (12 months of trip data across multiple CSV files), SQL was chosen for its ability to handle large datasets, perform complex queries, and execute data manipulation tasks like filtering, joining, and aggregating data efficiently. SQL’s powerful data-cleaning functions such as COALESCE() and DISTINCT were especially useful for handling missing values and removing duplicates.
+- **Tableau**: Once the data was cleaned and prepared, Tableau was used for visualizing the results and uncovering patterns and insights in the data. Tableau's drag-and-drop interface allowed for quick creation of visualizations to help identify anomalies or outliers in the dataset.
 
 ### Handling Multiple Large CSV Files 
 The dataset, consisting of 12 months of trip data in separate CSV files, was uploaded to a Google Cloud Storage bucket. A consolidated SQL table was then created by combining all 12 months of data, ensuring consistency across the files, as they shared the same column structure.
