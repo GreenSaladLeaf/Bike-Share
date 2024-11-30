@@ -84,11 +84,15 @@ The following steps were taken to ensure the data was clean and suitable for ana
 
 - **Step 1**: Review the Data
 The first step involved reviewing the dataset to understand its structure and assess the quality of the data. This was done by performing an initial query to inspect a sample of rows. The goal was to identify any obvious issues such as missing values, formatting inconsistencies, or incorrect data types.
-```SQL
+```sql
 SELECT  *
 FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
-LIMIT 10
+LIMIT 10;
 ```
-|ride_id|started_at|
-|---|---|
-|ddddd|ddddd|
+Inconsistencies were identified in the started_at and ended_at columns, as well as null values in key columns such as start_station_name, start_station_id, end_station_name, and end_station_id. Below is a snapshot of the data:
+
+|ride_id|started_at|ended_at|start_station_name|start_station_id|end_station_name|end_station_id|
+|---|---|--- |---|---|---|---|
+|1825FC51729D24C7|2024-06-15 13:22:02.900000 UTC|2024-06-15 13:24:41.489000 UTC|null|null|null|null|
+|7F08386D8DAB72FB|2024-04-24 13:50:55 UTC|2024-04-24 13:53:49 UTC|null|null|null|null|
+
