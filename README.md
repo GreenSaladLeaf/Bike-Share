@@ -98,3 +98,28 @@ Inconsistencies were identified in the `started_at` and `ended_at` columns, as w
 |1825FC51729D24C7|2024-06-15 13:22:02.900000 UTC|2024-06-15 13:24:41.489000 UTC|null|null|null|null|
 |7F08386D8DAB72FB|2024-04-24 13:50:55 UTC|2024-04-24 13:53:49 UTC|null|null|null|null|
 
+#### Step 2: Standardize Data
+Ensure consistency in the dataset by standardizing timestamp precision, normalizing textual data, and rounding geographic coordinates.
+
+```sql
+SELECT
+    TRIM(ride_id) AS ride_id,                      -- remove extra space
+    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
+    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,
+    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,
+    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
+    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
+    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
+    ROUND(start_lat,4) AS start_lat,  -- Round latitude to 4 decimal places for uniform precision (~10 meters)
+    ROUND(start_lng,4) AS start_lng,  -- Round longitude to 4 decimal places for uniform precision (~10 meters)
+    ROUND(end_lat,4) AS end_lat,      -- Round latitude to 4 decimal places for uniform precision (~10 meters)
+    ROUND(end_lng,4) AS end_lng,      -- Round longitude to 4 decimal places for uniform precision (~10 meters)
+FROM 
+    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+
+- **Standardizing timestamps**: The timestamps (started_at and ended_at) were truncated to the second to ensure uniform precision, removing any unnecessary fractional seconds. This step ensures that analysis of trip durations and timestamps remains consistent.
+- **Text normalization**: All text fields (e.g., rideable_type, start_station_name, member_casual) were trimmed of extra spaces and converted to lowercase to maintain consistency and reduce the chance of case-sensitive mismatches.
+- **Rounding geographic coordinates**: The latitude and longitude values were rounded to 4 decimal places (approximately 10 meters of precision) to standardize the dataset while maintaining accuracy. This reduces minor inconsistencies in spatial data and ensures that analysis involving geographic locations is more stable and comparable.
