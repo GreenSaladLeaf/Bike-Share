@@ -98,11 +98,21 @@ Inconsistencies were identified in the `started_at` and `ended_at` columns, as w
 |1825FC51729D24C7|2024-06-15 13:22:02.900000 UTC|2024-06-15 13:24:41.489000 UTC|null|null|null|null|
 |7F08386D8DAB72FB|2024-04-24 13:50:55 UTC|2024-04-24 13:53:49 UTC|null|null|null|null|
 
+#### Step 2: Count the number of trips
+```sql
+SELECT
+  COUNT(*) AS total_trips
+FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|Row| total_trips|
+|---|---|
+|1|5734381|
+
 #### Step 2: Standardize Data
 Ensure consistency in the dataset by standardizing timestamp precision, normalizing textual data, and rounding geographic coordinates.
 
 ```sql
-SELECT
+SELECT DISTINCT
     TRIM(ride_id) AS ride_id,                      -- remove extra space
     TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
     TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,
@@ -123,3 +133,96 @@ FROM
 - **Standardizing timestamps**: The timestamps (started_at and ended_at) were truncated to the second to ensure uniform precision, removing any unnecessary fractional seconds. This step ensures that analysis of trip durations and timestamps remains consistent.
 - **Text normalization**: All text fields (e.g., rideable_type, start_station_name, member_casual) were trimmed of extra spaces and converted to lowercase to maintain consistency and reduce the chance of case-sensitive mismatches.
 - **Rounding geographic coordinates**: The latitude and longitude values were rounded to 4 decimal places (approximately 10 meters of precision) to standardize the dataset while maintaining accuracy. This reduces minor inconsistencies in spatial data and ensures that analysis involving geographic locations is more stable and comparable.
+- **Duplicate Removal**: The use of SELECT DISTINCT ensures that any exact duplicates (after standardizing) are removed in one step. This ensures that each row is unique based on all the columns.
+
+By standardizing the dataset, duplicates are removed, and inconsistencies in timestamps, text fields, and geographic coordinates are addressed. This ensures that any analysis, whether it be trip durations or station usage, is based on clean, uniform data
+
+#### Step 3: Filter data rows that has invalid latitude and longtitude
+The goal of this step is to filter out rows where the latitude and longitude of the bike trip start and end points fall outside of the boundaries of central Chicago.
+
+```sql
+SELECT DISTINCT
+    TRIM(ride_id) AS ride_id,                      -- remove extra space
+    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
+    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,  -- standardize timestamp
+    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,      -- standardize timestamp
+    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
+    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
+    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
+    ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lat,4) AS end_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
+FROM 
+    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+WHERE
+    start_lat BETWEEN 41.6 AND 42.1  -- Chicago-only latitude range
+    AND start_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
+    AND end_lat BETWEEN 41.6 AND 42.1    -- Chicago-only latitude range
+    AND end_lng BETWEEN -88 AND -87.5;  -- Chicago-only longitude range   
+```
+
+#### Step 4 : Investigate data that have been filtered out 
+Investigates any rows that are outside this region, to understand the nature of the data that is being excluded.
+```sql
+SELECT DISTINCT
+    TRIM(ride_id) AS ride_id,                      -- remove extra space
+    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
+    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,
+    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,
+    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
+    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
+    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
+    ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lat,4) AS end_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
+FROM 
+    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+WHERE
+    (
+        (start_lat < 41.6 OR start_lat > 42.1)  -- Latitude outside Chicago range
+        OR (start_lng < -88 OR start_lng > -87.5)  -- Longitude outside Chicago range
+        OR (end_lat < 41.6 OR end_lat > 42.1)    -- End latitude outside Chicago range
+        OR (end_lng < -88 OR end_lng > -87.5)  -- End longitude outside Chicago range
+    )
+    AND (start_lat IS NOT NULL AND start_lng IS NOT NULL)  -- Ensure start coordinates are not null
+    AND (end_lat IS NOT NULL AND end_lng IS NOT NULL);  -- Ensure end coordinates are not null
+```
+there are 27 rows of data affected
+
+#### Step 5: Check if all duplicate has been removed
+```sql
+WITH duplicate_removed AS (
+SELECT DISTINCT
+    TRIM(ride_id) AS ride_id,                      -- remove extra space
+    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
+    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,
+    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,
+    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
+    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
+    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
+    ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lat,4) AS start_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lng,4) AS start_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
+FROM 
+    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+)
+SELECT
+    ride_id,
+    COUNT(*) AS count,
+FROM
+    duplicate_removed 
+GROUP BY
+    ride_id
+HAVING
+    COUNT(*) > 1;
+```
+
