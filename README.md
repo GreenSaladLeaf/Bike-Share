@@ -77,13 +77,13 @@ The following tools were selected for their efficiency and suitability in handli
 - **Tableau**: Tableau was used for visualizing the results once the data was cleaned and prepared. Its intuitive interface facilitated quick creation of visualizations, allowing for a deeper understanding of the patterns and trends in the data.
 
 ### Handling Multiple Large CSV Files 
-The dataset, consisting of 12 months of trip data in separate CSV files, was uploaded to a Google Cloud Storage bucket. A consolidated SQL table was then created by combining all 12 months of data, ensuring consistency across the files, as they shared the same column structure.
+The dataset consists of 12 months of trip data across separate CSV files, uploaded to a Google Cloud Storage bucket. These files were consolidated into a single SQL table to ensure consistency, as all files shared the same column structure.
 
 ### Data Cleaning Steps
-The following steps were taken to ensure the data was clean and suitable for analysis:
 
 #### Step 1: Review the Data
-The first step involved reviewing the dataset to understand its structure and assess the quality of the data. This was done by performing an initial query to inspect a sample of rows. The goal was to identify any obvious issues such as missing values, formatting inconsistencies, or incorrect data types.
+An initial review was performed to understand the dataset’s structure and assess the quality of the data. A sample query was run to inspect a few rows and identify any potential issues such as missing values or formatting inconsistencies.
+
 ```sql
 
 SELECT  *
@@ -91,7 +91,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 LIMIT 10;
 
 ```
-Inconsistencies were identified in the `started_at` and `ended_at` columns, as well as null values in key columns such as `start_station_name`, `start_station_id`, `end_station_name`, and `end_station_id`. Below is a snapshot of the data:
+Some inconsistencies were found in the started_at and ended_at columns, along with null values in key columns such as start_station_name, start_station_id, end_station_name, and end_station_id. Below is a snapshot of the data:
 
 |ride_id|started_at|ended_at|start_station_name|start_station_id|end_station_name|end_station_id|
 |---|---|--- |---|---|---|---|
@@ -99,6 +99,8 @@ Inconsistencies were identified in the `started_at` and `ended_at` columns, as w
 |7F08386D8DAB72FB|2024-04-24 13:50:55 UTC|2024-04-24 13:53:49 UTC|null|null|null|null|
 
 #### Step 2: Count the number of trips
+A query was run to count the total number of trips in the dataset:
+
 ```sql
 SELECT
   COUNT(*) AS total_trips
@@ -108,44 +110,29 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 |---|---|
 |1|5734381|
 
-#### Step 3: Standardize Data
-Ensure consistency in the dataset by standardizing timestamp precision, normalizing textual data, and rounding geographic coordinates.
+#### Step 3: Standardize, Filter, and Remove Duplicates
+Ensure consistency in the dataset by standardizing timestamp precision, normalizing textual data, rounding geographic coordinates, and removing any duplicate rows.
+
+This step involves:
+
+- **Standardizing Timestamps and Text Fields**:
+  - Timestamps (`started_at` and `ended_at`) were truncated to the second to ensure uniform precision, removing any unnecessary fractional seconds.
+  - All text fields (e.g., `rideable_type`, `station names`, and member status) were trimmed of extra spaces and converted to lowercase for consistency.
+  - Latitude and longitude values were rounded to four decimal places (about 10 meters of precision) to standardize the dataset while maintaining accuracy.
+
+- **Filtering Invalid Latitude and Longitude**:
+  - The dataset was filtered to exclude any rows where the latitude and longitude of either the start or end points fell outside the defined geographic boundaries of central Chicago (latitude between 41.6 and 42.1, longitude between -88 and -87.5).
+  - This ensured that only trips within Chicago were considered for analysis, excluding any trips that crossed into neighboring suburbs or had invalid geographic data.
+ 
+- **Removing Duplicates**:
+The `DISTINCT` keyword is applied to ensure that any exact duplicate rows (where all column values are identical) are removed from the dataset.
 
 ```sql
-SELECT DISTINCT
+SELECT DISTINCT       -- remove duplicate
     TRIM(ride_id) AS ride_id,                      -- remove extra space
     TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
-    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,
-    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,
-    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
-    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
-    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
-    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
-    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
-    ROUND(start_lat,4) AS start_lat,  -- Round latitude to 4 decimal places for uniform precision (~10 meters)
-    ROUND(start_lng,4) AS start_lng,  -- Round longitude to 4 decimal places for uniform precision (~10 meters)
-    ROUND(end_lat,4) AS end_lat,      -- Round latitude to 4 decimal places for uniform precision (~10 meters)
-    ROUND(end_lng,4) AS end_lng,      -- Round longitude to 4 decimal places for uniform precision (~10 meters)
-FROM 
-    `bike-share-case-study-430704.Bike_share.bike_share_12months`
-```
-
-- **Standardizing timestamps**: The timestamps (started_at and ended_at) were truncated to the second to ensure uniform precision, removing any unnecessary fractional seconds. This step ensures that analysis of trip durations and timestamps remains consistent.
-- **Text normalization**: All text fields (e.g., rideable_type, start_station_name, member_casual) were trimmed of extra spaces and converted to lowercase to maintain consistency and reduce the chance of case-sensitive mismatches.
-- **Rounding geographic coordinates**: The latitude and longitude values were rounded to 4 decimal places (approximately 10 meters of precision) to standardize the dataset while maintaining accuracy. This reduces minor inconsistencies in spatial data and ensures that analysis involving geographic locations is more stable and comparable.
-- **Duplicate Removal**: The use of SELECT DISTINCT ensures that any exact duplicates (after standardizing) are removed in one step. This ensures that each row is unique based on all the columns.
-
-By standardizing the dataset, duplicates are removed, and inconsistencies in timestamps, text fields, and geographic coordinates are addressed. This ensures that any analysis, whether it be trip durations or station usage, is based on clean, uniform data
-
-#### Step 4: Filter data rows that has invalid latitude and longtitude
-The goal of this step is to filter out rows where the latitude and longitude of the bike trip start and end points fall outside of the boundaries of central Chicago.
-
-```sql
-SELECT DISTINCT
-    TRIM(ride_id) AS ride_id,                      -- remove extra space
-    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
-    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,  -- standardize timestamp
-    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,      -- standardize timestamp
+    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,  -- Truncate timestamps to second precision
+    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,      -- Truncate timestamps to second precision
     TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
     TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
     TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
@@ -161,11 +148,13 @@ WHERE
     start_lat BETWEEN 41.6 AND 42.1  -- Chicago-only latitude range
     AND start_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
     AND end_lat BETWEEN 41.6 AND 42.1    -- Chicago-only latitude range
-    AND end_lng BETWEEN -88 AND -87.5;  -- Chicago-only longitude range   
+    AND end_lng BETWEEN -88 AND -87.5;  -- Chicago-only longitude range  
 ```
 
-#### Step 5 : Investigate data that have been filtered out 
-Investigates any rows that are outside this region, to understand the nature of the data that is being excluded. The goal was to ensure the data accurately represents trips within the city, while considering the possibility that some trips might cross the city borders into nearby areas.
+By standardizing the dataset, duplicates are removed, and inconsistencies in timestamps, text fields, and geographic coordinates are addressed. This ensures that any analysis, whether it be trip durations or station usage, is based on clean, uniform data
+
+#### Step 4 : Investigate data that have been filtered out 
+Investigates any rows that are outside this region, to understand the nature of the data that is being excluded. 
 
 ```sql
 SELECT DISTINCT
@@ -201,14 +190,68 @@ There are 27 rows of data fell outside this range:
   
 These 27 rows represent a small fraction of the total dataset (less than 0.0005% of the 5,734,381 trips), excluding them helps ensure the analysis is focused on high-quality, relevant data that accurately reflects trips within central Chicago.
 
+#### Step 5: Calculate the percentage of null value for lattitude and longtitude
+To understand the extent of missing geographic data, a query was run to calculate the percentage of rows with NULL values for the start_lat, start_lng, end_lat, or end_lng fields.
+```sql
+WITH formatted_data AS (
+    SELECT DISTINCT
+    TRIM(ride_id) AS ride_id,                      -- remove extra space
+    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
+    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,  -- standardise timestamp
+    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,      -- standardise timestamp
+    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
+    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
+    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
+    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
+    ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lat,4) AS end_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
+FROM 
+    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+)
 
+SELECT 
+  ROUND(((SELECT COUNT(ride_id) as missing_end_coordinate
+    FROM formatted_data
+      WHERE 
+        start_lat is NULL
+        or start_lng is null
+        or end_lat is null
+        or end_lng is null) / count(distinct ride_id)*100),2) As percentage
 
+  FROM
+    formatted_data
+```
 
+|Row|percentage|
+|---|---|
+|1|0.14|
 
+This shows that only 0.14% of the dataset has missing geographic data, which is a small percentage. The rest of the dataset is complete with respect to geographic coordinates, ensuring the analysis is based on robust data.
 
+#### Step 6: Check for other null values in the dataset
 
+```sql
+SELECT
+  COUNT(CASE WHEN ride_id IS NULL THEN 1 END) AS null_ride_id,
+  COUNT(CASE WHEN rideable_type IS NULL THEN 1 END) AS null_rideable_type,
+  COUNT(CASE WHEN started_at IS NULL THEN 1 END) AS null_started_at,
+  COUNT(CASE WHEN ended_at IS NULL THEN 1 END) AS null_ended_at,
+  COUNT(CASE WHEN start_station_name IS NULL THEN 1 END) AS null_start_station_name,
+  COUNT(CASE WHEN start_station_id IS NULL THEN 1 END) AS null_start_station_id,
+  COUNT(CASE WHEN end_station_name IS NULL THEN 1 END) AS null_end_station_name,
+  COUNT(CASE WHEN end_station_id IS NULL THEN 1 END) AS null_end_station_id,
+  COUNT(CASE WHEN member_casual IS NULL THEN 1 END) AS null_member_casual
+FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
 
-#### Step 5: Check if all duplicate has been removed
+|null_ride_id|null_rideable_type|null_started_at|null_ended_at|null_start_station_name|null_start_station_id|	null_end_station_name|null_end_station_id|null_member_casual|
+|---|---|---|---|---|---|---|---|---|
+|0|0|0|0|933003|933003|980556|980556|0|
+
+#### Step x: Check if all duplicate has been removed
 ```sql
 WITH duplicate_removed AS (
 SELECT DISTINCT
