@@ -108,7 +108,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 |---|---|
 |1|5734381|
 
-#### Step 2: Standardize Data
+#### Step 3: Standardize Data
 Ensure consistency in the dataset by standardizing timestamp precision, normalizing textual data, and rounding geographic coordinates.
 
 ```sql
@@ -137,7 +137,7 @@ FROM
 
 By standardizing the dataset, duplicates are removed, and inconsistencies in timestamps, text fields, and geographic coordinates are addressed. This ensures that any analysis, whether it be trip durations or station usage, is based on clean, uniform data
 
-#### Step 3: Filter data rows that has invalid latitude and longtitude
+#### Step 4: Filter data rows that has invalid latitude and longtitude
 The goal of this step is to filter out rows where the latitude and longitude of the bike trip start and end points fall outside of the boundaries of central Chicago.
 
 ```sql
@@ -164,8 +164,9 @@ WHERE
     AND end_lng BETWEEN -88 AND -87.5;  -- Chicago-only longitude range   
 ```
 
-#### Step 4 : Investigate data that have been filtered out 
-Investigates any rows that are outside this region, to understand the nature of the data that is being excluded.
+#### Step 5 : Investigate data that have been filtered out 
+Investigates any rows that are outside this region, to understand the nature of the data that is being excluded. The goal was to ensure the data accurately represents trips within the city, while considering the possibility that some trips might cross the city borders into nearby areas.
+
 ```sql
 SELECT DISTINCT
     TRIM(ride_id) AS ride_id,                      -- remove extra space
@@ -193,7 +194,19 @@ WHERE
     AND (start_lat IS NOT NULL AND start_lng IS NOT NULL)  -- Ensure start coordinates are not null
     AND (end_lat IS NOT NULL AND end_lng IS NOT NULL);  -- Ensure end coordinates are not null
 ```
-there are 27 rows of data affected
+There are 27 rows of data fell outside this range:
+- 26 rows are slightly outside the Chicago boundaries, likely representing trips that crossed into neighboring suburbs. These trips are valid but don't align with the analysis focus on central Chicago and should be excluded.
+  
+- The 1 row with 0,0 coordinates and station information ('Stony Island Ave & 63rd St') represents an outlier due to incorrect geographic data, and no other matching records exist for the station. This row should also be excluded, as it does not contribute meaningful or reliable data.
+  
+These 27 rows represent a small fraction of the total dataset (less than 0.0005% of the 5,734,381 trips), excluding them helps ensure the analysis is focused on high-quality, relevant data that accurately reflects trips within central Chicago.
+
+
+
+
+
+
+
 
 #### Step 5: Check if all duplicate has been removed
 ```sql
