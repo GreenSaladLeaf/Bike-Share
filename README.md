@@ -237,7 +237,6 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 |---|---|---|---|---|---|---|---|---|
 |0|0|0|0|933003|933003|980556|980556|0|
 
-**Key Observations**:
 - **No Missing Data for Essential Columns**:
 `ride_id`, `rideable_type`, `started_at`, `ended_at`, and `member_casual` have no null values, which is great for ensuring data consistency in terms of ride identification, timestamps, and user status.
 - **Missing Station Data**:
@@ -258,7 +257,6 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 |---|---|---|---|
 |16.27|16.27|17.1|17.1|
 
-**Key Observations**:
 - 16.27% of the dataset has missing start_station_name and start_station_id.
 - 17.1% of the dataset has missing end_station_name and end_station_id.
 - These percentages suggest that a significant portion of trips is dockless, which is common in modern bike-sharing systems.
@@ -280,14 +278,11 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 |---|---|---|---|
 |0|0|0|0|
 
-**Key Observations**:
-- There are no mismatched cases where the station name is present but the ID is missing, or the reverse. This suggests that the missing data for station names and IDs is likely due to the fact that some rides are dockless and thus do not require station information.
+- There are **no mismatched cases** where the station name is present but the ID is missing, or the reverse. This suggests that the missing data for station names and IDs is likely due to the fact that some rides are dockless and thus do not require station information.
 
 #### Step 7: Handling Null value 
 - This step addresses missing station information by filling start_station_name, start_station_id, end_station_name, and end_station_id with their respective latitude and longitude coordinates where necessary.
 - This ensures the dataset remains complete with geographic information, even when station data is missing (e.g., dockless bike trips).
-
-
 
 ```sql
 WITH formatted_data AS (
@@ -361,7 +356,7 @@ No misspellings were found in either the rideable_type or member_casual columns,
 #### Step 9: Checking  for Multiple Names for One Station ID
 This step investigates instances where a single start_station_id is associated with multiple start_station_name values.
 
-- **1. Identifying Station IDs with Multiple Names**
+##### 1. Identifying Station IDs with Multiple Names
 
 ```sql
 WITH formatted_data AS (
@@ -401,7 +396,7 @@ HAVING COUNT(DISTINCT start_station_name) > 1
 ```
 **81 rows** were found where a single start_station_id has more than one start_station_name.
 
-- **2. Analyzing Station Name Variations**
+##### 2. Analyzing Station Name Variations
   To better understand these cases, we examined the specific names and corresponding coordinates for the identified station IDs:
 
 ```sql
@@ -435,30 +430,32 @@ WHERE
 ORDER BY
   start_station_id
 ```
-**Key Findings**
 - **Temporary Relocations**:
-Example: start_station_id = '13290'
-Names: 'noble st & milwaukee ave' and 'noble st & milwaukee ave (temp)'
-Coordinates: Slightly different but close, suggesting a temporary relocation.
-Resolution: Could be standardized to one name.
-- **Minor Naming Variations**:
-Example: start_station_id = '21322'
-Names: 'grace st & cicero ave' and 'grace & cicero'
-Coordinates: Identical, indicating a formatting inconsistency.
-Resolution: Could be standardized to one format.
-- **Distinct Locations and Shared IDs**:
-Example: start_station_id = '523'
-Names: 'eastlake ter & howard st' and 'public rack - pulaski rd & roosevelt rd'
-Coordinates: Far apart geographically.
-Observation: Likely represents a shared ID for distinct station types (public rack vs. standard station).
-- **Name Changes Over Time**:
-Example: start_station_id = 'ta1305000030'
-Names: 'clark st & randolph st' and 'wells st & randolph st'
-Coordinates: Identical.
-Observation: Likely a historical name change. Can be standardized to the most recent name.
+  - Example: start_station_id = '13290'
+  - Names: 'noble st & milwaukee ave' and 'noble st & milwaukee ave (temp)'
+  - Coordinates: Slightly different but close, suggesting a temporary relocation.
+  - Resolution: Could be standardized to one name.
 
-- **3. Time-Based Investigation**
-  To verify name changes over time, we used this query to identify the first and last occurrences of each name:
+- **Minor Naming Variations**:
+  - Example: start_station_id = '21322'
+  - Names: 'grace st & cicero ave' and 'grace & cicero'
+  - Coordinates: Identical, indicating a formatting inconsistency.
+  - Resolution: Could be standardized to one format.
+    
+- **Distinct Locations and Shared IDs**:
+  - Example: start_station_id = '523'
+  - Names: 'eastlake ter & howard st' and 'public rack - pulaski rd & roosevelt rd'
+  - Coordinates: Far apart geographically.
+  - Observation: Likely represents a shared ID for distinct station types (public rack vs. standard station).
+    
+- **Name Changes Over Time**:
+  - Example: start_station_id = 'ta1305000030'
+  - Names: 'clark st & randolph st' and 'wells st & randolph st'
+  - Coordinates: Identical.
+  - Observation: Likely a historical name change. Can be standardized to the most recent name.
+
+##### 3. Time-Based Investigation
+To verify name changes over time, we used this query to identify the first and last occurrences of each name:
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -491,7 +488,15 @@ GROUP BY
 ORDER BY
   start_station_id
 ```
-result showed that: for case that completely different station names: for example station id: ta1305000030, station name:'clark st & randolph st' and 'wells st & randolph st' has changed over time, for these cases start station name will be standardise to the newer station name so it give us a better pictur when we analysize the most popular station etc.
+|Row|start_station_id|start_station_name|first_occurrence|last_occurrence|
+|---|---|---|---|
+|160|ta1305000030|clark st & randolph st|2023-07-01 00:48:15 UTC|2024-01-24 08:28:31 UTC|
+|161|ta1305000030|wells st & randolph st|2024-01-25 17:21:15 UTC|2024-06-30 21:12:05 UTC|
+
+
+
+
+
 
 #### Step x: Check if all duplicate has been removed
 ```sql
