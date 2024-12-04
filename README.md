@@ -127,7 +127,9 @@ This step involves:
 - **Removing Duplicates**:
 The `DISTINCT` keyword is applied to ensure that any exact duplicate rows (where all column values are identical) are removed from the dataset.
 
+***Throughout the data transformation process, Common Table Expressions (CTEs) were used extensively. CTEs allowed for a flexible and organized approach to data cleaning and manipulation, without altering the original dataset.*** 
 ```sql
+WITH formatted_data AS (
 SELECT DISTINCT       -- remove duplicate
     TRIM(ride_id) AS ride_id,                      -- remove extra space
     TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
@@ -144,11 +146,18 @@ SELECT DISTINCT       -- remove duplicate
     ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
 FROM 
     `bike-share-case-study-430704.Bike_share.bike_share_12months`
+)
+SELECT  *
+FROM formatted_data 
 WHERE
     start_lat BETWEEN 41.6 AND 42.1  -- Chicago-only latitude range
     AND start_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
     AND end_lat BETWEEN 41.6 AND 42.1    -- Chicago-only latitude range
-    AND end_lng BETWEEN -88 AND -87.5;  -- Chicago-only longitude range  
+    AND end_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
+    AND start_lat IS NOT NULL   -- exclude null value
+    AND start_lng IS NOT NULL  
+    AND end_lat IS NOT NULL
+    AND end_lng IS NOT NULL
 ```
 
 By standardizing the dataset, duplicates are removed, and inconsistencies in timestamps, text fields, and geographic coordinates are addressed. This ensures that any analysis, whether it be trip durations or station usage, is based on clean, uniform data
@@ -157,22 +166,11 @@ By standardizing the dataset, duplicates are removed, and inconsistencies in tim
 Investigates any rows that are outside this region, to understand the nature of the data that is being excluded. 
 
 ```sql
-SELECT DISTINCT
-    TRIM(ride_id) AS ride_id,                      -- remove extra space
-    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
-    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,
-    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,
-    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
-    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
-    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
-    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
-    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
-    ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(end_lat,4) AS end_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
-FROM 
-    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+WITH formatted_data AS (
+-- Refer to step 3
+)
+SELECT  *
+FROM formatted_data 
 WHERE
     (
         (start_lat < 41.6 OR start_lat > 42.1)  -- Latitude outside Chicago range
@@ -183,7 +181,7 @@ WHERE
     AND (start_lat IS NOT NULL AND start_lng IS NOT NULL)  -- Ensure start coordinates are not null
     AND (end_lat IS NOT NULL AND end_lng IS NOT NULL);  -- Ensure end coordinates are not null
 ```
-There are 27 rows of data fell outside this range:
+There are **27 rows** of data fell outside this range:
 - 26 rows are slightly outside the Chicago boundaries, likely representing trips that crossed into neighboring suburbs. These trips are valid but don't align with the analysis focus on central Chicago and should be excluded.
   
 - The 1 row with 0,0 coordinates and station information ('Stony Island Ave & 63rd St') represents an outlier due to incorrect geographic data, and no other matching records exist for the station. This row should also be excluded, as it does not contribute meaningful or reliable data.
@@ -194,34 +192,21 @@ These 27 rows represent a small fraction of the total dataset (less than 0.0005%
 To understand the extent of missing geographic data, a query was run to calculate the percentage of rows with NULL values for the start_lat, start_lng, end_lat, or end_lng fields.
 ```sql
 WITH formatted_data AS (
-    SELECT DISTINCT
-    TRIM(ride_id) AS ride_id,                      -- remove extra space
-    TRIM(LOWER(rideable_type)) AS rideable_type,   -- remove extra space and standardize case
-    TIMESTAMP_TRUNC(started_at, SECOND) AS cleaned_started_at,  -- standardise timestamp
-    TIMESTAMP_TRUNC(ended_at, SECOND) AS cleaned_ended_at,      -- standardise timestamp
-    TRIM(LOWER(start_station_name)) AS start_station_name,  -- remove extra space and standardize case
-    TRIM(LOWER(start_station_id)) AS start_station_id,      -- remove extra space and standardize case
-    TRIM(LOWER(end_station_name)) AS end_station_name,      -- remove extra space and standardize case
-    TRIM(LOWER(end_station_id)) AS end_station_id,          -- remove extra space and standardize case
-    TRIM(LOWER(member_casual)) AS member_casual,            -- remove extra space and standardize case
-    ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(end_lat,4) AS end_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
-FROM 
-    `bike-share-case-study-430704.Bike_share.bike_share_12months`
+    -- Refer to step 3
 )
 
 SELECT 
-  ROUND(((SELECT COUNT(ride_id) as missing_end_coordinate
-    FROM formatted_data
-      WHERE 
-        start_lat is NULL
-        or start_lng is null
-        or end_lat is null
-        or end_lng is null) / count(distinct ride_id)*100),2) As percentage
-
-  FROM
+  ROUND(
+    (COUNT(
+      CASE WHEN start_lat IS NULL
+                OR start_lng IS NULL
+                OR end_lat IS NULL
+                OR end_lng IS NULL
+                THEN 1 
+                END
+            ) / COUNT(*) * 100)
+  , 2) AS percentage
+FROM
     formatted_data
 ```
 
@@ -231,7 +216,8 @@ SELECT
 
 This shows that only 0.14% of the dataset has missing geographic data, which is a small percentage. The rest of the dataset is complete with respect to geographic coordinates, ensuring the analysis is based on robust data.
 
-#### Step 6: Check for other null values in the dataset
+#### Step 6: Check for Other Null Values in the Dataset
+##### 1. Count of Null Values in Essential Columns
 
 ```sql
 SELECT
@@ -250,6 +236,262 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 |null_ride_id|null_rideable_type|null_started_at|null_ended_at|null_start_station_name|null_start_station_id|	null_end_station_name|null_end_station_id|null_member_casual|
 |---|---|---|---|---|---|---|---|---|
 |0|0|0|0|933003|933003|980556|980556|0|
+
+**Key Observations**:
+- **No Missing Data for Essential Columns**:
+`ride_id`, `rideable_type`, `started_at`, `ended_at`, and `member_casual` have no null values, which is great for ensuring data consistency in terms of ride identification, timestamps, and user status.
+- **Missing Station Data**:
+  - `start_station_name` and `start_station_id` have 933,003 missing values.
+  - `end_station_name` and `end_station_id` have 980,556 missing values.
+  - indicating that some trips (likely dockless) do not have station-related information.
+
+##### 2. Calculate the Percentage of Null Values for Station Information
+```sql
+SELECT
+  ROUND((COUNT(CASE WHEN start_station_name IS NULL THEN 1 END) / COUNT(*)) * 100, 2) AS null_percentage_start_name,
+  ROUND((COUNT(CASE WHEN start_station_id IS NULL THEN 1 END) / COUNT(*)) * 100, 2) AS null_percentage_start_id,
+  ROUND((COUNT(CASE WHEN end_station_name IS NULL THEN 1 END) / COUNT(*)) * 100, 2) AS null_percentage_end_name,
+  ROUND((COUNT(CASE WHEN end_station_id IS NULL THEN 1 END) / COUNT(*)) * 100, 2) AS null_percentage_end_id
+FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|null_percentage_start_name| null_percentage_start_id|null_percentage_end_name|null_percentage_end_id|
+|---|---|---|---|
+|16.27|16.27|17.1|17.1|
+
+**Key Observations**:
+- 16.27% of the dataset has missing start_station_name and start_station_id.
+- 17.1% of the dataset has missing end_station_name and end_station_id.
+- These percentages suggest that a significant portion of trips is dockless, which is common in modern bike-sharing systems.
+- While missing station data is expected for dockless bikes, it's important to note that the absence of station information could potentially impact analyses that rely on station-based metrics, such as the most used stations, station-to-station trip patterns, or station-related demand analysis.
+
+##### 3. Checking for Mismatched Station Name and ID Pairs
+```sql
+SELECT
+  -- Mismatched cases for start station
+  COUNT(CASE WHEN start_station_name IS NOT NULL AND start_station_id IS NULL THEN 1 END) AS num_mismatch_start_1,
+  COUNT(CASE WHEN start_station_id IS NOT NULL AND start_station_name IS NULL THEN 1 END) AS num_mismatch_start_2,
+  
+  -- Mismatched cases for end station
+  COUNT(CASE WHEN end_station_name IS NOT NULL AND end_station_id IS NULL THEN 1 END) AS num_mismatch_end_1,
+  COUNT(CASE WHEN end_station_id IS NOT NULL AND end_station_name IS NULL THEN 1 END) AS num_mismatch_end_2
+FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|num_mismatch_start_1|num_mismatch_start_2|num_mismatch_end_1|num_mismatch_end_2|
+|---|---|---|---|
+|0|0|0|0|
+
+**Key Observations**:
+- There are no mismatched cases where the station name is present but the ID is missing, or the reverse. This suggests that the missing data for station names and IDs is likely due to the fact that some rides are dockless and thus do not require station information.
+
+#### Step 7: Handling Null value 
+- This step addresses missing station information by filling start_station_name, start_station_id, end_station_name, and end_station_id with their respective latitude and longitude coordinates where necessary.
+- This ensures the dataset remains complete with geographic information, even when station data is missing (e.g., dockless bike trips).
+
+
+
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+SELECT  *
+FROM  formatted_data
+WHERE
+    start_lat BETWEEN 41.6 AND 42.1  -- Chicago-only latitude range
+    AND start_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
+    AND end_lat BETWEEN 41.6 AND 42.1    -- Chicago-only latitude range
+    AND end_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range 
+    AND start_lat IS NOT NULL
+    AND start_lng IS NOT NULL
+    AND end_lat IS NOT NULL
+    AND end_lng IS NOT NULL
+) 
+
+SELECT
+  ride_id,
+  rideable_type,
+  cleaned_started_at,
+  cleaned_ended_at,
+  
+  -- Use COALESCE to fill missing station names with lat/lng values
+  COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
+  COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
+  COALESCE(end_station_name, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_name,  
+  COALESCE(end_station_id, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_id,
+  
+  member_casual,
+  start_lat,
+  start_lng,
+  end_lat,
+  end_lng
+  
+FROM 
+  filtered_data
+```
+- The **COALESCE()** function is used to populate missing station names and IDs with the corresponding latitude and longitude values. The **CONCAT()** function combine these latitude and longitude values into a string, indicating the approximate location of the trip's start or end point.
+  
+#### Step 8: Checking for misspelling 
+To ensure data consistency, the distinct values for the rideable_type and member_casual columns were checked for any misspellings.
+```sql
+SELECT DISTINCT
+  rideable_type
+FROM
+  `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|Row|rideable_type|
+|---|---|
+|1|electric_bike|
+|2|classic_bike|
+|3|docked_bike|
+
+```sql
+SELECT DISTINCT
+  member_casual
+FROM
+  `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|Row|member_casual|
+|---|---|
+|1|member|
+|2|casual|
+
+No misspellings were found in either the rideable_type or member_casual columns, ensuring consistency in these categorical fields.
+
+#### Step 9: Checking  for Multiple Names for One Station ID
+This step investigates instances where a single start_station_id is associated with multiple start_station_name values.
+
+- **1. Identifying Station IDs with Multiple Names**
+
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+SELECT
+  ride_id,
+  rideable_type,
+  cleaned_started_at,
+  cleaned_ended_at,  
+  -- Use COALESCE to fill missing station names with lat/lng values
+  COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
+  COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
+  COALESCE(end_station_name, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_name,  
+  COALESCE(end_station_id, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_id,
+  member_casual,
+  start_lat,
+  start_lng,
+  end_lat,
+  end_lng
+FROM 
+  filtered_data
+)
+
+SELECT 
+  start_station_id,
+  COUNT(DISTINCT start_station_name) AS num
+FROM filled_name
+GROUP BY start_station_id
+HAVING COUNT(DISTINCT start_station_name) > 1
+```
+**81 rows** were found where a single start_station_id has more than one start_station_name.
+
+- **2. Analyzing Station Name Variations**
+  To better understand these cases, we examined the specific names and corresponding coordinates for the identified station IDs:
+
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to above
+)
+
+SELECT DISTINCT
+  start_station_id,
+  start_station_name,
+  start_lat,
+  start_lng
+
+FROM 
+  filled_name
+WHERE
+  start_station_id IN (
+    SELECT start_station_id
+    FROM filled_name
+    GROUP BY start_station_id
+    HAVING COUNT(DISTINCT start_station_name) > 1
+  )
+ORDER BY
+  start_station_id
+```
+**Key Findings**
+- **Temporary Relocations**:
+Example: start_station_id = '13290'
+Names: 'noble st & milwaukee ave' and 'noble st & milwaukee ave (temp)'
+Coordinates: Slightly different but close, suggesting a temporary relocation.
+Resolution: Could be standardized to one name.
+- **Minor Naming Variations**:
+Example: start_station_id = '21322'
+Names: 'grace st & cicero ave' and 'grace & cicero'
+Coordinates: Identical, indicating a formatting inconsistency.
+Resolution: Could be standardized to one format.
+- **Distinct Locations and Shared IDs**:
+Example: start_station_id = '523'
+Names: 'eastlake ter & howard st' and 'public rack - pulaski rd & roosevelt rd'
+Coordinates: Far apart geographically.
+Observation: Likely represents a shared ID for distinct station types (public rack vs. standard station).
+- **Name Changes Over Time**:
+Example: start_station_id = 'ta1305000030'
+Names: 'clark st & randolph st' and 'wells st & randolph st'
+Coordinates: Identical.
+Observation: Likely a historical name change. Can be standardized to the most recent name.
+
+- **3. Time-Based Investigation**
+  To verify name changes over time, we used this query to identify the first and last occurrences of each name:
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to above
+)
+
+SELECT
+  start_station_id,
+  start_station_name,
+  MIN(cleaned_started_at) AS first_occurrence,
+  MAX(cleaned_started_at) AS last_occurrence,
+FROM 
+  filled_name
+WHERE
+  start_station_id IN (
+    SELECT start_station_id
+    FROM filled_name
+    GROUP BY start_station_id
+    HAVING COUNT(DISTINCT start_station_name) > 1
+  ) 
+GROUP BY 
+    start_station_id, start_station_name
+ORDER BY
+  start_station_id
+```
+result showed that: for case that completely different station names: for example station id: ta1305000030, station name:'clark st & randolph st' and 'wells st & randolph st' has changed over time, for these cases start station name will be standardise to the newer station name so it give us a better pictur when we analysize the most popular station etc.
 
 #### Step x: Check if all duplicate has been removed
 ```sql
