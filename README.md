@@ -516,7 +516,7 @@ ORDER BY
   station_id
 ```
 **Example Result**:
-One instance of a station ID with multiple names is shown below:
+
 |Row|start_station_id|start_station_name|first_occurrence|last_occurrence|
 |---|---|---|---|---|
 |160|ta1305000030|clark st & randolph st|2023-07-01 00:48:15 UTC|2024-01-24 08:28:31 UTC|
@@ -531,7 +531,7 @@ This suggests a deliberate renaming of the station ID (ta1305000030), as the coo
 This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
 
 
-
+ 
 
 #### Step x: Check if all duplicate has been removed
 ```sql
