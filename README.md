@@ -354,10 +354,10 @@ FROM
 No misspellings were found in either the rideable_type or member_casual columns, ensuring consistency in these categorical fields.
 
 #### Step 9: Checking  for Multiple Names for One Station ID
-This step investigates instances where a single start_station_id is associated with multiple start_station_name values.
+This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
 
 ##### 1. Identifying Station IDs with Multiple Names
-
+The start and end station IDs were combined into a single 'station_id' column, and the corresponding names into a 'station_name' column to identifies station IDs with more than one distinct name.
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -388,17 +388,23 @@ FROM
 )
 
 SELECT 
-  start_station_id,
-  COUNT(DISTINCT start_station_name) AS num
-FROM filled_name
-GROUP BY start_station_id
-HAVING COUNT(DISTINCT start_station_name) > 1
+  station_id,
+  COUNT(DISTINCT station_name) AS num_names
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name
+  FROM filled_name
+) AS station_data
+GROUP BY station_id
+HAVING COUNT(DISTINCT station_name) > 1
+ORDER BY station_id 
 ```
-**81 rows** were found where a single start_station_id has more than one start_station_name.
+**90 rows** were found where a station id has more than one station name.
 
 ##### 2. Analyzing Station Name Variations
-  To better understand these cases, we examined the specific names and corresponding coordinates for the identified station IDs:
-
+To better understand these discrepancies, we examined the distinct station names and their corresponding coordinates for each identified station_id.
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -413,23 +419,33 @@ WITH formatted_data AS (
 )
 
 SELECT DISTINCT
-  start_station_id,
-  start_station_name,
-  start_lat,
-  start_lng
-
-FROM 
-  filled_name
-WHERE
-  start_station_id IN (
-    SELECT start_station_id
+  station_id,
+  station_name,
+  latitude,
+  longitude
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name, start_lat AS latitude, start_lng AS longitude
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name, end_lat AS latitude, end_lng AS longitude
+  FROM filled_name
+) AS station_info
+WHERE station_id IN (
+  SELECT station_id
+  FROM (
+    SELECT start_station_id AS station_id, start_station_name AS station_name
     FROM filled_name
-    GROUP BY start_station_id
-    HAVING COUNT(DISTINCT start_station_name) > 1
-  )
-ORDER BY
-  start_station_id
+    UNION ALL
+    SELECT end_station_id AS station_id, end_station_name AS station_name
+    FROM filled_name
+  ) AS station_data
+  GROUP BY station_id
+  HAVING COUNT(DISTINCT station_name) > 1
+)
+ORDER BY station_id
 ```
+**Observations**
+
 - **Temporary Relocations**:
   - Example: start_station_id = '13290'
   - Names: 'noble st & milwaukee ave' and 'noble st & milwaukee ave (temp)'
@@ -455,7 +471,7 @@ ORDER BY
   - Observation: Likely a historical name change. Can be standardized to the most recent name.
 
 ##### 3. Time-Based Investigation
-To verify name changes over time, we used this query to identify the first and last occurrences of each name:
+To validate name changes over time, the query below was used to identify the first and last occurrences of each station name:
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -470,30 +486,49 @@ WITH formatted_data AS (
 )
 
 SELECT
-  start_station_id,
-  start_station_name,
+  station_id,
+  station_name,
   MIN(cleaned_started_at) AS first_occurrence,
   MAX(cleaned_started_at) AS last_occurrence,
-FROM 
-  filled_name
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
+  FROM filled_name
+) AS station_time
 WHERE
-  start_station_id IN (
-    SELECT start_station_id
-    FROM filled_name
-    GROUP BY start_station_id
-    HAVING COUNT(DISTINCT start_station_name) > 1
+  station_id IN (
+    SELECT station_id
+    FROM (
+      SELECT start_station_id AS station_id, start_station_name AS station_name
+      FROM filled_name
+      UNION ALL
+      SELECT end_station_id AS station_id, end_station_name AS station_name
+      FROM filled_name
+    ) AS station_data
+    GROUP BY station_id
+    HAVING COUNT(DISTINCT station_name) > 1
   ) 
 GROUP BY 
-    start_station_id, start_station_name
+  station_id, station_name
 ORDER BY
-  start_station_id
+  station_id
 ```
+**Example Result**:
+One instance of a station ID with multiple names is shown below:
 |Row|start_station_id|start_station_name|first_occurrence|last_occurrence|
 |---|---|---|---|---|
 |160|ta1305000030|clark st & randolph st|2023-07-01 00:48:15 UTC|2024-01-24 08:28:31 UTC|
 |161|ta1305000030|wells st & randolph st|2024-01-25 17:21:15 UTC|2024-06-30 21:12:05 UTC|
+In this case:
 
+- "clark st & randolph st" was the station name from July 2023 to January 24, 2024.
+- "wells st & randolph st" became the station name starting January 25, 2024, with no overlap in usage.
 
+This suggests a deliberate renaming of the station ID (ta1305000030), as the coordinates for both names are identical. For analysis, it could be standardized to the newer name.
+
+This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
 
 
 
