@@ -431,6 +431,7 @@ ORDER BY
 |---|---|---|---|---|
 |160|ta1305000030|clark st & randolph st|2023-07-01 00:48:15 UTC|2024-01-24 08:28:31 UTC|
 |161|ta1305000030|wells st & randolph st|2024-01-25 17:21:15 UTC|2024-06-30 21:12:05 UTC|
+
 In this case:
 
 - "clark st & randolph st" was the station name from July 2023 to January 24, 2024.
