@@ -217,7 +217,7 @@ FROM
 This shows that only 0.14% of the dataset has missing geographic data, which is a small percentage. The rest of the dataset is complete with respect to geographic coordinates, ensuring the analysis is based on robust data.
 
 #### Step 6: Check for Other Null Values in the Dataset
-##### 1. Count of Null Values in Essential Columns
+##### Count of Null Values in Essential Columns
 
 ```sql
 SELECT
@@ -244,7 +244,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
   - `end_station_name` and `end_station_id` have 980,556 missing values.
   - indicating that some trips (likely dockless) do not have station-related information.
 
-##### 2. Calculate the Percentage of Null Values for Station Information
+##### Calculate the Percentage of Null Values for Station Information
 ```sql
 SELECT
   ROUND((COUNT(CASE WHEN start_station_name IS NULL THEN 1 END) / COUNT(*)) * 100, 2) AS null_percentage_start_name,
@@ -262,7 +262,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 - These percentages suggest that a significant portion of trips is dockless, which is common in modern bike-sharing systems.
 - While missing station data is expected for dockless bikes, it's important to note that the absence of station information could potentially impact analyses that rely on station-based metrics, such as the most used stations, station-to-station trip patterns, or station-related demand analysis.
 
-##### 3. Checking for Mismatched Station Name and ID Pairs
+##### Checking for Mismatched Station Name and ID Pairs
 ```sql
 SELECT
   -- Mismatched cases for start station
@@ -280,7 +280,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 
 - There are **no mismatched cases** where the station name is present but the ID is missing, or the reverse. This suggests that the missing data for station names and IDs is likely due to the fact that some rides are dockless and thus do not require station information.
 
-##### Step 7: Checking  for Multiple Names for One Station ID
+#### Step 7: Checking  for Multiple Names for One Station ID
 This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
 
 ##### 1. Identifying Station IDs with Multiple Names
@@ -319,7 +319,7 @@ GROUP BY station_id
 HAVING name_count > 1
 ORDER BY name_count DESC 
 ```
-**90 rows** were found where a station id has more than one station name.
+- **90 rows** were found where a station id has more than one station name.
 
 ##### 2. Analyzing Station Name Variations
 To better understand these discrepancies, we examined the distinct station names and their corresponding coordinates for each identified station_id.
@@ -332,8 +332,12 @@ WITH formatted_data AS (
   -- Refer to step 7
 ) 
 
-,filled_name AS (
-  -- Refer to above
+,station_data AS (
+    SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name
+    FROM filtered_data
+    UNION ALL
+    SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name
+    FROM filtered_data  
 )
 
 SELECT DISTINCT
@@ -342,21 +346,15 @@ SELECT DISTINCT
   latitude,
   longitude
 FROM (
-  SELECT start_station_id AS station_id, start_station_name AS station_name, start_lat AS latitude, start_lng AS longitude
-  FROM filled_name
+  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, start_lat AS latitude, start_lng AS longitude
+  FROM filtered_data
   UNION ALL
-  SELECT end_station_id AS station_id, end_station_name AS station_name, end_lat AS latitude, end_lng AS longitude
-  FROM filled_name
+  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, end_lat AS latitude, end_lng AS longitude
+  FROM filtered_data
 ) AS station_info
 WHERE station_id IN (
   SELECT station_id
-  FROM (
-    SELECT start_station_id AS station_id, start_station_name AS station_name
-    FROM filled_name
-    UNION ALL
-    SELECT end_station_id AS station_id, end_station_name AS station_name
-    FROM filled_name
-  ) AS station_data
+  FROM station_data
   GROUP BY station_id
   HAVING COUNT(DISTINCT station_name) > 1
 )
@@ -399,32 +397,26 @@ WITH formatted_data AS (
   -- Refer to step 7
 ) 
 
-,filled_name AS (
-  -- Refer to above
+,station_data AS (
+  -- Refer to step 7  
 )
-
+  
 SELECT
   station_id,
   station_name,
   MIN(cleaned_started_at) AS first_occurrence,
   MAX(cleaned_started_at) AS last_occurrence,
 FROM (
-  SELECT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
-  FROM filled_name
+  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
+  FROM filtered_data
   UNION ALL
-  SELECT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
-  FROM filled_name
+  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
+  FROM filtered_data
 ) AS station_time
 WHERE
   station_id IN (
     SELECT station_id
-    FROM (
-      SELECT start_station_id AS station_id, start_station_name AS station_name
-      FROM filled_name
-      UNION ALL
-      SELECT end_station_id AS station_id, end_station_name AS station_name
-      FROM filled_name
-    ) AS station_data
+    FROM station_data
     GROUP BY station_id
     HAVING COUNT(DISTINCT station_name) > 1
   ) 
