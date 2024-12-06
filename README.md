@@ -302,19 +302,21 @@ WHERE
     AND start_lng IS NOT NULL
     AND end_lat IS NOT NULL
     AND end_lng IS NOT NULL
-) 
+)
+
+,station_data AS (
+    SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name
+    FROM filtered_data
+    UNION ALL
+    SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name
+    FROM filtered_data  
+)
 
 SELECT 
   station_id,
   ARRAY_AGG(DISTINCT station_name) AS station_names,
   COUNT(DISTINCT station_name) AS name_count
-FROM (
-  SELECT start_station_id AS station_id, start_station_name AS station_name
-  FROM filtered_data
-  UNION ALL
-  SELECT end_station_id AS station_id, end_station_name AS station_name
-  FROM filtered_data
-) AS station_data
+FROM station_data
 GROUP BY station_id
 HAVING name_count > 1
 ORDER BY name_count DESC 
@@ -333,11 +335,7 @@ WITH formatted_data AS (
 ) 
 
 ,station_data AS (
-    SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name
-    FROM filtered_data
-    UNION ALL
-    SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name
-    FROM filtered_data  
+  -- Refer to step 7
 )
 
 SELECT DISTINCT
@@ -441,6 +439,164 @@ This suggests a deliberate renaming of the station ID (ta1305000030), as the coo
 
 This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
 
+#### Step 8: Identifying and Resolving Station Names with Multiple IDs
+This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+SELECT 
+  station_name,
+  ARRAY_AGG(DISTINCT station_id) AS station_id,
+  COUNT(DISTINCT station_id) AS id_count
+FROM station_data
+GROUP BY station_name
+HAVING id_count > 1
+ORDER BY id_count DESC
+```
+#### Step 8: Standardizing Start and End Station Names
+Based on the findings from Step 9, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
+
+create a mapping station table 
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+SELECT DISTINCT
+    CASE
+        -- station id changes over time
+        WHEN station_name = 'spaulding ave & 16th st' THEN '21366'
+        WHEN station_name = 'lawndale ave & 30th st' THEN '21334'
+        WHEN station_name = 'richmond st & lincoln ave' THEN '21452'
+        WHEN station_name = 'kostner ave & wrightwood ave' THEN '23321'
+        WHEN station_name = 'lamon ave & armitage ave' THEN '21357'
+        WHEN station_name = 'lockwood ave & wrightwood ave' THEN '21312'
+        WHEN station_name = 'meade ave & addison st' THEN '21324'
+        WHEN station_name = 'rockwell st & 57th st' THEN '21386'
+        WHEN station_name = 'lincoln ave & peterson ave' THEN '21462'
+        WHEN station_name = 'st louis ave & 59th st' THEN '21387'
+        WHEN station_name = 'kedzie ave & 57th st' THEN '21346'
+        WHEN station_name = 'kilpatrick ave & grand ave' THEN '21374'
+        WHEN station_name = 'pulaski rd & 51st st' THEN '21343'
+        WHEN station_name = 'long ave & belmont ave' THEN '21317'
+        WHEN station_name = 'francisco ave & 47th st' THEN '21381'
+        WHEN station_name = 'kedzie ave & 48th pl' THEN '21382'
+        WHEN station_name = 'shabbona park' THEN '21395'
+        WHEN station_name = 'tripp ave & 65th st' THEN '21407'
+        WHEN station_name = 'harding ave & 26th st' THEN '21332'
+        WHEN station_name = 'central park ave & douglas blvd' THEN '21329'
+        WHEN station_name = 'campbell ave & 51st st' THEN '21383'
+        WHEN station_name = 'kildare ave & 47th st' THEN '21401'
+        WHEN station_name = 'lamon ave & chicago ave' THEN '24205'
+        WHEN station_name = 'kildare ave & 26th st' THEN '21365'
+        WHEN station_name = 'kildare ave & chicago ave' THEN '21371'
+        WHEN station_name = 'kildare ave & division st' THEN '21303'
+        WHEN station_name = 'monticello ave & chicago ave' THEN '21301'
+        WHEN station_name = 'lawler ave & 50th st' THEN '21400'
+        WHEN station_name = 'artesian ave & 55th st' THEN '21345'
+        WHEN station_name = 'richmond st & 59th st' THEN '21388'
+        WHEN station_name = 'fairfield ave & 44th st' THEN '21380'
+        WHEN station_name = 'tripp ave & 15th st' THEN '21363'
+        WHEN station_name = 'central ave & roscoe st' THEN '21396'
+        WHEN station_name = 'meade ave & diversey ave' THEN '21353'
+        WHEN station_name = 'california ave & marquette rd' THEN '21390'
+        WHEN station_name = 'california ave & 36th st' THEN '21338'
+        WHEN station_name = 'kildare ave & 55th st' THEN '21403'
+        WHEN station_name = 'lavergne ave & division st' THEN '21304'
+        WHEN station_name = 'cicero ave & wellington ave' THEN '24174'
+        WHEN station_name = 'tripp ave & 31st st' THEN '21368'
+        WHEN station_name = 'hoyne ave & 34th st' THEN '21337'
+        WHEN station_name = 'leamington ave & hirsch st' THEN '21307'
+        WHEN station_name = 'long ave & north ave' THEN '21375'
+        WHEN station_name = 'oketo ave & addison st' THEN '21393'
+        WHEN station_name = 'harlem ave & grace st' THEN '21325'
+        WHEN station_name = 'kostner ave & 63rd st' THEN '21406'
+        WHEN station_name = 'parkside ave & armitage ave' THEN '21354'
+        WHEN station_name = 'kedzie ave & 52nd st' THEN '21384'
+        ELSE station_id
+    END AS station_id,
+
+    CASE
+        -- Temporary relocations 
+        WHEN station_id = '13290' THEN 'noble st & milwaukee ave'
+        WHEN station_id = '15541' OR station_id = '15541.1.1' THEN 'buckingham fountain'
+        WHEN station_id = 'hubbard bike-checking (lbs-wh-test)' THEN 'base - 2132 w hubbard' 
+        ---The names 'scooters - 2132 w hubbard st' and 'scooters classic - 2132 w hubbard st' were recorded only briefly, each existing for a single day with very few data entries. These instances suggest a temporary relocation or test setup. For consistency, all occurrences were standardized to 'base - 2132 w hubbard'.---
+        -- Minor Naming Variations
+        WHEN station_id = '21322' THEN 'grace st & cicero ave'
+        WHEN station_id = '21366' THEN 'spaulding ave & 16th st'
+        WHEN station_id = '21371' THEN 'kildare ave & chicago ave'
+        WHEN station_id = '21393' THEN 'oketo ave & addison st'
+        WHEN station_id = '23187' THEN 'lockwood ave & grand ave'
+        WHEN station_id = '23215' THEN 'lexington st & california ave'
+        -- Name changes Over Time
+        WHEN station_id = '24156' THEN 'granville ave & pulaski rd'
+        WHEN station_id = 'ka1503000074' THEN 'museum of science and industry'
+        WHEN station_id = 'ta1305000030' THEN 'wells st & randolph st'
+        WHEN station_id = 'ta1309000042' THEN 'lincoln ave & melrose st'
+        ELSE station_name
+    END AS station_name
+    
+FROM station_data
+ORDER BY station_id
+
+
+```
+export it to `bike-share-case-study-430704.Bike_share.mapping_station`
+Once the mapping table (station_name_mapping) is ready, rewrite the query to join it and apply the standardized names for the whole table.
+
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to step 9
+)
+
+SELECT
+    ride_id,
+    rideable_type,
+    cleaned_started_at,
+    cleaned_ended_at,
+    f.start_station_id,
+    COALESCE(m.station_name, f.start_station_name) AS start_station_name,
+    f.end_station_id,
+    COALESCE(m.station_name, f.end_station_name) AS end_station_name
+    member_casual,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng
+FROM 
+    filled_name AS f
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m
+    ON f.start_station_id = m.station_id
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m
+    ON f.end_station_id = m.station_id
+```
 
 
 
