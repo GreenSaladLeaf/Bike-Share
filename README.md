@@ -280,10 +280,11 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 
 - There are **no mismatched cases** where the station name is present but the ID is missing, or the reverse. This suggests that the missing data for station names and IDs is likely due to the fact that some rides are dockless and thus do not require station information.
 
-#### Step 7: Handling Null value 
-- This step addresses missing station information by filling start_station_name, start_station_id, end_station_name, and end_station_id with their respective latitude and longitude coordinates where necessary.
-- This ensures the dataset remains complete with geographic information, even when station data is missing (e.g., dockless bike trips).
+##### Step 7: Checking  for Multiple Names for One Station ID
+This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
 
+##### 1. Identifying Station IDs with Multiple Names
+The start and end station IDs were combined into a single 'station_id' column, and the corresponding names into a 'station_name' column to identifies station IDs with more than one distinct name.
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -303,103 +304,20 @@ WHERE
     AND end_lng IS NOT NULL
 ) 
 
-SELECT
-  ride_id,
-  rideable_type,
-  cleaned_started_at,
-  cleaned_ended_at,
-  
-  -- Use COALESCE to fill missing station names with lat/lng values
-  COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
-  COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
-  COALESCE(end_station_name, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_name,  
-  COALESCE(end_station_id, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_id,
-  
-  member_casual,
-  start_lat,
-  start_lng,
-  end_lat,
-  end_lng
-  
-FROM 
-  filtered_data
-```
-- The **COALESCE()** function is used to populate missing station names and IDs with the corresponding latitude and longitude values. The **CONCAT()** function combine these latitude and longitude values into a string, indicating the approximate location of the trip's start or end point.
-  
-#### Step 8: Checking for misspelling 
-To ensure data consistency, the distinct values for the rideable_type and member_casual columns were checked for any misspellings.
-```sql
-SELECT DISTINCT
-  rideable_type
-FROM
-  `bike-share-case-study-430704.Bike_share.bike_share_12months`
-```
-|Row|rideable_type|
-|---|---|
-|1|electric_bike|
-|2|classic_bike|
-|3|docked_bike|
-
-```sql
-SELECT DISTINCT
-  member_casual
-FROM
-  `bike-share-case-study-430704.Bike_share.bike_share_12months`
-```
-|Row|member_casual|
-|---|---|
-|1|member|
-|2|casual|
-
-No misspellings were found in either the rideable_type or member_casual columns, ensuring consistency in these categorical fields.
-
-#### Step 9: Checking  for Multiple Names for One Station ID
-This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
-
-##### 1. Identifying Station IDs with Multiple Names
-The start and end station IDs were combined into a single 'station_id' column, and the corresponding names into a 'station_name' column to identifies station IDs with more than one distinct name.
-```sql
-WITH formatted_data AS (
-  -- Refer to step 3
-)
-
-,filtered_data AS (
-  -- Refer to step 7
-) 
-
-,filled_name AS (
-SELECT
-  ride_id,
-  rideable_type,
-  cleaned_started_at,
-  cleaned_ended_at,  
-  -- Use COALESCE to fill missing station names with lat/lng values
-  COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
-  COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
-  COALESCE(end_station_name, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_name,  
-  COALESCE(end_station_id, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_id,
-  member_casual,
-  start_lat,
-  start_lng,
-  end_lat,
-  end_lng
-FROM 
-  filtered_data
-)
-
 SELECT 
   station_id,
-  COUNT(DISTINCT station_name) AS num_names
+  ARRAY_AGG(DISTINCT station_name) AS station_names,
+  COUNT(DISTINCT station_name) AS name_count
 FROM (
   SELECT start_station_id AS station_id, start_station_name AS station_name
-  FROM filled_name
+  FROM filtered_data
   UNION ALL
   SELECT end_station_id AS station_id, end_station_name AS station_name
-  FROM filled_name
+  FROM filtered_data
 ) AS station_data
 GROUP BY station_id
-HAVING COUNT(DISTINCT station_name) > 1
-ORDER BY station_id 
+HAVING name_count > 1
+ORDER BY name_count DESC 
 ```
 **90 rows** were found where a station id has more than one station name.
 
@@ -531,7 +449,353 @@ This suggests a deliberate renaming of the station ID (ta1305000030), as the coo
 This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
 
 
- 
+
+
+#### Step 7: Handling Null value 
+- This step addresses missing station information by filling start_station_name, start_station_id, end_station_name, and end_station_id with their respective latitude and longitude coordinates where necessary.
+- This ensures the dataset remains complete with geographic information, even when station data is missing (e.g., dockless bike trips).
+
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+SELECT  *
+FROM  formatted_data
+WHERE
+    start_lat BETWEEN 41.6 AND 42.1  -- Chicago-only latitude range
+    AND start_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
+    AND end_lat BETWEEN 41.6 AND 42.1    -- Chicago-only latitude range
+    AND end_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range 
+    AND start_lat IS NOT NULL
+    AND start_lng IS NOT NULL
+    AND end_lat IS NOT NULL
+    AND end_lng IS NOT NULL
+) 
+
+SELECT
+  ride_id,
+  rideable_type,
+  cleaned_started_at,
+  cleaned_ended_at,
+  
+  -- Use COALESCE to fill missing station names with lat/lng values
+  COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
+  COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
+  COALESCE(end_station_name, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_name,  
+  COALESCE(end_station_id, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_id,
+  
+  member_casual,
+  start_lat,
+  start_lng,
+  end_lat,
+  end_lng
+  
+FROM 
+  filtered_data
+```
+- The **COALESCE()** function is used to populate missing station names and IDs with the corresponding latitude and longitude values. The **CONCAT()** function combine these latitude and longitude values into a string, indicating the approximate location of the trip's start or end point.
+  
+#### Step 8: Checking for misspelling 
+To ensure data consistency, the distinct values for the rideable_type and member_casual columns were checked for any misspellings.
+```sql
+SELECT DISTINCT
+  rideable_type
+FROM
+  `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|Row|rideable_type|
+|---|---|
+|1|electric_bike|
+|2|classic_bike|
+|3|docked_bike|
+
+```sql
+SELECT DISTINCT
+  member_casual
+FROM
+  `bike-share-case-study-430704.Bike_share.bike_share_12months`
+```
+|Row|member_casual|
+|---|---|
+|1|member|
+|2|casual|
+
+No misspellings were found in either the rideable_type or member_casual columns, ensuring consistency in these categorical fields.
+
+#### Step 9: Checking  for Multiple Names for One Station ID
+This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
+
+##### 1. Identifying Station IDs with Multiple Names
+The start and end station IDs were combined into a single 'station_id' column, and the corresponding names into a 'station_name' column to identifies station IDs with more than one distinct name.
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+SELECT
+  ride_id,
+  rideable_type,
+  cleaned_started_at,
+  cleaned_ended_at,  
+  -- Use COALESCE to fill missing station names with lat/lng values
+  COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
+  COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
+  COALESCE(end_station_name, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_name,  
+  COALESCE(end_station_id, CONCAT('Lat: ', CAST(end_lat AS STRING), ', Long: ', CAST(end_lng AS STRING))) AS end_station_id,
+  member_casual,
+  start_lat,
+  start_lng,
+  end_lat,
+  end_lng
+FROM 
+  filtered_data
+)
+
+SELECT 
+  station_id,
+  ARRAY_AGG(DISTINCT station_name) AS station_names,
+  COUNT(DISTINCT station_name) AS name_count
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name
+  FROM filled_name
+) AS station_data
+GROUP BY station_id
+HAVING name_count > 1
+ORDER BY name_count DESC 
+```
+**90 rows** were found where a station id has more than one station name.
+
+##### 2. Analyzing Station Name Variations
+To better understand these discrepancies, we examined the distinct station names and their corresponding coordinates for each identified station_id.
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to above
+)
+
+SELECT DISTINCT
+  station_id,
+  station_name,
+  latitude,
+  longitude
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name, start_lat AS latitude, start_lng AS longitude
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name, end_lat AS latitude, end_lng AS longitude
+  FROM filled_name
+) AS station_info
+WHERE station_id IN (
+  SELECT station_id
+  FROM (
+    SELECT start_station_id AS station_id, start_station_name AS station_name
+    FROM filled_name
+    UNION ALL
+    SELECT end_station_id AS station_id, end_station_name AS station_name
+    FROM filled_name
+  ) AS station_data
+  GROUP BY station_id
+  HAVING COUNT(DISTINCT station_name) > 1
+)
+ORDER BY station_id
+```
+**Observations**
+
+- **Temporary Relocations**:
+  - Example: start_station_id = '13290'
+  - Names: 'noble st & milwaukee ave' and 'noble st & milwaukee ave (temp)'
+  - Coordinates: Slightly different but close, suggesting a temporary relocation.
+  - Resolution: Could be standardized to one name.
+
+- **Minor Naming Variations**:
+  - Example: start_station_id = '21322'
+  - Names: 'grace st & cicero ave' and 'grace & cicero'
+  - Coordinates: Identical, indicating a formatting inconsistency.
+  - Resolution: Could be standardized to one format.
+    
+- **Distinct Locations and Shared IDs**:
+  - Example: start_station_id = '523'
+  - Names: 'eastlake ter & howard st' and 'public rack - pulaski rd & roosevelt rd'
+  - Coordinates: Far apart geographically.
+  - Observation: Likely represents a shared ID for distinct station types (public rack vs. standard station).
+    
+- **Name Changes Over Time**:
+  - Example: start_station_id = 'ta1305000030'
+  - Names: 'clark st & randolph st' and 'wells st & randolph st'
+  - Coordinates: Identical.
+  - Observation: Likely a historical name change. Can be standardized to the most recent name.
+
+##### 3. Time-Based Investigation
+To validate name changes over time, the query below was used to identify the first and last occurrences of each station name:
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to above
+)
+
+SELECT
+  station_id,
+  station_name,
+  MIN(cleaned_started_at) AS first_occurrence,
+  MAX(cleaned_started_at) AS last_occurrence,
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
+  FROM filled_name
+) AS station_time
+WHERE
+  station_id IN (
+    SELECT station_id
+    FROM (
+      SELECT start_station_id AS station_id, start_station_name AS station_name
+      FROM filled_name
+      UNION ALL
+      SELECT end_station_id AS station_id, end_station_name AS station_name
+      FROM filled_name
+    ) AS station_data
+    GROUP BY station_id
+    HAVING COUNT(DISTINCT station_name) > 1
+  ) 
+GROUP BY 
+  station_id, station_name
+ORDER BY
+  station_id
+```
+**Example Result**:
+
+|Row|start_station_id|start_station_name|first_occurrence|last_occurrence|
+|---|---|---|---|---|
+|160|ta1305000030|clark st & randolph st|2023-07-01 00:48:15 UTC|2024-01-24 08:28:31 UTC|
+|161|ta1305000030|wells st & randolph st|2024-01-25 17:21:15 UTC|2024-06-30 21:12:05 UTC|
+In this case:
+
+- "clark st & randolph st" was the station name from July 2023 to January 24, 2024.
+- "wells st & randolph st" became the station name starting January 25, 2024, with no overlap in usage.
+
+This suggests a deliberate renaming of the station ID (ta1305000030), as the coordinates for both names are identical. For analysis, it could be standardized to the newer name.
+
+This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
+
+#### Step 10: Identifying and Resolving Station Names with Multiple IDs
+This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
+```sql
+
+
+#### Step 10: Standardizing Start and End Station Names
+Based on the findings from Step 9, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
+
+create a mapping station table 
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to step 9
+)
+
+SELECT DISTINCT
+    station_id,
+    CASE
+        -- Temporary relocations 
+        WHEN station_id = '13290' THEN 'noble st & milwaukee ave'
+        WHEN station_id = '15541' OR station_id = '15541.1.1' THEN 'buckingham fountain'
+        WHEN station_id = 'hubbard bike-checking (lbs-wh-test)' THEN 'base - 2132 w hubbard' 
+        ---The names 'scooters - 2132 w hubbard st' and 'scooters classic - 2132 w hubbard st' were recorded only briefly, each existing for a single day with very few data entries. These instances suggest a temporary relocation or test setup. For consistency, all occurrences were standardized to 'base - 2132 w hubbard'.---
+        -- Minor Naming Variations
+        WHEN station_id = '21322' THEN 'grace st & cicero ave'
+        WHEN station_id = '21366' THEN 'spaulding ave & 16th st'
+        WHEN station_id = '21371' THEN 'kildare ave & chicago ave'
+        WHEN station_id = '21393' THEN 'oketo ave & addison st'
+        WHEN station_id = '23187' THEN 'lockwood ave & grand ave'
+        WHEN station_id = '23215' THEN 'lexington st & california ave'
+        -- Name changes Over Time
+        WHEN station_id = '24156' THEN 'granville ave & pulaski rd'
+        WHEN station_id = 'ka1503000074' THEN 'museum of science and industry'
+        WHEN station_id = 'ta1305000030' THEN 'wells st & randolph st'
+        WHEN station_id = 'ta1309000042' THEN 'lincoln ave & melrose st'
+        WHEN station_id = '647' THEN 'racine ave & 57th st'
+        ELSE station_name
+    END AS station_name
+    
+FROM (
+  SELECT start_station_id AS station_id, start_station_name AS station_name
+  FROM filled_name
+  UNION ALL
+  SELECT end_station_id AS station_id, end_station_name AS station_name
+  FROM filled_name
+) AS station_data
+
+
+```
+export it to `bike-share-case-study-430704.Bike_share.mapping_station`
+Once the mapping table (station_name_mapping) is ready, rewrite the query to join it and apply the standardized names for the whole table.
+
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,filled_name AS (
+  -- Refer to step 9
+)
+
+SELECT
+    ride_id,
+    rideable_type,
+    cleaned_started_at,
+    cleaned_ended_at,
+    f.start_station_id,
+    COALESCE(m.station_name, f.start_station_name) AS start_station_name,
+    f.end_station_id,
+    COALESCE(m.station_name, f.end_station_name) AS end_station_name
+    member_casual,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng
+FROM 
+    filled_name AS f
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m
+    ON f.start_station_id = m.station_id
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m
+    ON f.end_station_id = m.station_id
+```
+
 
 #### Step x: Check if all duplicate has been removed
 ```sql
