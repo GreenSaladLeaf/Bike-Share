@@ -217,7 +217,7 @@ FROM
 This shows that only 0.14% of the dataset has missing geographic data, which is a small percentage. The rest of the dataset is complete with respect to geographic coordinates, ensuring the analysis is based on robust data.
 
 #### Step 6: Check for Other Null Values in the Dataset
-##### Count of Null Values in Essential Columns
+##### 1. Count of Null Values in Essential Columns
 
 ```sql
 SELECT
@@ -244,7 +244,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
   - `end_station_name` and `end_station_id` have 980,556 missing values.
   - indicating that some trips (likely dockless) do not have station-related information.
 
-##### Calculate the Percentage of Null Values for Station Information
+##### 2. Calculate the Percentage of Null Values for Station Information
 ```sql
 SELECT
   ROUND((COUNT(CASE WHEN start_station_name IS NULL THEN 1 END) / COUNT(*)) * 100, 2) AS null_percentage_start_name,
@@ -262,7 +262,7 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 - These percentages suggest that a significant portion of trips is dockless, which is common in modern bike-sharing systems.
 - While missing station data is expected for dockless bikes, it's important to note that the absence of station information could potentially impact analyses that rely on station-based metrics, such as the most used stations, station-to-station trip patterns, or station-related demand analysis.
 
-##### Checking for Mismatched Station Name and ID Pairs
+##### 3. Checking for Mismatched Station Name and ID Pairs
 ```sql
 SELECT
   -- Mismatched cases for start station
@@ -464,6 +464,8 @@ HAVING id_count > 1
 ORDER BY id_count DESC
 ```
 - **48** station names have more than one station id.
+
+**Example Results**:
 |Row|station_name|station_id|id_count|
 |---|---|---|---|
 |1|campbell ave & 51st st|383|2|
@@ -471,6 +473,51 @@ ORDER BY id_count DESC
 |2|california ave & 36th st|21338|2|
 | | |338| |
 
+- To identify if the station id changes over time:
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 7
+) 
+
+,station_data AS (
+  -- Refer to step 7  
+)
+  
+SELECT
+  station_id,
+  station_name,
+  MIN(cleaned_started_at) AS first_occurrence,
+  MAX(cleaned_started_at) AS last_occurrence,
+FROM (
+  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
+  FROM filtered_data
+  UNION ALL
+  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
+  FROM filtered_data
+) AS station_time
+WHERE
+  station_name IN (
+    SELECT station_name
+    FROM station_data
+    GROUP BY station_name
+    HAVING COUNT(DISTINCT station_id) > 1
+  ) 
+GROUP BY 
+  station_id, station_name
+ORDER BY
+  station_name
+```
+- There are no overlapping in time for there station ids, station ids that start with '21-' are the newer ones
+**Example Results**:
+|Row|station_id|station_name|first_occurrence|last_occurrence|
+|1|21345|artesian ave & 55th st|2024-04-27 16:42:36 UTC|2024-06-30 20:38:58 UTC|
+|2|345|artesian ave & 55th st|2023-07-03 14:47:22 UTC|2024-04-14 11:22:36 UTC|
+|3|338|california ave & 36th st|2023-07-01 20:56:28 UTC|2024-04-09 19:54:34 UTC|
+|4|21338|california ave & 36th st|2024-04-17 11:18:50 UTC|2024-06-25 20:17:40 UTC|
 
 
 #### Step 8: Standardizing Start and End Station Names
