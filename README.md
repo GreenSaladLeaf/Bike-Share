@@ -463,6 +463,16 @@ GROUP BY station_name
 HAVING id_count > 1
 ORDER BY id_count DESC
 ```
+- **48** station names have more than one station id.
+|Row|station_name|station_id|id_count|
+|---|---|---|---|
+|1|campbell ave & 51st st|383|2|
+| | |21383| |
+|2|california ave & 36th st|21338|2|
+| | |338| |
+
+
+
 #### Step 8: Standardizing Start and End Station Names
 Based on the findings from Step 9, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
 
