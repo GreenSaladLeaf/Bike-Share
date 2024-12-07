@@ -511,16 +511,19 @@ GROUP BY
 ORDER BY
   station_name
 ```
-- There are no overlapping in time for there station ids, station ids that start with '21-' are the newer ones
+- There are no overlapping in time for there station ids, station ids that start with '21-' are the newer ones.
+  
 **Example Results**:
+
 |Row|station_id|station_name|first_occurrence|last_occurrence|
+|---|---|---|---|---|
 |1|21345|artesian ave & 55th st|2024-04-27 16:42:36 UTC|2024-06-30 20:38:58 UTC|
 |2|345|artesian ave & 55th st|2023-07-03 14:47:22 UTC|2024-04-14 11:22:36 UTC|
 |3|338|california ave & 36th st|2023-07-01 20:56:28 UTC|2024-04-09 19:54:34 UTC|
 |4|21338|california ave & 36th st|2024-04-17 11:18:50 UTC|2024-06-25 20:17:40 UTC|
 
 
-#### Step 8: Standardizing Start and End Station Names
+#### Step 9: Standardizing Start and End Station Names
 Based on the findings from Step 9, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
 
 create a mapping station table 
