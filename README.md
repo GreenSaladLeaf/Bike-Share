@@ -470,7 +470,8 @@ HAVING id_count > 1
 ORDER BY id_count DESC
 ```
 - **48** station names have more than one station id.
-
+- found one station id has its station name
+  
 **Example Results**:
 |Row|station_name|station_id|id_count|
 |---|---|---|---|
@@ -478,6 +479,8 @@ ORDER BY id_count DESC
 | | |21383| |
 |2|california ave & 36th st|21338|2|
 | | |338| |
+|45|cicero ave & wellington ave|24174|2|
+| | |cicero ave & wellington ave| |
 
 - To identify if the station id changes over time:
 ```sql
@@ -663,7 +666,7 @@ LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
 
 
 
-#### Step 7: Handling Null value 
+#### Step 10: Handling Null value 
 - This step addresses missing station information by filling start_station_name, start_station_id, end_station_name, and end_station_id with their respective latitude and longitude coordinates where necessary.
 - This ensures the dataset remains complete with geographic information, even when station data is missing (e.g., dockless bike trips).
 
@@ -673,25 +676,38 @@ WITH formatted_data AS (
 )
 
 ,filtered_data AS (
-SELECT  *
-FROM  formatted_data
-WHERE
-    start_lat BETWEEN 41.6 AND 42.1  -- Chicago-only latitude range
-    AND start_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range
-    AND end_lat BETWEEN 41.6 AND 42.1    -- Chicago-only latitude range
-    AND end_lng BETWEEN -88 AND -87.5  -- Chicago-only longitude range 
-    AND start_lat IS NOT NULL
-    AND start_lng IS NOT NULL
-    AND end_lat IS NOT NULL
-    AND end_lng IS NOT NULL
+  -- Refer to step 7
 ) 
+
+,updated_station AS (
+SELECT DISTINCT
+    ride_id, 
+    rideable_type,
+    cleaned_started_at,
+    cleaned_ended_at,
+    COALESCE(m_start.station_id, f.start_station_id) AS start_station_id,
+    COALESCE(m_start.station_name, f.start_station_name) AS start_station_name,
+    COALESCE(m_end.station_id, f.end_station_id) AS end_station_id,
+    COALESCE(m_end.station_name, f.end_station_name) AS end_station_name,
+    member_casual,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng
+FROM 
+    filtered_data AS f
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_start
+    ON f.start_station_id = m_start.station_id AND f.start_station_name = m_start.station_name
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
+    ON f.end_station_id = m_end.station_id AND f.end_station_name = m_end.station_name
+)
 
 SELECT
   ride_id,
   rideable_type,
   cleaned_started_at,
   cleaned_ended_at,
-  
+
   -- Use COALESCE to fill missing station names with lat/lng values
   COALESCE(start_station_name, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_name,  
   COALESCE(start_station_id, CONCAT('Lat: ', CAST(start_lat AS STRING), ', Long: ', CAST(start_lng AS STRING))) AS start_station_id,
@@ -705,11 +721,11 @@ SELECT
   end_lng
   
 FROM 
-  filtered_data
+  updated_station
 ```
 - The **COALESCE()** function is used to populate missing station names and IDs with the corresponding latitude and longitude values. The **CONCAT()** function combine these latitude and longitude values into a string, indicating the approximate location of the trip's start or end point.
   
-#### Step 8: Checking for misspelling 
+#### Step 11: Checking for misspelling 
 To ensure data consistency, the distinct values for the rideable_type and member_casual columns were checked for any misspellings.
 ```sql
 SELECT DISTINCT
