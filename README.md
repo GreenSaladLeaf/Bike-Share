@@ -524,7 +524,7 @@ ORDER BY
 
 
 #### Step 9: Standardizing Start and End Station Names
-Based on the findings from Step 9, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
+Based on the findings from Step 7 and step 8, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
 
 create a mapping station table 
 ```sql
@@ -612,13 +612,13 @@ SELECT DISTINCT
         WHEN station_id = 'ka1503000074' THEN 'museum of science and industry'
         WHEN station_id = 'ta1305000030' THEN 'wells st & randolph st'
         WHEN station_id = 'ta1309000042' THEN 'lincoln ave & melrose st'
+        WHEN station_id = '647' THEN 'racine ave & 57th st'
         ELSE station_name
     END AS station_name
     
 FROM station_data
+WHERE station_name IS NOT NULL and station_id IS NOT NULL
 ORDER BY station_id
-
-
 ```
 export it to `bike-share-case-study-430704.Bike_share.mapping_station`
 Once the mapping table (station_name_mapping) is ready, rewrite the query to join it and apply the standardized names for the whole table.
