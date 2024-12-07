@@ -305,11 +305,17 @@ WHERE
 )
 
 ,station_data AS (
-    SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name
-    FROM filtered_data
-    UNION ALL
-    SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name
-    FROM filtered_data  
+SELECT DISTINCT
+  start_station_id AS station_id, 
+  start_station_name AS station_name
+FROM filtered_data
+WHERE start_station_name IS NOT NULL AND start_station_id IS NOT NULL
+UNION ALL
+SELECT DISTINCT 
+  end_station_id AS station_id, 
+  end_station_name AS station_name
+FROM filtered_data 
+WHERE end_station_name IS NOT NULL AND end_station_id IS NOT NULL 
 )
 
 SELECT 
@@ -541,6 +547,7 @@ WITH formatted_data AS (
 )
 
 SELECT DISTINCT
+    -- ### Assign New Station IDs ###
     CASE
         -- station id changes over time
         WHEN station_name = 'spaulding ave & 16th st' THEN '21366'
@@ -591,9 +598,11 @@ SELECT DISTINCT
         WHEN station_name = 'kostner ave & 63rd st' THEN '21406'
         WHEN station_name = 'parkside ave & armitage ave' THEN '21354'
         WHEN station_name = 'kedzie ave & 52nd st' THEN '21384'
+        WHEN station_name = 'buckingham fountain' OR station_name = 'buckingham - fountain' THEN '15541'
         ELSE station_id
     END AS station_id,
-
+    
+    -- ### Assign New Station Names ###
     CASE
         -- Temporary relocations 
         WHEN station_id = '13290' THEN 'noble st & milwaukee ave'
@@ -615,9 +624,7 @@ SELECT DISTINCT
         WHEN station_id = '647' THEN 'racine ave & 57th st'
         ELSE station_name
     END AS station_name
-    
 FROM station_data
-WHERE station_name IS NOT NULL and station_id IS NOT NULL
 ORDER BY station_id
 ```
 export it to `bike-share-case-study-430704.Bike_share.mapping_station`
@@ -632,30 +639,31 @@ WITH formatted_data AS (
   -- Refer to step 7
 ) 
 
-,filled_name AS (
-  -- Refer to step 9
-)
+,station_data AS (
+  -- Refer to step 7
+）
 
-SELECT
-    ride_id,
+SELECT DISTINCT
+    ride_id, 
     rideable_type,
     cleaned_started_at,
     cleaned_ended_at,
-    f.start_station_id,
-    COALESCE(m.station_name, f.start_station_name) AS start_station_name,
-    f.end_station_id,
-    COALESCE(m.station_name, f.end_station_name) AS end_station_name
+    COALESCE(m_start.station_id, f.start_station_id) AS start_station_id,
+    COALESCE(m_start.station_name, f.start_station_name) AS start_station_name,
+    COALESCE(m_end.station_id, f.end_station_id) AS end_station_id,
+    COALESCE(m_end.station_name, f.end_station_name) AS end_station_name,
     member_casual,
     start_lat,
     start_lng,
     end_lat,
     end_lng
 FROM 
-    filled_name AS f
-LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m
-    ON f.start_station_id = m.station_id
-LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m
-    ON f.end_station_id = m.station_id
+    filtered_data AS f
+LEFT JOIN mapping_station AS m_start
+    ON f.start_station_id = m_start.station_id AND f.start_station_name = m_start.station_name
+LEFT JOIN mapping_station AS m_end
+    ON f.end_station_id = m_end.station_id AND f.end_station_name = m_end.station_name
+
 ```
 
 
