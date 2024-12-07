@@ -639,10 +639,6 @@ WITH formatted_data AS (
   -- Refer to step 7
 ) 
 
-,station_data AS (
-  -- Refer to step 7
-）
-
 SELECT DISTINCT
     ride_id, 
     rideable_type,
@@ -659,11 +655,10 @@ SELECT DISTINCT
     end_lng
 FROM 
     filtered_data AS f
-LEFT JOIN mapping_station AS m_start
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_start
     ON f.start_station_id = m_start.station_id AND f.start_station_name = m_start.station_name
-LEFT JOIN mapping_station AS m_end
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
     ON f.end_station_id = m_end.station_id AND f.end_station_name = m_end.station_name
-
 ```
 
 
