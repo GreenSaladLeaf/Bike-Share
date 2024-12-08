@@ -337,7 +337,7 @@ WITH formatted_data AS (
 )
 
 ,filtered_data AS (
-  -- Refer to step 7
+  -- Refer to step 3
 ) 
 
 ,station_data AS (
@@ -398,7 +398,7 @@ WITH formatted_data AS (
 )
 
 ,filtered_data AS (
-  -- Refer to step 7
+  -- Refer to step 3
 ) 
 
 ,station_data AS (
@@ -445,104 +445,14 @@ This suggests a deliberate renaming of the station ID (ta1305000030), as the coo
 
 This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
 
-#### Step 8: Identifying and Resolving Station Names with Multiple IDs
-This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
+- to address this inconsistency in these station id with multiple name:
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
 )
 
 ,filtered_data AS (
-  -- Refer to step 7
-) 
-
-,station_data AS (
-  -- Refer to step 7
-)
-
-SELECT 
-  station_name,
-  ARRAY_AGG(DISTINCT station_id) AS station_id,
-  COUNT(DISTINCT station_id) AS id_count
-FROM station_data
-GROUP BY station_name
-HAVING id_count > 1
-ORDER BY id_count DESC
-```
-- **48** station names have more than one station id.
-- found one station id has its station name
-  
-**Example Results**:
-|Row|station_name|station_id|id_count|
-|---|---|---|---|
-|1|campbell ave & 51st st|383|2|
-| | |21383| |
-|2|california ave & 36th st|21338|2|
-| | |338| |
-|45|cicero ave & wellington ave|24174|2|
-| | |cicero ave & wellington ave| |
-
-- To identify if the station id changes over time:
-```sql
-WITH formatted_data AS (
   -- Refer to step 3
-)
-
-,filtered_data AS (
-  -- Refer to step 7
-) 
-
-,station_data AS (
-  -- Refer to step 7  
-)
-  
-SELECT
-  station_id,
-  station_name,
-  MIN(cleaned_started_at) AS first_occurrence,
-  MAX(cleaned_started_at) AS last_occurrence,
-FROM (
-  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
-  FROM filtered_data
-  UNION ALL
-  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
-  FROM filtered_data
-) AS station_time
-WHERE
-  station_name IN (
-    SELECT station_name
-    FROM station_data
-    GROUP BY station_name
-    HAVING COUNT(DISTINCT station_id) > 1
-  ) 
-GROUP BY 
-  station_id, station_name
-ORDER BY
-  station_name
-```
-- There are no overlapping in time for there station ids, station ids that start with '21-' are the newer ones.
-  
-**Example Results**:
-
-|Row|station_id|station_name|first_occurrence|last_occurrence|
-|---|---|---|---|---|
-|1|21345|artesian ave & 55th st|2024-04-27 16:42:36 UTC|2024-06-30 20:38:58 UTC|
-|2|345|artesian ave & 55th st|2023-07-03 14:47:22 UTC|2024-04-14 11:22:36 UTC|
-|3|338|california ave & 36th st|2023-07-01 20:56:28 UTC|2024-04-09 19:54:34 UTC|
-|4|21338|california ave & 36th st|2024-04-17 11:18:50 UTC|2024-06-25 20:17:40 UTC|
-
-
-#### Step 9: Standardizing Start and End Station Names
-Based on the findings from Step 7 and step 8, station names with temporary relocations, minor naming variations, or historical name changes will be standardized. The aim is to consolidate these variations into a single, consistent station name for improved clarity and analysis.
-
-create a mapping station table 
-```sql
-WITH formatted_data AS (
-  -- Refer to step 3
-)
-
-,filtered_data AS (
-  -- Refer to step 7
 ) 
 
 ,station_data AS (
@@ -550,61 +460,8 @@ WITH formatted_data AS (
 )
 
 SELECT DISTINCT
-    -- ### Assign New Station IDs ###
-    CASE
-        -- station id changes over time
-        WHEN station_name = 'spaulding ave & 16th st' THEN '21366'
-        WHEN station_name = 'lawndale ave & 30th st' THEN '21334'
-        WHEN station_name = 'richmond st & lincoln ave' THEN '21452'
-        WHEN station_name = 'kostner ave & wrightwood ave' THEN '23321'
-        WHEN station_name = 'lamon ave & armitage ave' THEN '21357'
-        WHEN station_name = 'lockwood ave & wrightwood ave' THEN '21312'
-        WHEN station_name = 'meade ave & addison st' THEN '21324'
-        WHEN station_name = 'rockwell st & 57th st' THEN '21386'
-        WHEN station_name = 'lincoln ave & peterson ave' THEN '21462'
-        WHEN station_name = 'st louis ave & 59th st' THEN '21387'
-        WHEN station_name = 'kedzie ave & 57th st' THEN '21346'
-        WHEN station_name = 'kilpatrick ave & grand ave' THEN '21374'
-        WHEN station_name = 'pulaski rd & 51st st' THEN '21343'
-        WHEN station_name = 'long ave & belmont ave' THEN '21317'
-        WHEN station_name = 'francisco ave & 47th st' THEN '21381'
-        WHEN station_name = 'kedzie ave & 48th pl' THEN '21382'
-        WHEN station_name = 'shabbona park' THEN '21395'
-        WHEN station_name = 'tripp ave & 65th st' THEN '21407'
-        WHEN station_name = 'harding ave & 26th st' THEN '21332'
-        WHEN station_name = 'central park ave & douglas blvd' THEN '21329'
-        WHEN station_name = 'campbell ave & 51st st' THEN '21383'
-        WHEN station_name = 'kildare ave & 47th st' THEN '21401'
-        WHEN station_name = 'lamon ave & chicago ave' THEN '24205'
-        WHEN station_name = 'kildare ave & 26th st' THEN '21365'
-        WHEN station_name = 'kildare ave & chicago ave' THEN '21371'
-        WHEN station_name = 'kildare ave & division st' THEN '21303'
-        WHEN station_name = 'monticello ave & chicago ave' THEN '21301'
-        WHEN station_name = 'lawler ave & 50th st' THEN '21400'
-        WHEN station_name = 'artesian ave & 55th st' THEN '21345'
-        WHEN station_name = 'richmond st & 59th st' THEN '21388'
-        WHEN station_name = 'fairfield ave & 44th st' THEN '21380'
-        WHEN station_name = 'tripp ave & 15th st' THEN '21363'
-        WHEN station_name = 'central ave & roscoe st' THEN '21396'
-        WHEN station_name = 'meade ave & diversey ave' THEN '21353'
-        WHEN station_name = 'california ave & marquette rd' THEN '21390'
-        WHEN station_name = 'california ave & 36th st' THEN '21338'
-        WHEN station_name = 'kildare ave & 55th st' THEN '21403'
-        WHEN station_name = 'lavergne ave & division st' THEN '21304'
-        WHEN station_name = 'cicero ave & wellington ave' THEN '24174'
-        WHEN station_name = 'tripp ave & 31st st' THEN '21368'
-        WHEN station_name = 'hoyne ave & 34th st' THEN '21337'
-        WHEN station_name = 'leamington ave & hirsch st' THEN '21307'
-        WHEN station_name = 'long ave & north ave' THEN '21375'
-        WHEN station_name = 'oketo ave & addison st' THEN '21393'
-        WHEN station_name = 'harlem ave & grace st' THEN '21325'
-        WHEN station_name = 'kostner ave & 63rd st' THEN '21406'
-        WHEN station_name = 'parkside ave & armitage ave' THEN '21354'
-        WHEN station_name = 'kedzie ave & 52nd st' THEN '21384'
-        WHEN station_name = 'buckingham fountain' OR station_name = 'buckingham - fountain' THEN '15541'
-        ELSE station_id
-    END AS station_id,
-    
+    station_id,
+
     -- ### Assign New Station Names ###
     CASE
         -- Temporary relocations 
@@ -630,6 +487,286 @@ SELECT DISTINCT
 FROM station_data
 ORDER BY station_id
 ```
+
+- to verify :
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+,standardized_station_name AS (
+SELECT DISTINCT
+    station_id,
+
+    -- ### Assign New Station Names ###
+    CASE
+        -- Temporary relocations 
+        WHEN station_id = '13290' THEN 'noble st & milwaukee ave'
+        WHEN station_id = '15541' OR station_id = '15541.1.1' THEN 'buckingham fountain'
+        WHEN station_id = 'hubbard bike-checking (lbs-wh-test)' THEN 'base - 2132 w hubbard' 
+        ---The names 'scooters - 2132 w hubbard st' and 'scooters classic - 2132 w hubbard st' were recorded only briefly, each existing for a single day with very few data entries. These instances suggest a temporary relocation or test setup. For consistency, all occurrences were standardized to 'base - 2132 w hubbard'.---
+        -- Minor Naming Variations
+        WHEN station_id = '21322' THEN 'grace st & cicero ave'
+        WHEN station_id = '21366' THEN 'spaulding ave & 16th st'
+        WHEN station_id = '21371' THEN 'kildare ave & chicago ave'
+        WHEN station_id = '21393' THEN 'oketo ave & addison st'
+        WHEN station_id = '23187' THEN 'lockwood ave & grand ave'
+        WHEN station_id = '23215' THEN 'lexington st & california ave'
+        -- Name changes Over Time
+        WHEN station_id = '24156' THEN 'granville ave & pulaski rd'
+        WHEN station_id = 'ka1503000074' THEN 'museum of science and industry'
+        WHEN station_id = 'ta1305000030' THEN 'wells st & randolph st'
+        WHEN station_id = 'ta1309000042' THEN 'lincoln ave & melrose st'
+        WHEN station_id = '647' THEN 'racine ave & 57th st'
+        ELSE station_name
+    END AS station_name
+FROM station_data
+ORDER BY station_id
+)
+
+SELECT 
+  station_id,
+  ARRAY_AGG(DISTINCT station_name) AS station_names,
+  COUNT(DISTINCT station_name) AS name_count
+FROM standardized_station_name
+GROUP BY station_id
+HAVING name_count > 1
+ORDER BY name_count DESC
+```
+there are only station_id with station_name that have 'public rack- ' left, they are 2 distinct station so i decided to leave it as it would not affect the station analysis using name instead of id. 
+
+#### Step 8: Identifying and Resolving Station Names with Multiple IDs
+This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+,standardized_station_name AS (
+  -- Refre to step 7
+)
+
+SELECT 
+  station_name,
+  ARRAY_AGG(DISTINCT station_id) AS station_id,
+  COUNT(DISTINCT station_id) AS id_count
+FROM standardized_station_name
+GROUP BY station_name
+HAVING id_count > 1
+ORDER BY id_count DESC
+```
+- **48** station names have more than one station id, in pattern of one of them with extra '21-'
+- found one station id has its station name
+- 
+  
+**Example Results**:
+|Row|station_name|station_id|id_count|
+|---|---|---|---|
+|1|campbell ave & 51st st|383|2|
+| | |21383| |
+|4|california ave & 36th st|21338|2|
+| | |338| |
+|9|buckingham fountain|15541.1.1|2|
+| | |15541| |
+|48|cicero ave & wellington ave|24174|2|
+| | |cicero ave & wellington ave| |
+
+- check if there is other station name equal to station id:
+```sql
+SELECT DISTINCT
+  start_station_name,
+  start_station_id,
+  end_station_name,
+  end_station_id,
+FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
+WHERE start_station_name = start_station_id OR end_station_name = end_station_id
+```
+only one result which is station name and station id equal to 'cicero ave & wellington ave'
+
+- To address the station name = station id and station name = 'buckingham fountain' 
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+,standardized_station_name AS (
+  -- Refre to step 7
+)
+
+SELECT DISTINCT
+    -- ### Assign New Station IDs ###
+    CASE
+        -- hangling entry error station id = station name --
+        WHEN station_name = 'cicero ave & wellington ave' THEN '24174'
+        WHEN station_name = 'buckingham fountain' THEN '15541'
+        ELSE station_id
+    END AS station_id,
+    station_name
+FROM standardized_station_name
+ORDER BY station_id
+```
+
+- To identify if the rest of the duplicate station ids are due to changes over time:
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,standardized_station_name AS (
+  -- Refre to step 7
+)
+
+,corrected_id AS (
+SELECT DISTINCT
+    -- ### Assign New Station IDs ###
+    CASE
+        -- hangling entry error station id = station name --
+        WHEN station_name = 'cicero ave & wellington ave' THEN '24174'
+        WHEN station_name = 'buckingham fountain' THEN '15541'
+        ELSE station_id
+    END AS station_id,
+    station_name
+FROM standardized_station_name
+ORDER BY station_id
+)
+
+SELECT
+  station_id,
+  station_name,
+  MIN(cleaned_started_at) AS first_occurrence,
+  MAX(cleaned_started_at) AS last_occurrence,
+FROM (
+  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, cleaned_started_at
+  FROM filtered_data
+  UNION ALL
+  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, cleaned_started_at
+  FROM filtered_data
+) AS station_time
+WHERE
+  station_name IN (
+    SELECT station_name
+    FROM corrected_id
+    GROUP BY station_name
+    HAVING COUNT(DISTINCT station_id) > 1
+  ) 
+GROUP BY 
+  station_id, station_name
+ORDER BY
+  station_name
+```
+- There are no overlapping in time for there station ids, station ids that start with '21-' are the newer ones.
+  
+**Example Results**:
+
+|Row|station_id|station_name|first_occurrence|last_occurrence|
+|---|---|---|---|---|
+|1|21345|artesian ave & 55th st|2024-04-27 16:42:36 UTC|2024-06-30 20:38:58 UTC|
+|2|345|artesian ave & 55th st|2023-07-03 14:47:22 UTC|2024-04-14 11:22:36 UTC|
+|3|338|california ave & 36th st|2023-07-01 20:56:28 UTC|2024-04-09 19:54:34 UTC|
+|4|21338|california ave & 36th st|2024-04-17 11:18:50 UTC|2024-06-25 20:17:40 UTC|
+
+- to address this pick the newer one as the only station id
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+,standardized_station_name AS (
+  -- Refer to step 7
+)
+
+,corrected_id AS (
+  -- Refer to above
+)
+
+SELECT
+  station_name,
+  MAX(station_id) AS standardized_station_id
+FROM corrected_id
+GROUP BY station_name
+```
+
+- verify there is no multiple id per name
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,station_data AS (
+  -- Refer to step 7
+)
+
+,standardized_station_name AS (
+  -- Refer to step 7
+)
+
+,corrected_id AS (
+  -- Refer to above
+)
+
+,standardized_station_id AS (
+SELECT
+  station_name,
+  MAX(station_id) AS standardized_station_id
+FROM corrected_id
+GROUP BY station_name
+)
+
+SELECT 
+  station_name,
+  count(standardized_station_id) AS id_count
+FROM standardized_station_id
+GROUP BY station_name
+HAVING id_count > 1
+ORDER BY id_count DESC
+```
+- There is no data to display
+
+- Create a mapping station table 
 export it to `bike-share-case-study-430704.Bike_share.mapping_station`
 Once the mapping table (station_name_mapping) is ready, rewrite the query to join it and apply the standardized names for the whole table.
 
@@ -639,7 +776,7 @@ WITH formatted_data AS (
 )
 
 ,filtered_data AS (
-  -- Refer to step 7
+  -- Refer to step 3
 ) 
 
 SELECT DISTINCT
