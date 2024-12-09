@@ -721,7 +721,7 @@ WITH formatted_data AS (
 
 SELECT
   station_name,
-  MAX(station_id) AS standardized_station_id
+  MAX(station_id) AS station_id
 FROM corrected_id
 GROUP BY station_name
 ```
@@ -751,14 +751,14 @@ WITH formatted_data AS (
 ,standardized_station_id AS (
 SELECT
   station_name,
-  MAX(station_id) AS standardized_station_id
+  MAX(station_id) AS station_id
 FROM corrected_id
 GROUP BY station_name
 )
 
 SELECT 
   station_name,
-  count(standardized_station_id) AS id_count
+  count(station_id) AS id_count
 FROM standardized_station_id
 GROUP BY station_name
 HAVING id_count > 1
@@ -768,6 +768,8 @@ ORDER BY id_count DESC
 
 - Create a mapping station table 
 export it to `bike-share-case-study-430704.Bike_share.mapping_station`
+
+##### Step 9: 
 Once the mapping table (station_name_mapping) is ready, rewrite the query to join it and apply the standardized names for the whole table.
 
 ```sql
@@ -888,6 +890,9 @@ FROM
 |2|casual|
 
 No misspellings were found in either the rideable_type or member_casual columns, ensuring consistency in these categorical fields.
+
+
+
 
 #### Step 9: Checking  for Multiple Names for One Station ID
 This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
