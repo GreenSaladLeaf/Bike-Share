@@ -143,7 +143,7 @@ SELECT DISTINCT       -- remove duplicate
     ROUND(start_lat,4) AS start_lat,       -- rounding to 4 decimal places (precision of about 10 meters)
     ROUND(start_lng,4) AS start_lng,       -- rounding to 4 decimal places (precision of about 10 meters)
     ROUND(end_lat,4) AS end_lat,         -- rounding to 4 decimal places (precision of about 10 meters)
-    ROUND(end_lng,4) AS end_lng,         -- rounding to 4 decimal places (precision of about 10 meters)
+    ROUND(end_lng,4) AS end_lng         -- rounding to 4 decimal places (precision of about 10 meters)
 FROM 
     `bike-share-case-study-430704.Bike_share.bike_share_12months`
 )
@@ -348,12 +348,12 @@ SELECT DISTINCT
   station_id,
   station_name,
   latitude,
-  longitude
+  longtitude
 FROM (
-  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, start_lat AS latitude, start_lng AS longitude
+  SELECT DISTINCT start_station_id AS station_id, start_station_name AS station_name, start_lat AS latitude, start_lng AS longtitude
   FROM filtered_data
   UNION ALL
-  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, end_lat AS latitude, end_lng AS longitude
+  SELECT DISTINCT end_station_id AS station_id, end_station_name AS station_name, end_lat AS latitude, end_lng AS longtitude
   FROM filtered_data
 ) AS station_info
 WHERE station_id IN (
@@ -445,7 +445,87 @@ This suggests a deliberate renaming of the station ID (ta1305000030), as the coo
 
 This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
 
-- to address this inconsistency in these station id with multiple name:
+
+- to address Distinct Locations and Shared IDs
+  - It updates the start_station_id and end_station_id based on the presence of the "public rack -" prefix in the station name. If it matches, it appends "a" to the station ID.
+```sql
+WITH formatted_data AS (
+  -- refer to step 3
+) 
+
+,filtered_data AS (
+  -- refer to step 3
+) 
+
+SELECT
+  CASE
+    WHEN LOWER(start_station_name) LIKE 'public rack -%' THEN CONCAT(start_station_id, 'a')  -- Appending 'a' for public rack stations
+    ELSE start_station_id  -- Retaining the original ID for standard stations
+  END AS new_start_station_id,
+  start_station_name,
+
+  CASE
+    WHEN LOWER(end_station_name) LIKE 'public rack -%' THEN CONCAT(end_station_id, 'a')  -- Appending 'a' for public rack stations
+    ELSE end_station_id  -- Retaining the original ID for standard stations
+  END AS new_end_station_id,
+  end_station_name
+
+FROM filtered_data  
+```
+- to verify:
+```sql
+WITH formatted_data AS (
+  -- refer to step 3
+) 
+
+,filtered_data AS (
+  -- refer to step 3
+) 
+
+,new_station_id AS (
+SELECT
+  CASE
+    WHEN LOWER(start_station_name) LIKE 'public rack -%' THEN CONCAT(start_station_id, 'a')  -- Appending 'a' for public rack stations
+    ELSE start_station_id  -- Retaining the original ID for standard stations
+  END AS new_start_station_id,
+  start_station_name,
+
+  CASE
+    WHEN LOWER(end_station_name) LIKE 'public rack -%' THEN CONCAT(end_station_id, 'a')  -- Appending 'a' for public rack stations
+    ELSE end_station_id  -- Retaining the original ID for standard stations
+  END AS new_end_station_id,
+  end_station_name
+
+FROM filtered_data  
+)
+
+,new_station_data AS (
+SELECT DISTINCT
+  new_start_station_id AS station_id, 
+  start_station_name AS station_name
+FROM new_station_id
+WHERE start_station_name IS NOT NULL AND new_start_station_id IS NOT NULL
+UNION ALL
+SELECT DISTINCT 
+  new_end_station_id AS station_id, 
+  end_station_name AS station_name
+FROM new_station_id 
+WHERE end_station_name IS NOT NULL AND new_end_station_id IS NOT NULL
+)
+
+SELECT 
+  station_id,
+  ARRAY_AGG(DISTINCT station_name) AS station_names,
+  COUNT(DISTINCT station_name) AS name_count
+FROM new_station_data
+GROUP BY station_id
+HAVING name_count > 1
+ORDER BY name_count DESC 
+```
+- only 15 rows of data left, station id that has multiple station name that has 'public-rack' has been filtered out.
+
+  
+- to address this inconsistency in station name that are due to : Temporary Relocations,Minor Naming Variations and Name Changes Over Time
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -455,8 +535,12 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
-  -- Refer to step 7
+,new_station_id AS (
+ -- Refer to above
+)
+
+,new_station_data AS (
+  -- Refer to above
 )
 
 SELECT DISTINCT
@@ -484,7 +568,7 @@ SELECT DISTINCT
         WHEN station_id = '647' THEN 'racine ave & 57th st'
         ELSE station_name
     END AS station_name
-FROM station_data
+FROM new_station_data
 ORDER BY station_id
 ```
 
@@ -498,8 +582,12 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
-  -- Refer to step 7
+,new_station_id AS (
+ -- Refer to above
+)
+
+,new_station_data AS (
+  -- Refer to above
 )
 
 ,standardized_station_name AS (
@@ -528,7 +616,7 @@ SELECT DISTINCT
         WHEN station_id = '647' THEN 'racine ave & 57th st'
         ELSE station_name
     END AS station_name
-FROM station_data
+FROM new_station_data
 ORDER BY station_id
 )
 
@@ -541,7 +629,7 @@ GROUP BY station_id
 HAVING name_count > 1
 ORDER BY name_count DESC
 ```
-there are only station_id with station_name that have 'public rack- ' left, they are 2 distinct station so i decided to leave it as it would not affect the station analysis using name instead of id. 
+- there is no data to display.
 
 #### Step 8: Identifying and Resolving Station Names with Multiple IDs
 This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
@@ -554,12 +642,16 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
+,new_station_id AS (
+ -- Refer to step 7
+)
+
+,new_station_data AS (
   -- Refer to step 7
 )
 
 ,standardized_station_name AS (
-  -- Refre to step 7
+  -- Refer to step 7
 )
 
 SELECT 
@@ -571,9 +663,9 @@ GROUP BY station_name
 HAVING id_count > 1
 ORDER BY id_count DESC
 ```
-- **48** station names have more than one station id, in pattern of one of them with extra '21-'
+- **47** station names have more than one station id, in pattern of one of them with extra '21-'
 - found one station id has its station name
-- 
+- another one with '15541.1.1'
   
 **Example Results**:
 |Row|station_name|station_id|id_count|
@@ -609,12 +701,16 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
+,new_station_id AS (
+ -- Refer to step 7
+)
+
+,new_station_data AS (
   -- Refer to step 7
 )
 
 ,standardized_station_name AS (
-  -- Refre to step 7
+  -- Refer to step 7
 )
 
 SELECT DISTINCT
@@ -640,12 +736,16 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
-  -- Refer to step 7  
+,new_station_id AS (
+ -- Refer to step 7
+)
+
+,new_station_data AS (
+  -- Refer to step 7
 )
 
 ,standardized_station_name AS (
-  -- Refre to step 7
+  -- Refer to step 7
 )
 
 ,corrected_id AS (
@@ -707,7 +807,11 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
+,new_station_id AS (
+ -- Refer to step 7
+)
+
+,new_station_data AS (
   -- Refer to step 7
 )
 
@@ -736,7 +840,11 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,station_data AS (
+,new_station_id AS (
+ -- Refer to step 7
+)
+
+,new_station_data AS (
   -- Refer to step 7
 )
 
@@ -758,7 +866,8 @@ GROUP BY station_name
 
 SELECT 
   station_name,
-  count(station_id) AS id_count
+  ARRAY_AGG(DISTINCT station_id) AS station_id,
+  COUNT(DISTINCT station_id) AS id_count
 FROM standardized_station_id
 GROUP BY station_name
 HAVING id_count > 1
@@ -798,9 +907,9 @@ SELECT DISTINCT
 FROM 
     filtered_data AS f
 LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_start
-    ON f.start_station_id = m_start.station_id AND f.start_station_name = m_start.station_name
+    ON f.start_station_id = m_start.station_id 
 LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
-    ON f.end_station_id = m_end.station_id AND f.end_station_name = m_end.station_name
+    ON f.end_station_id = m_end.station_id
 ```
 
 
