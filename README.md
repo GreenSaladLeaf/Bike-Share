@@ -823,11 +823,19 @@ WITH formatted_data AS (
   -- Refer to above
 )
 
-SELECT
-  station_name,
-  MAX(station_id) AS station_id
-FROM corrected_id
+,normalized_data AS (
+    SELECT 
+        station_name,
+        CAST(station_id AS FLOAT64) AS station_id -- Convert to a numeric type (INT) for proper comparison
+    FROM corrected_id
+)
+
+SELECT 
+    station_name,
+    CAST(MAX(station_id) AS STRING) AS station_id
+FROM normalized_data
 GROUP BY station_name
+
 ```
 
 - verify there is no multiple id per name
@@ -853,6 +861,10 @@ WITH formatted_data AS (
 )
 
 ,corrected_id AS (
+  -- Refer to above
+)
+
+,normalized_data AS (
   -- Refer to above
 )
 
