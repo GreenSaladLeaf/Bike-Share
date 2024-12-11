@@ -457,20 +457,35 @@ WITH formatted_data AS (
   -- refer to step 3
 ) 
 
-SELECT
-  CASE
-    WHEN LOWER(start_station_name) LIKE 'public rack -%' THEN CONCAT(start_station_id, 'a')  -- Appending 'a' for public rack stations
-    ELSE start_station_id  -- Retaining the original ID for standard stations
-  END AS new_start_station_id,
-  start_station_name,
+,station_data AS (
+  -- Refer to step 7  
+)
 
-  CASE
-    WHEN LOWER(end_station_name) LIKE 'public rack -%' THEN CONCAT(end_station_id, 'a')  -- Appending 'a' for public rack stations
-    ELSE end_station_id  -- Retaining the original ID for standard stations
-  END AS new_end_station_id,
-  end_station_name
+,sn2 AS (
+SELECT DISTINCT
+    station_id,
+    station_name,
+FROM station_data
+WHERE station_id IN (
+                      SELECT station_id
+                      FROM station_data
+                      GROUP BY station_id
+                      HAVING COUNT(DISTINCT station_name) > 1
+                      )
+)
 
-FROM filtered_data  
+SELECT DISTINCT
+  CASE -- assign new id to station name like 'public rack -%'
+    WHEN station_name IN (
+        SELECT station_name
+        FROM sn2
+        WHERE sn2.station_name LIKE 'public rack -%'  -- Check if any name starts with 'public rack -'
+    ) THEN CONCAT(station_id, 'a')  -- Append 'a' if the condition is met
+    ELSE station_id  -- Keep the original station_id otherwise
+  END AS station_id,
+  
+  station_name  -- Selecting the original station_name for reference
+FROM station_data 
 ```
 - to verify:
 ```sql
@@ -482,42 +497,42 @@ WITH formatted_data AS (
   -- refer to step 3
 ) 
 
-,new_station_id AS (
-SELECT
-  CASE
-    WHEN LOWER(start_station_name) LIKE 'public rack -%' THEN CONCAT(start_station_id, 'a')  -- Appending 'a' for public rack stations
-    ELSE start_station_id  -- Retaining the original ID for standard stations
-  END AS new_start_station_id,
-  start_station_name,
-
-  CASE
-    WHEN LOWER(end_station_name) LIKE 'public rack -%' THEN CONCAT(end_station_id, 'a')  -- Appending 'a' for public rack stations
-    ELSE end_station_id  -- Retaining the original ID for standard stations
-  END AS new_end_station_id,
-  end_station_name
-
-FROM filtered_data  
+,station_data AS (
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
+,sn2 AS (
 SELECT DISTINCT
-  new_start_station_id AS station_id, 
-  start_station_name AS station_name
-FROM new_station_id
-WHERE start_station_name IS NOT NULL AND new_start_station_id IS NOT NULL
-UNION ALL
-SELECT DISTINCT 
-  new_end_station_id AS station_id, 
-  end_station_name AS station_name
-FROM new_station_id 
-WHERE end_station_name IS NOT NULL AND new_end_station_id IS NOT NULL
+    station_id,
+    station_name,
+FROM station_data
+WHERE station_id IN (
+                      SELECT station_id
+                      FROM station_data
+                      GROUP BY station_id
+                      HAVING COUNT(DISTINCT station_name) > 1
+                      )
 )
 
+,new_station_id AS (
+SELECT DISTINCT
+  CASE -- assign new id to station name like 'public rack -%'
+    WHEN station_name IN (
+        SELECT station_name
+        FROM sn2
+        WHERE sn2.station_name LIKE 'public rack -%'  -- Check if any name starts with 'public rack -'
+    ) THEN CONCAT(station_id, 'a')  -- Append 'a' if the condition is met
+    ELSE station_id  -- Keep the original station_id otherwise
+  END AS station_id,
+  
+  station_name  -- Selecting the original station_name for reference
+FROM station_data
+)
 SELECT 
   station_id,
   ARRAY_AGG(DISTINCT station_name) AS station_names,
   COUNT(DISTINCT station_name) AS name_count
-FROM new_station_data
+FROM new_station_id
 GROUP BY station_id
 HAVING name_count > 1
 ORDER BY name_count DESC 
@@ -535,12 +550,16 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
-,new_station_id AS (
- -- Refer to above
+,station_data AS (
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to above
+,sn2 AS (
+  -- Refer to step 7  
+)
+
+,new_station_id AS (
+  -- Refer to step 7  
 )
 
 SELECT DISTINCT
@@ -568,7 +587,7 @@ SELECT DISTINCT
         WHEN station_id = '647' THEN 'racine ave & 57th st'
         ELSE station_name
     END AS station_name
-FROM new_station_data
+FROM new_station_id
 ORDER BY station_id
 ```
 
@@ -582,15 +601,19 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,sn2 AS (
+  -- Refer to step 7  
+)
+
 ,new_station_id AS (
- -- Refer to above
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to above
-)
-
-,standardized_station_name AS (
+,standardized_name AS (
 SELECT DISTINCT
     station_id,
 
@@ -616,7 +639,7 @@ SELECT DISTINCT
         WHEN station_id = '647' THEN 'racine ave & 57th st'
         ELSE station_name
     END AS station_name
-FROM new_station_data
+FROM new_station_id
 ORDER BY station_id
 )
 
@@ -624,7 +647,7 @@ SELECT
   station_id,
   ARRAY_AGG(DISTINCT station_name) AS station_names,
   COUNT(DISTINCT station_name) AS name_count
-FROM standardized_station_name
+FROM standardized_name
 GROUP BY station_id
 HAVING name_count > 1
 ORDER BY name_count DESC
@@ -642,15 +665,19 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,sn2 AS (
+  -- Refer to step 7  
+)
+
 ,new_station_id AS (
- -- Refer to step 7
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to step 7
-)
-
-,standardized_station_name AS (
+,standardized_name AS (
   -- Refer to step 7
 )
 
@@ -658,7 +685,7 @@ SELECT
   station_name,
   ARRAY_AGG(DISTINCT station_id) AS station_id,
   COUNT(DISTINCT station_id) AS id_count
-FROM standardized_station_name
+FROM standardized_name
 GROUP BY station_name
 HAVING id_count > 1
 ORDER BY id_count DESC
@@ -691,7 +718,7 @@ WHERE start_station_name = start_station_id OR end_station_name = end_station_id
 ```
 only one result which is station name and station id equal to 'cicero ave & wellington ave'
 
-- To address the station name = station id and station name = 'buckingham fountain' 
+- To address the station name = station id and station name = 'buckingham fountain' with 2 station id = '15541' and '15541.1.1'
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -701,28 +728,32 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,sn2 AS (
+  -- Refer to step 7  
+)
+
 ,new_station_id AS (
- -- Refer to step 7
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to step 7
-)
-
-,standardized_station_name AS (
+,standardized_name AS (
   -- Refer to step 7
 )
 
 SELECT DISTINCT
     -- ### Assign New Station IDs ###
     CASE
-        -- hangling entry error station id = station name --
+        -- handling entry error station id equal to station name and station id variations--
         WHEN station_name = 'cicero ave & wellington ave' THEN '24174'
         WHEN station_name = 'buckingham fountain' THEN '15541'
         ELSE station_id
     END AS station_id,
     station_name
-FROM standardized_station_name
+FROM standardized_name
 ORDER BY station_id
 ```
 
@@ -736,15 +767,19 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,sn2 AS (
+  -- Refer to step 7  
+)
+
 ,new_station_id AS (
- -- Refer to step 7
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to step 7
-)
-
-,standardized_station_name AS (
+,standardized_name AS (
   -- Refer to step 7
 )
 
@@ -752,13 +787,13 @@ WITH formatted_data AS (
 SELECT DISTINCT
     -- ### Assign New Station IDs ###
     CASE
-        -- hangling entry error station id = station name --
+        -- handling entry error station id equal to station name and station id variations--
         WHEN station_name = 'cicero ave & wellington ave' THEN '24174'
         WHEN station_name = 'buckingham fountain' THEN '15541'
         ELSE station_id
     END AS station_id,
     station_name
-FROM standardized_station_name
+FROM standardized_name
 ORDER BY station_id
 )
 
@@ -807,15 +842,19 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,sn2 AS (
+  -- Refer to step 7  
+)
+
 ,new_station_id AS (
- -- Refer to step 7
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to step 7
-)
-
-,standardized_station_name AS (
+,standardized_name AS (
   -- Refer to step 7
 )
 
@@ -823,19 +862,22 @@ WITH formatted_data AS (
   -- Refer to above
 )
 
-,normalized_data AS (
-    SELECT 
-        station_name,
-        CAST(station_id AS FLOAT64) AS station_id -- Convert to a numeric type (INT) for proper comparison
-    FROM corrected_id
-)
-
-SELECT 
-    station_name,
-    CAST(MAX(station_id) AS STRING) AS station_id
-FROM normalized_data
-GROUP BY station_name
-
+SELECT DISTINCT
+  station_id,
+  station_name 
+FROM (
+        SELECT 
+            station_name,
+            station_id,
+            LENGTH(station_id) AS id_length,
+            ROW_NUMBER() OVER (
+              PARTITION BY station_name 
+              ORDER BY LENGTH(station_id) DESC,
+                        station_id NOT LIKE '%.0'DESC,
+                        station_id LIKE '21%' DESC) AS rn
+        FROM corrected_id
+    ) AS subquery
+WHERE rn = 1 -- Pick the longest station_id and station id that start with '21-' for each station_name
 ```
 
 - verify there is no multiple id per name
@@ -844,19 +886,19 @@ WITH formatted_data AS (
   -- Refer to step 3
 )
 
-,filtered_data AS (
-  -- Refer to step 3
-) 
+,station_data AS (
+  -- Refer to step 7  
+)
+
+,sn2 AS (
+  -- Refer to step 7  
+)
 
 ,new_station_id AS (
- -- Refer to step 7
+  -- Refer to step 7  
 )
 
-,new_station_data AS (
-  -- Refer to step 7
-)
-
-,standardized_station_name AS (
+,standardized_name AS (
   -- Refer to step 7
 )
 
@@ -864,23 +906,30 @@ WITH formatted_data AS (
   -- Refer to above
 )
 
-,normalized_data AS (
-  -- Refer to above
-)
-
-,standardized_station_id AS (
-SELECT
-  station_name,
-  MAX(station_id) AS station_id
-FROM corrected_id
-GROUP BY station_name
+,mapping_station AS (
+SELECT DISTINCT
+  station_id,
+  station_name 
+FROM (
+        SELECT 
+            station_name,
+            station_id,
+            LENGTH(station_id) AS id_length,
+            ROW_NUMBER() OVER (
+              PARTITION BY station_name 
+              ORDER BY LENGTH(station_id) DESC,
+                        station_id NOT LIKE '%.0'DESC,
+                        station_id LIKE '21%' DESC) AS rn
+        FROM corrected_id
+    ) AS subquery
+WHERE rn = 1 -- Pick the longest station_id for each station_name
 )
 
 SELECT 
   station_name,
   ARRAY_AGG(DISTINCT station_id) AS station_id,
   COUNT(DISTINCT station_id) AS id_count
-FROM standardized_station_id
+FROM mapping_station
 GROUP BY station_name
 HAVING id_count > 1
 ORDER BY id_count DESC
@@ -902,14 +951,15 @@ WITH formatted_data AS (
   -- Refer to step 3
 ) 
 
+,cleaned_name AS (
 SELECT DISTINCT
     ride_id, 
     rideable_type,
     cleaned_started_at,
     cleaned_ended_at,
-    COALESCE(m_start.station_id, f.start_station_id) AS start_station_id,
+    f.start_station_id,
     COALESCE(m_start.station_name, f.start_station_name) AS start_station_name,
-    COALESCE(m_end.station_id, f.end_station_id) AS end_station_id,
+    f.end_station_id,
     COALESCE(m_end.station_name, f.end_station_name) AS end_station_name,
     member_casual,
     start_lat,
@@ -919,11 +969,98 @@ SELECT DISTINCT
 FROM 
     filtered_data AS f
 LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_start
-    ON f.start_station_id = m_start.station_id 
+    ON f.start_station_id = m_start.station_id
 LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
     ON f.end_station_id = m_end.station_id
-```
+)
 
+,cleaned_name2 AS (
+SELECT DISTINCT
+    ride_id, 
+    rideable_type,
+    cleaned_started_at,
+    cleaned_ended_at,
+    COALESCE(m_start.station_id, n.start_station_id) AS start_station_id,
+    n.start_station_name,
+    COALESCE(m_end.station_id, n.end_station_id) AS end_station_id,
+    n.end_station_name,
+    member_casual,
+    start_lat,
+    start_lng,
+    end_lat,
+    end_lng
+FROM 
+    cleaned_name AS n
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_start
+    ON n.start_station_name = m_start.station_name 
+LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
+    ON n.end_station_name = m_end.station_name
+)
+
+```
+- to verify
+```sql
+WITH formatted_data AS (
+  -- Refer to step 3
+)
+
+,filtered_data AS (
+  -- Refer to step 3
+) 
+
+,cleaned_name AS (
+  -- Refer to above
+)
+
+,cleaned_name2 AS (
+  -- Refer to above
+)
+  
+SELECT 
+  start_station_name,
+  ARRAY_AGG(DISTINCT start_station_id) AS station_ids,
+  COUNT(DISTINCT start_station_id) AS id_count
+FROM cleaned_name2
+GROUP BY start_station_name
+HAVING id_count > 1
+ORDER BY id_count DESC
+```
+- There is no data to display.
+and 
+```sql
+SELECT 
+  end_station_name,
+  ARRAY_AGG(DISTINCT end_station_id) AS station_ids,
+  COUNT(DISTINCT end_station_id) AS id_count
+FROM cleaned_name2
+GROUP BY end_station_name
+HAVING id_count > 1
+ORDER BY id_count DESC
+```
+- There is no data to display.
+and
+```sql
+SELECT 
+  start_station_id,
+  ARRAY_AGG(DISTINCT start_station_name) AS station_names,
+  COUNT(DISTINCT start_station_name) AS name_count
+FROM cleaned_name2
+GROUP BY start_station_id
+HAVING name_count > 1
+ORDER BY name_count DESC
+```
+- There is no data to display.
+and
+```sql
+SELECT 
+  end_station_id,
+  ARRAY_AGG(DISTINCT end_station_name) AS station_names,
+  COUNT(DISTINCT end_station_name) AS name_count
+FROM cleaned_name2
+GROUP BY end_station_id
+HAVING name_count > 1
+ORDER BY name_count DESC
+```
 
 
 #### Step 10: Handling Null value 
