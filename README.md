@@ -658,7 +658,11 @@ ORDER BY name_count DESC
 Verification confirmed that all station IDs now have unique and consistent station names, with no remaining cases of multiple names for a single ID.
 
 #### Step 8: Identifying and Resolving Station Names with Multiple IDs
-This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
+This step identifies station names associated with multiple station IDs and standardizes them for consistency in analysis. The process involves identifying patterns, resolving duplicates, and validating results.
+
+##### Identifying Station Names with Multiple IDs
+To identify station names with multiple station IDs, the query aggregates station IDs for each station name and counts distinct IDs.
+
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -693,9 +697,11 @@ GROUP BY station_name
 HAVING id_count > 1
 ORDER BY id_count DESC
 ```
-- **47** station names have more than one station id, in pattern of one of them with extra '21-'
-- found one station id has its station name
-- another one with '15541.1.1'
+**Findings:**
+- **49** station names are associated with more than one station ID.
+- **47** of these station names follow a pattern where an additional '21-' prefix is added to the station ID.
+- One station has an ID that is exactly the same as its station name.
+- Another station name has two IDs: '15541' and '15541.1.1', indicating a potential versioning issue or an inconsistency.
   
 **Example Results**:
 |Row|station_name|station_id|id_count|
@@ -709,19 +715,12 @@ ORDER BY id_count DESC
 |48|cicero ave & wellington ave|24174|2|
 | | |cicero ave & wellington ave| |
 
-- check if there is other station name equal to station id:
-```sql
-SELECT DISTINCT
-  start_station_name,
-  start_station_id,
-  end_station_name,
-  end_station_id,
-FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
-WHERE start_station_name = start_station_id OR end_station_name = end_station_id
-```
-only one result which is station name and station id equal to 'cicero ave & wellington ave'
+##### Resolving Station Name Equal to Station ID and Variations
+For instances where a station name matches a station ID, or where variations in IDs exist for the same name:
 
-- To address the station name = station id and station name = 'buckingham fountain' with 2 station id = '15541' and '15541.1.1'
+- Cicero ave & wellington ave: Assigned a single station ID ('24174').
+- Buckingham fountain: Resolved by using the base station ID ('15541').
+  
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -760,7 +759,9 @@ FROM standardized_name
 ORDER BY station_id
 ```
 
-- To identify if the rest of the duplicate station ids are due to changes over time:
+##### Validating Time-Based Changes
+To confirm whether duplicate station IDs represent changes over time, the query examines the first and last occurrences for each combination of station ID and station name.
+
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -824,7 +825,8 @@ GROUP BY
 ORDER BY
   station_name
 ```
-- There are no overlapping in time for there station ids, station ids that start with '21-' are the newer ones.
+**Results**:
+- IDs with a '21-' prefix are confirmed as newer entries without overlapping timeframes.
   
 **Example Results**:
 
@@ -835,7 +837,9 @@ ORDER BY
 |3|338|california ave & 36th st|2023-07-01 20:56:28 UTC|2024-04-09 19:54:34 UTC|
 |4|21338|california ave & 36th st|2024-04-17 11:18:50 UTC|2024-06-25 20:17:40 UTC|
 
-- to address this pick the newer one as the only station id
+##### Assigning Standardized Station IDs
+The longest station ID, preferring those starting with '21-', is assigned to each station name.
+
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -883,7 +887,9 @@ FROM (
 WHERE rn = 1 -- Pick the longest station_id and station id that start with '21-' for each station_name
 ```
 
-- verify there is no multiple id per name
+##### Verifying and Creating a Mapping Table
+The verification ensures no station name is associated with multiple IDs.
+
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -937,13 +943,15 @@ GROUP BY station_name
 HAVING id_count > 1
 ORDER BY id_count DESC
 ```
-- There is no data to display
+**Result**:
+- No station names with multiple IDs remain.
 
-- Create a mapping station table 
-export it to `bike-share-case-study-430704.Bike_share.mapping_station`
+The final mapping table is exported to bike-share-case-study-430704.Bike_share.mapping_station.
 
-##### Step 9: 
-Once the mapping table (station_name_mapping) is ready, rewrite the query to join it and apply the standardized names for the whole table.
+#### Step 9: Applying the Standardized Station Names and IDs
+This step integrates the standardized station names and IDs across the dataset by joining it with the mapping_station table. This ensures consistency in station information throughout the data.
+
+
 
 ```sql
 WITH formatted_data AS (
