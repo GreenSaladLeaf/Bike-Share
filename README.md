@@ -1275,6 +1275,18 @@ ORDER BY
 
 After processing, the final cleaned table was exported to the dataset bike-share-case-study-430704.Bike_share.cleaned_table.
 
+## Analysis
+With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. The goal of the analysis is to uncover trends and patterns related to bike usage, user behavior, and station performance. This includes examining trip durations, ride types, popular routes, and the impact of seasonality on bike usage.
+
+Trip Duration Analysis: Investigating the average trip duration and how it varies by rideable type (e.g., electric bikes vs. classic bikes).
+
+Distance Travelled: Identifying patterns in trip distance across different areas and ride types.
+
+User Behavior: Understanding usage patterns for members versus casual riders.
+
+Station Performance: Analyzing which stations are the most popular for starting and ending trips.
+
+Seasonality Effects: Exploring how bike usage varies throughout the year, identifying any seasonal trends.
 
 
 
