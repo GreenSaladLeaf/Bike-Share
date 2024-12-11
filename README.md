@@ -280,8 +280,8 @@ FROM `bike-share-case-study-430704.Bike_share.bike_share_12months`
 
 - There are **no mismatched cases** where the station name is present but the ID is missing, or the reverse. This suggests that the missing data for station names and IDs is likely due to the fact that some rides are dockless and thus do not require station information.
 
-#### Step 7: Checking  for Multiple Names for One Station ID
-This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data, which could arise from factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
+#### Step 7: Checking for Multiple Names for One Station ID
+This step investigates cases where a single 'start_station_id' or 'end_station_id' is linked to multiple 'start_station_name' or 'end_station_name' values. The goal is to identify potential inconsistencies in station data caused by factors such as temporary relocations, naming variations, shared IDs, or historical name changes.
 
 ##### 1. Identifying Station IDs with Multiple Names
 The start and end station IDs were combined into a single 'station_id' column, and the corresponding names into a 'station_name' column to identifies station IDs with more than one distinct name.
@@ -441,13 +441,12 @@ In this case:
 - "clark st & randolph st" was the station name from July 2023 to January 24, 2024.
 - "wells st & randolph st" became the station name starting January 25, 2024, with no overlap in usage.
 
-This suggests a deliberate renaming of the station ID (ta1305000030), as the coordinates for both names are identical. For analysis, it could be standardized to the newer name.
-
-This is one of several examples observed in the dataset, where station IDs show a transition between names over time, likely reflecting updates or corrections in station naming conventions.
+This shows a transition in station naming, likely reflecting updates or corrections. Standardizing to the newer name enhances data consistency.
 
 
-- to address Distinct Locations and Shared IDs
-  - It updates the start_station_id and end_station_id based on the presence of the "public rack -" prefix in the station name. If it matches, it appends "a" to the station ID.
+##### 4. Address Shared IDs
+To resolve shared IDs, station IDs were updated based on specific naming patterns, such as appending a suffix for station names starting with "public rack -".
+
 ```sql
 WITH formatted_data AS (
   -- refer to step 3
@@ -537,10 +536,12 @@ GROUP BY station_id
 HAVING name_count > 1
 ORDER BY name_count DESC 
 ```
-- only 15 rows of data left, station id that has multiple station name that has 'public-rack' has been filtered out.
+After applying this update, the number of station IDs with multiple names was reduced to 15 rows, effectively filtering out shared ID cases.
 
   
-- to address this inconsistency in station name that are due to : Temporary Relocations,Minor Naming Variations and Name Changes Over Time
+##### 5. Addressing Inconsistencies in Naming Variations
+For inconsistencies caused by temporary relocations, minor naming variations, or historical name changes, standardized station names were assigned to each station ID.
+
 ```sql
 WITH formatted_data AS (
   -- Refer to step 3
@@ -653,6 +654,8 @@ HAVING name_count > 1
 ORDER BY name_count DESC
 ```
 - there is no data to display.
+  
+Verification confirmed that all station IDs now have unique and consistent station names, with no remaining cases of multiple names for a single ID.
 
 #### Step 8: Identifying and Resolving Station Names with Multiple IDs
 This step focuses on identifying station names associated with multiple station IDs. The goal is to standardize these IDs for consistency in analysis.
