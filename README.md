@@ -1061,7 +1061,7 @@ GROUP BY end_station_id
 HAVING name_count > 1
 ORDER BY name_count DESC
 ```
-
+- There is no data to display.
 
 #### Step 10: Handling Null value 
 - This step addresses missing station information by filling start_station_name, start_station_id, end_station_name, and end_station_id with their respective latitude and longitude coordinates where necessary.
@@ -1076,27 +1076,12 @@ WITH formatted_data AS (
   -- Refer to step 7
 ) 
 
-,updated_station AS (
-SELECT DISTINCT
-    ride_id, 
-    rideable_type,
-    cleaned_started_at,
-    cleaned_ended_at,
-    COALESCE(m_start.station_id, f.start_station_id) AS start_station_id,
-    COALESCE(m_start.station_name, f.start_station_name) AS start_station_name,
-    COALESCE(m_end.station_id, f.end_station_id) AS end_station_id,
-    COALESCE(m_end.station_name, f.end_station_name) AS end_station_name,
-    member_casual,
-    start_lat,
-    start_lng,
-    end_lat,
-    end_lng
-FROM 
-    filtered_data AS f
-LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_start
-    ON f.start_station_id = m_start.station_id AND f.start_station_name = m_start.station_name
-LEFT JOIN `bike-share-case-study-430704.Bike_share.mapping_station` AS m_end
-    ON f.end_station_id = m_end.station_id AND f.end_station_name = m_end.station_name
+,cleaned_name AS (
+  -- Refer to above
+)
+
+,cleaned_name2 AS (
+  -- Refer to above
 )
 
 SELECT
@@ -1118,7 +1103,7 @@ SELECT
   end_lng
   
 FROM 
-  updated_station
+  cleaned_name2 
 ```
 - The **COALESCE()** function is used to populate missing station names and IDs with the corresponding latitude and longitude values. The **CONCAT()** function combine these latitude and longitude values into a string, indicating the approximate location of the trip's start or end point.
   
