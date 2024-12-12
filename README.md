@@ -1336,31 +1336,79 @@ GROUP BY
 |4	|classic_bike |casual |857927|
 |5	|docked_bike |casual |26841|
 
-- member prefer classic bike over electric bike where casual riders prefer electric bike, only casual riders use docked bike 
+
 ```sql
 SELECT 
-  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'electric_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100, 2) AS percentage_of_member_electric,
-  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'classic_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100, 2) AS percentage_of_member_classic,
-  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100, 2) AS percentage_of_member_docked,
+  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'electric_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100) AS percentage_of_member_electric,
+  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'classic_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100) AS percentage_of_member_classic,
+  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100) AS percentage_of_member_docked,
 
-  ROUND((COUNT(CASE WHEN member_casual = 'casual'AND rideable_type = 'electric_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100, 2) AS percentage_of_casual_electric,
-  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'classic_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100, 2) AS percentage_of_casual_classic,
-  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100, 2) AS percentage_of_casual_docked
+  ROUND((COUNT(CASE WHEN member_casual = 'casual'AND rideable_type = 'electric_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100) AS percentage_of_casual_electric,
+  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'classic_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100) AS percentage_of_casual_classic,
+  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100) AS percentage_of_casual_docked
 FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
 ```
 |rideable_type between member and casual| percentage (%)|
 |---|---|
-|percentage_of_member_electric| 48.44|
-|percentage_of_member_classic|51.56|
-|percentage_of_member_docked|0.0|
-|percentage_of_casual_electric|52.18|
-|percentage_of_casual_classic|46.37|
-|percentage_of_casual_docked|1.45|
+|percentage_of_member_electric| 48|
+|percentage_of_member_classic|52|
+|percentage_of_member_docked|0|
+|percentage_of_casual_electric|52|
+|percentage_of_casual_classic|46|
+|percentage_of_casual_docked|1|
 
-
+- member prefer classic bike(52%) over electric bike (48%) whereas casual riders prefer electric bike (52%) over classic bike (46%), only 1% of casual riders use docked bike. 
 
 
 Trip Duration Analysis: Investigating the average trip duration and how it varies by rideable type (e.g., electric bikes vs. classic bikes).
+```sql
+SELECT DISTINCT
+  member_casual,
+  PERCENTILE_CONT(trip_duration,0.5) OVER(PARTITION BY member_casual)  AS median
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table` 
+```
+|Row	 |member_casual |median|
+|---|---|---|
+|1	|member |8.0|
+|2 	|casual |12.0 |
+
+```sql
+SELECT
+  member_casual,
+  ROUND(AVG(trip_duration)) AS average_trip_duration
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table` 
+GROUP BY
+  member_casual
+```
+|Row	|member_casual|average_trip_duration|
+|---|---|---|
+|1	|casual |20.0|
+|2	|member |12.0|
+
+- casual rider average takes longer ride compare to member rider
+
+```sql
+SELECT
+  member_casual,
+  rideable_type,
+  ROUND(AVG(trip_duration)) AS average_trip_duration
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table` 
+GROUP BY
+  member_casual,
+  rideable_type
+```
+|Row	|member_casual |rideable_type |average_trip_duration|
+|---|---|---|---|
+|1	|member |electric_bike |11.0|
+|2	|member |classic_bike |13.0|
+|3	|casual |electric_bike |15.0|
+|4	|casual |classic_bike |25.0|
+|5	|casual |docked_bike |49.0|
+
+- electric bike are use for shorter trips in average, docked bike seems to be used for longer rides
 
 Distance Travelled: Identifying patterns in trip distance across different areas and ride types.
 
