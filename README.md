@@ -1317,6 +1317,47 @@ FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 |--- |--- |--- |
 |1	|65.48 |34.52|
 
+- type of bikes prefer between member and casual
+```sql
+SELECT DISTINCT
+  rideable_type,
+  member_casual,
+  COUNT(*) AS ride_count
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
+GROUP BY
+  rideable_type,
+  member_casual
+```
+|Row	|rideable_type |member_casual |ride_count|
+|--- |---|---|---|
+|1	|electric_bike |member| 1699699|
+|2	|classic_bike |member |1809287|
+|3	|electric_bike |casual |965443|
+|4	|classic_bike |casual |857927|
+|5	|docked_bike |casual |26841|
+
+- member prefer classic bike over electric bike where casual riders prefer electric bike, only casual riders use docked bike 
+```sql
+SELECT 
+  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'electric_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100, 2) AS percentage_of_member_electric,
+  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'classic_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100, 2) AS percentage_of_member_classic,
+  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100, 2) AS percentage_of_member_docked,
+
+  ROUND((COUNT(CASE WHEN member_casual = 'casual'AND rideable_type = 'electric_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100, 2) AS percentage_of_casual_electric,
+  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'classic_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100, 2) AS percentage_of_casual_classic,
+  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100, 2) AS percentage_of_casual_docked
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
+```
+|rideable_type between member and casual| percentage (%)|
+|---|---|
+|percentage_of_member_electric| 48.44|
+|percentage_of_member_classic|51.56|
+|percentage_of_member_docked|0.0|
+|percentage_of_casual_electric|52.18|
+|percentage_of_casual_classic|46.37|
+|percentage_of_casual_docked|1.45|
+
+
 
 
 Trip Duration Analysis: Investigating the average trip duration and how it varies by rideable type (e.g., electric bikes vs. classic bikes).
