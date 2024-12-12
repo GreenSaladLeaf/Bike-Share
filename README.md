@@ -1292,7 +1292,9 @@ Result: No data to display.
 ## Analysis
 With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. The goal of the analysis is to uncover trends and patterns related to bike usage, user behavior, and station performance. This includes examining trip durations, ride types, popular routes, and the impact of seasonality on bike usage.
 
-how many member rider trips vs casual rider trips:
+### Member vs. Casual Rider Trips
+The breakdown of trips by rider type is as follows:
+
 ```sql
 SELECT 
   member_casual,
@@ -1303,10 +1305,10 @@ GROUP BY
 ```
 |Row |member_casual |ride_count |
 |--- |--- |--- |
-|1 |casual |1850211|
-|2 |member |3508986|
+|1 |casual |1,850,211|
+|2 |member |3,508,986|
 
-- percentage of member trips and casual trips over total trips
+The percentage of trips taken by member and casual riders:
 ```sql
 SELECT 
   ROUND((COUNT(CASE WHEN member_casual = 'member' THEN 1 END) / COUNT(*)) * 100, 2) AS percentage_of_member,
@@ -1317,7 +1319,10 @@ FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 |--- |--- |--- |
 |1	|65.48 |34.52|
 
-- type of bikes prefer between member and casual
+- Members account for 65.48% of all trips, while casual riders account for 34.52%.
+
+### Preferred Bike Types by Rider Type
+The following query explores bike preferences among members and casual riders:
 ```sql
 SELECT DISTINCT
   rideable_type,
@@ -1330,77 +1335,84 @@ GROUP BY
 ```
 |Row	|rideable_type |member_casual |ride_count|
 |--- |---|---|---|
-|1	|electric_bike |member| 1699699|
-|2	|classic_bike |member |1809287|
-|3	|electric_bike |casual |965443|
-|4	|classic_bike |casual |857927|
-|5	|docked_bike |casual |26841|
+|1	|electric_bike |member| 1,699,699|
+|2	|classic_bike |member |1,809,287|
+|3	|electric_bike |casual |965,443|
+|4	|classic_bike |casual |857,927|
+|5	|docked_bike |casual |26,841|
 
-
+The percentages for bike type preferences among riders are as follows:
 ```sql
-SELECT 
-  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'electric_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100) AS percentage_of_member_electric,
-  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'classic_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100) AS percentage_of_member_classic,
-  ROUND((COUNT(CASE WHEN member_casual = 'member' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'member' THEN 1 END)) * 100) AS percentage_of_member_docked,
-
-  ROUND((COUNT(CASE WHEN member_casual = 'casual'AND rideable_type = 'electric_bike'  THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100) AS percentage_of_casual_electric,
-  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'classic_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100) AS percentage_of_casual_classic,
-  ROUND((COUNT(CASE WHEN member_casual = 'casual' AND rideable_type = 'docked_bike' THEN 1 END) / COUNT(CASE WHEN member_casual = 'casual' THEN 1 END)) * 100) AS percentage_of_casual_docked
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
+SELECT
+  member_casual AS rider_type,
+  ROUND((COUNT(CASE WHEN rideable_type = 'electric_bike' THEN 1 END) / SUM(COUNT(*)) OVER(PARTITION BY member_casual)) * 100, 2) AS electric_percentage,
+  ROUND((COUNT(CASE WHEN rideable_type = 'classic_bike' THEN 1 END) / SUM(COUNT(*)) OVER(PARTITION BY member_casual)) * 100, 2) AS classic_percentage,
+  ROUND((COUNT(CASE WHEN rideable_type = 'docked_bike' THEN 1 END) / SUM(COUNT(*)) OVER(PARTITION BY member_casual)) * 100, 2) AS docked_percentage,
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY
+  member_casual
+ORDER BY
+  member_casual4.Bike_share.cleaned_table` 
 ```
-|rideable_type between member and casual| percentage (%)|
-|---|---|
-|percentage_of_member_electric| 48|
-|percentage_of_member_classic|52|
-|percentage_of_member_docked|0|
-|percentage_of_casual_electric|52|
-|percentage_of_casual_classic|46|
-|percentage_of_casual_docked|1|
+|Row	|rider_type |electric_percentage |classic_percentage |docked_percentage|
+|---|---|---|---|---|
+|1	|casual|52.18|46.37|1.45|
+|2	|member|48.44|51.56|0.0|
 
-- member prefer classic bike(52%) over electric bike (48%) whereas casual riders prefer electric bike (52%) over classic bike (46%), only 1% of casual riders use docked bike. 
+This breakdown shows that casual riders prefer electric bikes (52.18%), while members have a more balanced preference between electric (48.44%) and classic bikes (51.56%). The preference for docked bikes is minimal among both groups.
 
+### Trip Duration Analysis
+This section examines trip duration patterns by rider type and bike type.
 
-Trip Duration Analysis: Investigating the average trip duration and how it varies by rideable type (e.g., electric bikes vs. classic bikes).
+#### Average and Median Trip Durations by Rider Type
+To understand the differences in trip durations between members and casual riders, the median and average durations are calculated:
+
+- **Median Trip Duration**: The query calculates the median trip duration by rider type using the PERCENTILE_CONT function:
 ```sql
 SELECT DISTINCT
   member_casual,
-  PERCENTILE_CONT(trip_duration,0.5) OVER(PARTITION BY member_casual)  AS median
+  PERCENTILE_CONT(trip_duration,0.5) OVER(PARTITION BY member_casual)  AS median_trip_duration_minutes
 FROM
   `bike-share-case-study-430704.Bike_share.cleaned_table` 
 ```
-|Row	 |member_casual |median|
+|Row	 |member_casual |median_trip_duration_minutes|
 |---|---|---|
 |1	|member |8.0|
 |2 	|casual |12.0 |
 
+- **Average Trip Duration**: The average trip duration for each rider type is calculated:
 ```sql
 SELECT
   member_casual,
-  ROUND(AVG(trip_duration)) AS average_trip_duration
+  ROUND(AVG(trip_duration)) AS average_trip_duration_minutes
 FROM
   `bike-share-case-study-430704.Bike_share.cleaned_table` 
 GROUP BY
   member_casual
 ```
-|Row	|member_casual|average_trip_duration|
+|Row	|member_casual|average_trip_duration_minutes|
 |---|---|---|
 |1	|casual |20.0|
 |2	|member |12.0|
 
-- casual rider average takes longer ride compare to member rider
+- Casual riders tend to take longer trips on average (20 minutes) compared to members (12 minutes).
+- The median trip durations show a smaller difference: 8 minutes for members and 12 minutes for casual riders.
 
+#### Trip Durations by Bike Type
+Trip durations are further analyzed by bike type for both rider categories:
 ```sql
 SELECT
   member_casual,
   rideable_type,
-  ROUND(AVG(trip_duration)) AS average_trip_duration
+  ROUND(AVG(trip_duration)) AS average_trip_duration_minutes
 FROM
   `bike-share-case-study-430704.Bike_share.cleaned_table` 
 GROUP BY
   member_casual,
   rideable_type
 ```
-|Row	|member_casual |rideable_type |average_trip_duration|
+|Row	|member_casual |rideable_type |average_trip_duration_minutes|
 |---|---|---|---|
 |1	|member |electric_bike |11.0|
 |2	|member |classic_bike |13.0|
@@ -1408,9 +1420,28 @@ GROUP BY
 |4	|casual |classic_bike |25.0|
 |5	|casual |docked_bike |49.0|
 
-- electric bike are use for shorter trips in average, docked bike seems to be used for longer rides
+- **Electric bikes** tend to have shorter trip durations for both member and casual riders, with members averaging 11 minutes and casual riders averaging 15 minutes.
+- **Classic bikes** have longer average trip durations, especially for casual riders (25 minutes on average).
+- **Docked bikes** show significantly longer trip durations, particularly for casual riders (49 minutes on average). This may reflect longer trips or specific usage patterns.
+
+**Key Insights**:
+- **Casual riders on docked bikes** have the longest average trip duration (49 minutes), likely due to the nature of docked bike usage, where riders may be more inclined to take longer trips, especially for one-time or less frequent uses.
+- **Members** tend to have shorter and more efficient trips, regardless of bike type. This suggests that members use the service more frequently and for shorter, routine trips compared to casual riders, whose trips tend to be longer or less regular.
 
 Distance Travelled: Identifying patterns in trip distance across different areas and ride types.
+Trip Distance: Calculate the average or distribution of trip distances. To understand whether trips are typically short or long, and the geographical reach of the bike share system.
+- typical distance traveled per ride(median):
+```sql
+SELECT DISTINCT
+  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER()) AS median_distance_meters
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table`
+```
+|Row	|median_distance_meters|
+|---|---|
+|1	|1658.0|
+
+
 
 User Behavior: Understanding usage patterns for members versus casual riders.
 
