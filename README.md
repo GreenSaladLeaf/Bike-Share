@@ -1275,8 +1275,49 @@ ORDER BY
 
 After processing, the final cleaned table was exported to the dataset bike-share-case-study-430704.Bike_share.cleaned_table.
 
+- to verify there is no duplicate for ride_id:
+```sql
+SELECT
+    ride_id,
+    COUNT(*) AS count
+FROM
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY
+    ride_id
+HAVING
+    COUNT(*) > 1
+```
+Result: No data to display.
+
 ## Analysis
 With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. The goal of the analysis is to uncover trends and patterns related to bike usage, user behavior, and station performance. This includes examining trip durations, ride types, popular routes, and the impact of seasonality on bike usage.
+
+how many member rider trips vs casual rider trips:
+```sql
+SELECT 
+  member_casual,
+  COUNT(*) AS ride_count
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
+GROUP BY
+  member_casual
+```
+|Row |member_casual |ride_count |
+|--- |--- |--- |
+|1 |casual |1850211|
+|2 |member |3508986|
+
+- percentage of member trips and casual trips over total trips
+```sql
+SELECT 
+  ROUND((COUNT(CASE WHEN member_casual = 'member' THEN 1 END) / COUNT(*)) * 100, 2) AS percentage_of_member,
+  ROUND((COUNT(CASE WHEN member_casual = 'casual'  THEN 1 END) / COUNT(*)) * 100, 2) AS percentage_of_casual
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
+```
+|Row	|percentage_of_member |percentage_of_casual|
+|--- |--- |--- |
+|1	|65.48 |34.52|
+
+
 
 Trip Duration Analysis: Investigating the average trip duration and how it varies by rideable type (e.g., electric bikes vs. classic bikes).
 
