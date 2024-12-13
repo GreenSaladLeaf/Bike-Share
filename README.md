@@ -1636,11 +1636,12 @@ Docked bikes have limited use overall, but when used, they tend to be for longer
 
 
 ___
-Refined Observations
 Behavior Differences:
 Casual riders may use the system more for leisure or one-off longer trips, while members lean towards practical, short-distance rides for daily routines.
 Electric Bike Popularity:
 The preference for electric bikes in longer trips highlights their role in expanding the system's reach, making them crucial for encouraging higher usage and reducing physical effort.
+---
+---
 Optimization Opportunities:
 Promote membership plans targeting casual users with medium or long-distance usage patterns.
 Increase the availability of electric bikes, especially in areas with higher demand for medium and long trips.
