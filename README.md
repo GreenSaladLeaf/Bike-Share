@@ -1363,7 +1363,9 @@ ORDER BY
 This breakdown shows that casual riders prefer electric bikes (52.18%), while members have a more balanced preference between electric (48.44%) and classic bikes (51.56%). The preference for docked bikes is minimal among both groups.
 
 ### Trip Duration Analysis
-This section examines trip duration patterns by rider type and bike type.
+This section explores trip duration patterns to understand user engagement.
+- Overall Trends: What is the typical trip length?
+- Rider and Bike Type Breakdown: How do durations vary across rider and bike types?
 
 #### Average and Median Trip Durations by Rider Type
 To understand the differences in trip durations between members and casual riders, the median and average durations are calculated:
@@ -1428,9 +1430,15 @@ GROUP BY
 - **Casual riders on docked bikes** have the longest average trip duration (49 minutes), likely due to the nature of docked bike usage, where riders may be more inclined to take longer trips, especially for one-time or less frequent uses.
 - **Members** tend to have shorter and more efficient trips, regardless of bike type. This suggests that members use the service more frequently and for shorter, routine trips compared to casual riders, whose trips tend to be longer or less regular.
 
-Distance Travelled: Identifying patterns in trip distance across different areas and ride types.
-Trip Distance: Calculate the average or distribution of trip distances. To understand whether trips are typically short or long, and the geographical reach of the bike share system.
-- typical distance traveled per ride(median):
+
+### Trip Distance Analysis
+This analysis explores trip distances to assess Cyclistic's geographical reach and user behavior.
+- Overall Trends: Are trips typically short or long?
+- Rider and Bike Type Breakdown: How do distances vary by rider type (casual vs. member) and bike type (classic, docked, electric)?
+
+#### Overall Trip Distance
+The median and average distances for all trips provide an overview of the typical distances traveled.
+- **Median Trip Distance**: 
 ```sql
 SELECT DISTINCT
   ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER()) AS median_distance_meters
@@ -1440,6 +1448,227 @@ FROM
 |Row	|median_distance_meters|
 |---|---|
 |1	|1658.0|
+The median trip distance is 1658 meters (or approximately 1.65 kilometers), indicating that half of the trips are shorter than this distance.
+
+- **Average Trip Distance**:
+```sql
+SELECT 
+  ROUND(AVG(distance_meters)) AS average_distance_meters
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+```
+|Row	|average_distance_meters|
+|---|---|
+|1	|2269.0|
+The average trip distance is 2269 meters (or approximately 2.27 kilometers), which is slightly higher than the median, reflecting the impact of longer trips in the dataset.
+
+#### Trip Distance by Rider Type
+The average and median distances differ between member and casual riders, suggesting variations in how frequently they use the service and the nature of their trips.
+
+- **Median Distance by Rider Type**:
+```sql
+SELECT DISTINCT
+  member_casual AS rider_type,
+  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER(PARTITION BY member_casual))  AS median_distance
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table`
+```
+|Row	|rider_type|median_distance|
+|---|---|---|
+|1	|member|1620.0|
+|2	|casual|1756.0|
+Members have a median distance of 1620 meters (1.62 km), while casual riders have a median distance of 1756 meters (1.76 km). Casual riders, on average, tend to take slightly longer trips than members.
+
+- **Average Distance by Rider Type**:
+```sql
+SELECT
+  member_casual AS rider_type,
+  ROUND(AVG(distance_meters)) AS avg_distance
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table` 
+GROUP BY
+  rider_type
+```
+|Row|	rider_type|avg_distance|
+|---|---|---|
+|1	|casual|2336.0|
+|2	|member|2234.0|
+- Casual riders have an average trip distance of 2336 meters (2.34 km), while members have an average of 2234 meters (2.23 km).
+- This indicates that casual riders, who might use the service for leisure or irregular trips, tend to travel slightly further than members, who may use bikes more frequently for short, routine trips.
+
+#### Trip Distance by Bike Type
+The trip distance analysis by bike type highlights preferences and patterns in the use of different bike types by rider type.
+
+- **Average Distance by Bike Type**:
+```sql
+SELECT
+  member_casual AS rider_type,
+  rideable_type AS bike_type,
+  ROUND(AVG(distance_meters)) AS avg_distance
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table` 
+GROUP BY
+  rider_type,
+  bike_type
+ORDER BY
+  rider_type DESC,
+  avg_distance DESC
+```
+|Row	|rider_type|bike_type|avg_distance|
+|---|---|---|---|
+|1	|member|electric_bike|2487.0|
+|2	|member|classic_bike|1996.0|
+|3	|casual|docked_bike|2691.0|
+|4	|casual|electric_bike|2355.0|
+|5	|casual|classic_bike|2303.0|
+
+- **Electric bikes**: Members traveling on electric bikes have the longest average trip distance of 2487 meters (2.49 km), which could be due to the comfort and efficiency of electric bikes for longer trips. Casual riders using electric bikes have an average distance of 2355 meters (2.36 km).
+- **Classic bikes**: Members have an average trip distance of 1996 meters (1.99 km), while casual riders have a slightly higher average at 2303 meters (2.30 km).
+- **Docked bikes**: Casual riders using docked bikes travel the farthest, with an average distance of 2691 meters (2.69 km), indicating that docked bikes are used for relatively longer, planned trips.
+
+#### Distance Distribution
+The distance distribution reveals some interesting insights into the range of distances traveled by users in the bike-sharing system:
+
+**Trip Categories**:
+
+```sql
+SELECT
+  CASE 
+    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
+    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
+    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
+    ELSE 'Very Long (20km+)' 
+  END AS distance_category,
+  COUNT(*) AS trip_count
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY distance_category
+ORDER BY trip_count DESC
+```
+|Row	|distance_category |trip_count|
+|---|---|---|
+|1	|Short (10m-2km)|3147188|
+|2	|Medium (2km-10km)|2171218|
+|3	|Long (10km-20km)|39127|
+|4	|Very Long (20km+)|1664|
+
+- **Short Trips Dominate**:
+Most trips (73.6%) fall within the "Short (10m-2km)" category, suggesting the system is primarily used for quick, local rides.
+- **Medium Trips Second**:
+Medium trips (2km-10km) are the second most common (25.4%), indicating a significant share of users take slightly longer commutes or errands.
+- **Long and Very Long Trips Are Rare**:
+Combined, trips over 10km account for less than 1% of all trips, likely reflecting edge cases or specific use cases like recreational rides or long-distance commutes.
+
+**Distance Breakdown by Rider Type**:
+The analysis further divides the trip distance categories by rider type (member vs. casual) to understand patterns for each group. 
+```sql
+SELECT
+  CASE 
+    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
+    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
+    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
+    ELSE 'Very Long (20km+)' 
+  END AS distance_category,
+  member_casual AS rider_type,
+  COUNT(*) AS trip_count
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY
+  distance_category, rider_type
+ORDER BY
+  rider_type, trip_count DESC
+```
+|Row	|distance_category|rider_type|trip_count|
+|---|---|---|---|
+|1	|Short (10m-2km)|casual|1,045,942|
+|2	|Medium (2km-10km)|casual|786,755|
+|3	|Long (10km-20km)|casual|16,772|
+|4	|Very Long (20km+)|casual|742|
+|5	|Short (10m-2km)|member|2,101,246|
+|6	|Medium (2km-10km)|member|1,138,446|
+|7	|Long (10km-20km)|member|22,355|
+|8	|Very Long (20km+)|member|922|
+
+- **Casual Riders Take Longer Trips**:
+Casual riders show a higher proportion of medium and long trips than members. For example:
+  - Casual riders: 44% of trips are 2km or longer.
+  - Members: Only 35% are 2km or longer.
+- **Members Focus on Short Trips**:
+Members dominate in the "Short (10m-2km)" category, making them the primary group for quick, consistent use like commuting or errands.
+
+**Distance Breakdown by Bike Type**:
+```sql
+SELECT
+  CASE 
+    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
+    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
+    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
+    ELSE 'Very Long (20km+)' 
+  END AS distance_category,
+  rideable_type AS bike_type,
+  COUNT(*) AS trip_count
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY
+  distance_category, bike_type
+ORDER BY
+  bike_type, trip_count DESC
+```
+|Row	|distance_category|bike_type|trip_count|
+|---|---|---|---|
+|1	|Short (10m-2km)|classic_bike|1691499|
+|2	|Medium (2km-10km)|classic_bike|959457|
+|3	|Long (10km-20km)|classic_bike|15435|
+|4	|Very Long (20km+)|classic_bike|823|
+|5	|Short (10m-2km)|docked_bike|13360|
+|6	|Medium (2km-10km)|docked_bike|13011|
+|7	|Long (10km-20km)|docked_bike|461|
+|8	|Very Long (20km+)|docked_bike|9|
+|9	|Short (10m-2km)|electric_bike|1442329|
+|10	|Medium (2km-10km)|electric_bike|1198750|
+|11	|Long (10km-20km)|electric_bike|23231|
+|12	|Very Long (20km+)|electric_bike|832|
+
+- **Classic Bikes for Local Trips**:
+Classic bikes are mostly used for short distances, with 77% of classic bike trips under 2km.
+- **Electric Bikes for Longer Trips**:
+Electric bikes are popular for medium and long trips:
+  - 45% of electric bike trips are 2km or longer.
+  - Electric bikes handle 94% of trips longer than 10km.
+- **Docked Bikes for Niche Usage**:
+Docked bikes have limited use overall, but when used, they tend to be for longer casual trips (average distance ~2.7km).
+
+
+___
+Refined Observations
+Behavior Differences:
+Casual riders may use the system more for leisure or one-off longer trips, while members lean towards practical, short-distance rides for daily routines.
+Electric Bike Popularity:
+The preference for electric bikes in longer trips highlights their role in expanding the system's reach, making them crucial for encouraging higher usage and reducing physical effort.
+Optimization Opportunities:
+Promote membership plans targeting casual users with medium or long-distance usage patterns.
+Increase the availability of electric bikes, especially in areas with higher demand for medium and long trips.
+---
+```sql
+SELECT
+  CASE 
+    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
+    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
+    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
+    ELSE 'Very Long (20km+)' 
+  END AS distance_category,
+  member_casual,
+  rideable_type,
+  COUNT(*) AS trip_count
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY
+  distance_category, member_casual, rideable_type
+ORDER BY
+  distance_category, trip_count DESC
+```
+
+Key Insights:
+Casual riders tend to take slightly longer trips than members, as evidenced by their higher median and average trip distances.
+Docked bikes are primarily used by casual riders for longer trips, with an average trip distance of 2691 meters.
+Electric bikes tend to be used for longer trips, with members on electric bikes traveling an average of 2487 meters, followed by casual riders at 2355 meters.
+Members generally prefer classic bikes for slightly shorter trips, while casual riders using classic bikes tend to travel longer distances compared to members.
+
 
 
 
