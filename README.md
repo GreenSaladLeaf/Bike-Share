@@ -1526,10 +1526,10 @@ ORDER BY
 - **Docked bikes**: Casual riders using docked bikes travel the farthest, with an average distance of 2691 meters (2.69 km), indicating that docked bikes are used for relatively longer, planned trips.
 
 #### Distance Distribution
-The distance distribution reveals some interesting insights into the range of distances traveled by users in the bike-sharing system:
+The distance analysis highlights the patterns in trip lengths within the bike-sharing system, segmented into distinct categories:
 
 **Trip Categories**:
-
+Trips were categorized by their lengths into four groups:
 ```sql
 SELECT
   CASE 
@@ -1538,102 +1538,100 @@ SELECT
     WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
     ELSE 'Very Long (20km+)' 
   END AS distance_category,
-  COUNT(*) AS trip_count
+  COUNT(*) AS trip_count,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS percentage
 FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 GROUP BY distance_category
 ORDER BY trip_count DESC
 ```
-|Row	|distance_category |trip_count|
-|---|---|---|
-|1	|Short (10m-2km)|3147188|
-|2	|Medium (2km-10km)|2171218|
-|3	|Long (10km-20km)|39127|
-|4	|Very Long (20km+)|1664|
+|Row	|distance_category |trip_count|percentage|
+|---|---|---|---|
+|1	|Short (10m-2km)|3147188|58.72|
+|2	|Medium (2km-10km)|2171218|40.51|
+|3	|Long (10km-20km)|39127|0.73|
+|4	|Very Long (20km+)|1664|0.03|
 
-- **Short Trips Dominate**:
-Most trips (73.6%) fall within the "Short (10m-2km)" category, suggesting the system is primarily used for quick, local rides.
-- **Medium Trips Second**:
-Medium trips (2km-10km) are the second most common (25.4%), indicating a significant share of users take slightly longer commutes or errands.
-- **Long and Very Long Trips Are Rare**:
-Combined, trips over 10km account for less than 1% of all trips, likely reflecting edge cases or specific use cases like recreational rides or long-distance commutes.
+Trip Distribution Across Categories:
+- The majority of trips fall under the "Short" category (10m-2km), making up 58.72% of all rides. "Medium" trips (2km-10km) are the second most common at 40.51%, while "Long" (0.73%) and "Very Long" (0.03%) trips are rare. This indicates that the bike-sharing system is primarily used for short, local trips.
 
 **Distance Breakdown by Rider Type**:
-The analysis further divides the trip distance categories by rider type (member vs. casual) to understand patterns for each group. 
-```sql
 SELECT
-  CASE 
-    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
-    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
-    ELSE 'Very Long (20km+)' 
-  END AS distance_category,
+  distance_category,
   member_casual AS rider_type,
-  COUNT(*) AS trip_count
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY
-  distance_category, rider_type
-ORDER BY
-  rider_type, trip_count DESC
+  COUNT(*) AS trip_count,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY member_casual), 2) AS percentage_within_rider_type
+FROM (
+  SELECT
+    CASE 
+      WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
+      WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
+      WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
+      ELSE 'Very Long (20km+)' 
+    END AS distance_category,
+    member_casual,
+    distance_meters
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+) AS categorized
+GROUP BY distance_category, member_casual
+ORDER BY member_casual, percentage_within_rider_type DESC
 ```
-|Row	|distance_category|rider_type|trip_count|
-|---|---|---|---|
-|1	|Short (10m-2km)|casual|1,045,942|
-|2	|Medium (2km-10km)|casual|786,755|
-|3	|Long (10km-20km)|casual|16,772|
-|4	|Very Long (20km+)|casual|742|
-|5	|Short (10m-2km)|member|2,101,246|
-|6	|Medium (2km-10km)|member|1,138,446|
-|7	|Long (10km-20km)|member|22,355|
-|8	|Very Long (20km+)|member|922|
+|Row	|distance_category|rider_type|trip_count|percentage_within_rider_type|
+|---|---|---|---|---|
+|1	|Short (10m-2km)|casual|1,045,942|56.53|
+|2	|Medium (2km-10km)|casual|786,755|42.52|
+|3	|Long (10km-20km)|casual|16,772|0.91|
+|4	|Very Long (20km+)|casual|742|0.04|
+|5	|Short (10m-2km)|member|2,101,246|59.88|
+|6	|Medium (2km-10km)|member|1,138,446|39.45|
+|7	|Long (10km-20km)|member|22,355|0.64|
+|8	|Very Long (20km+)|member|922|0.03|
 
-- **Casual Riders Take Longer Trips**:
-Casual riders show a higher proportion of medium and long trips than members. For example:
-  - Casual riders: 44% of trips are 2km or longer.
-  - Members: Only 35% are 2km or longer.
-- **Members Focus on Short Trips**:
-Members dominate in the "Short (10m-2km)" category, making them the primary group for quick, consistent use like commuting or errands.
+---
+Rider Type Behavior:
+- Both casual riders and members follow similar patterns, with most trips being short, followed by medium. However, members account for a larger volume of rides overall, particularly in the "Short" and "Medium" categories. This suggests that members use the system more frequently, likely for commuting or routine tasks, whereas casual riders engage with it for occasional, leisurely activities.
+---
 
 **Distance Breakdown by Bike Type**:
 ```sql
 SELECT
-  CASE 
-    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
-    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
-    ELSE 'Very Long (20km+)' 
-  END AS distance_category,
-  rideable_type AS bike_type,
-  COUNT(*) AS trip_count
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY
-  distance_category, bike_type
-ORDER BY
-  bike_type, trip_count DESC
+  distance_category,
+  bike_type,
+  COUNT(*) AS trip_count,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY distance_category), 2) AS percentage_within_bike_type
+FROM (
+  SELECT
+    CASE 
+      WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
+      WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
+      WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
+      ELSE 'Very Long (20km+)' 
+    END AS distance_category,
+    rideable_type AS bike_type,
+    distance_meters
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+) AS categorized
+GROUP BY distance_category, bike_type
+ORDER BY distance_category, percentage_bike_type DESC
 ```
-|Row	|distance_category|bike_type|trip_count|
-|---|---|---|---|
-|1	|Short (10m-2km)|classic_bike|1691499|
-|2	|Medium (2km-10km)|classic_bike|959457|
-|3	|Long (10km-20km)|classic_bike|15435|
-|4	|Very Long (20km+)|classic_bike|823|
-|5	|Short (10m-2km)|docked_bike|13360|
-|6	|Medium (2km-10km)|docked_bike|13011|
-|7	|Long (10km-20km)|docked_bike|461|
-|8	|Very Long (20km+)|docked_bike|9|
-|9	|Short (10m-2km)|electric_bike|1442329|
-|10	|Medium (2km-10km)|electric_bike|1198750|
-|11	|Long (10km-20km)|electric_bike|23231|
-|12	|Very Long (20km+)|electric_bike|832|
+|Row	|distance_category|bike_type|trip_count|percentage_bike_type|
+|---|---|---|---|---|
+|1	|Long (10km-20km)|electric_bike|23231|59.37|
+|2	|Long (10km-20km)|classic_bike|15435|39.45|
+|3	|Long (10km-20km)|docked_bike|461|1.18|
+|4	|Medium (2km-10km)|electric_bike|1198750|55.21|
+|5	|Medium (2km-10km)|classic_bike|959457|44.19|
+|6	|Medium (2km-10km)|docked_bike|13011|0.6|
+|7	|Short (10m-2km)|classic_bike|1691499|53.75|
+|8	|Short (10m-2km)|electric_bike|1442329|45.83|
+|9	|Short (10m-2km)|docked_bike|13360|0.42|
+|10	|Very Long (20km+)|electric_bike|832|50.0|
+|11	|Very Long (20km+)|classic_bike|823|49.46|
+|12	|Very Long (20km+)|docked_bike|9|0.54|
 
-- **Classic Bikes for Local Trips**:
-Classic bikes are mostly used for short distances, with 77% of classic bike trips under 2km.
-- **Electric Bikes for Longer Trips**:
-Electric bikes are popular for medium and long trips:
-  - 45% of electric bike trips are 2km or longer.
-  - Electric bikes handle 94% of trips longer than 10km.
-- **Docked Bikes for Niche Usage**:
-Docked bikes have limited use overall, but when used, they tend to be for longer casual trips (average distance ~2.7km).
-
+- Electric Bikes are preferred for medium (55.21%), long (59.37%), and very long trips (50.0%) due to their efficiency over greater distances.
+- Classic Bikes dominate short trips (53.75%) but also contribute significantly to medium (44.19%) and long trips (39.45%), reflecting their versatility.
+- Docked Bikes account for a minimal share across all categories, with their highest usage in short (0.42%) and medium trips (0.6%).
+- For very long trips, usage is nearly balanced between electric (50.0%) and classic bikes (49.46%), highlighting varied rider preferences.
 
 ___
 Behavior Differences:
@@ -1641,45 +1639,111 @@ Behavior Differences:
 ---
 ---
 Electric Bike Popularity:
-The preference for electric bikes in longer trips highlights their role in expanding the system's reach, making them crucial for encouraging higher usage and reducing physical effort.
+- The preference for electric bikes in longer trips highlights their role in expanding the system's reach, making them crucial for encouraging higher usage and reducing physical effort.
 ---
 ---
 Optimization Opportunities:
 - Promote membership plans targeting casual users with medium or long-distance usage patterns.
 - Increase the availability of electric bikes, especially in areas with higher demand for medium and long trips.
 ---
+
+
 ```sql
-SELECT
-  CASE 
-    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
-    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
-    ELSE 'Very Long (20km+)' 
-  END AS distance_category,
-  member_casual,
-  rideable_type,
-  COUNT(*) AS trip_count
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY
-  distance_category, member_casual, rideable_type
-ORDER BY
-  distance_category, trip_count DESC
+SELECT 
+    member_casual,
+    EXTRACT(HOUR FROM cleaned_started_at) AS hour_of_day,
+    EXTRACT(DAYOFWEEK FROM cleaned_started_at) AS day_of_week,
+    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
+    ROUND(AVG(distance_meters),2) AS avg_distance_meters,
+    ROUND(AVG(trip_duration),2) AS avg_trip_duration_minutes,
+    COUNT(*) AS trips
+FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY 
+    member_casual, hour_of_day, day_of_week, month_of_year
+ORDER BY 
+    hour_of_day, avg_distance_meters DESC
+
+SELECT *
+FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
 ```
 
-Key Insights:
-Casual riders tend to take slightly longer trips than members, as evidenced by their higher median and average trip distances.
-Docked bikes are primarily used by casual riders for longer trips, with an average trip distance of 2691 meters.
-Electric bikes tend to be used for longer trips, with members on electric bikes traveling an average of 2487 meters, followed by casual riders at 2355 meters.
-Members generally prefer classic bikes for slightly shorter trips, while casual riders using classic bikes tend to travel longer distances compared to members.
-
-
-
-
-User Behavior: Understanding usage patterns for members versus casual riders.
-
-Station Performance: Analyzing which stations are the most popular for starting and ending trips.
-
 Seasonality Effects: Exploring how bike usage varies throughout the year, identifying any seasonal trends.
+
+```sql
+  -- Top 10 popular routes and counts for member and casual user trips
+SELECT
+    LEAST(start_station_name, end_station_name) AS start_station,
+    GREATEST(start_station_name, end_station_name) AS end_station,
+    COUNT(DISTINCT ride_id) AS num_of_trips,
+    COUNT(DISTINCT CASE WHEN member_casual = 'member' THEN ride_id END) AS num_of_member_trips,
+    COUNT(DISTINCT CASE WHEN member_casual = 'casual' THEN ride_id END) AS num_of_casual_trips
+FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY 
+    start_station, end_station
+ORDER BY 
+  num_of_trips DESC
+LIMIT 10
+```
+|Row	|start_station|end_station|num_of_trips|num_of_member_trips|num_of_casual_trips|
+|---|---|---|---|---|---|
+|1	|calumet ave & 33rd st|state st & 33rd st|11823|11354|469|
+|2	|ellis ave & 55th st|ellis ave & 60th st|10985|7405|3580|
+|3	|ellis ave & 60th st|university ave & 57th st|10609|8141|2468|
+|4	|dusable lake shore dr & monroe st|streeter dr & grand ave|8243|949|7294|
+|5	|loomis st & lexington st|morgan st & polk st|6177|5790|387|
+|6	|kimbark ave & 53rd st|university ave & 57th st|5107|3789|1318|
+|7	|mlk jr dr & 29th st|state st & 33rd st|4844|4658|186|
+|8	|lake park ave & 56th st|university ave & 57th st|4667|3520|1147|
+|9	|dusable lake shore dr & monroe st|shedd aquarium|4165|473|3692|
+|10	|dusable lake shore dr & north blvd|streeter dr & grand ave|4090|830|3260|
+
+```sql
+WITH route_user_type AS (
+  -- Top 10 popular routes and counts for member and casual user trips
+  SELECT
+    LEAST(start_station_name, end_station_name) AS start_station,
+    GREATEST(start_station_name, end_station_name) AS end_station,
+    COUNT(DISTINCT ride_id) AS num_of_trips,
+    COUNT(DISTINCT CASE WHEN member_casual = 'member' THEN ride_id END) AS num_of_member_trips,
+    COUNT(DISTINCT CASE WHEN member_casual = 'casual' THEN ride_id END) AS num_of_casual_trips
+  FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+  GROUP BY 
+    start_station, end_station
+ORDER BY 
+  num_of_trips DESC
+LIMIT 10
+)
+
+-- Calculate percentage of member and casual trips for each route
+SELECT
+  start_station,
+  end_station,
+  num_of_trips,
+  ROUND((num_of_member_trips / num_of_trips) * 100, 2) AS member_percentage,
+  ROUND((num_of_casual_trips / num_of_trips) * 100, 2) AS casual_percentage
+FROM 
+  route_user_type
+
+```
+|Row	|start_station|end_station|num_of_trips|member_percentage|casual_percentage|
+|---|---|---|---|---|---|
+|1	|calumet ave & 33rd st|state st & 33rd st|11823|96.03|3.97|
+|2	|ellis ave & 55th st|ellis ave & 60th st|10985|67.41|32.59|
+|3	|ellis ave & 60th st|university ave & 57th st|10609|76.74|23.26|
+|4	|dusable lake shore dr & monroe st|streeter dr & grand ave|8243|11.51|88.49|
+|5	|loomis st & lexington st|morgan st & polk st|6177|93.73|6.27|
+|6	|kimbark ave & 53rd st|university ave & 57th st|5107|74.19|25.81|
+|7	|mlk jr dr & 29th st|state st & 33rd st|4844|96.16|3.84|
+|8	|lake park ave & 56th st|university ave & 57th st|4667|75.42|24.58|
+|9	|dusable lake shore dr & monroe st|shedd aquarium|4165|11.36|88.64|
+|10	|dusable lake shore dr & north blvd|streeter dr & grand ave|4090|20.29|79.71|
+
+
+
 
 
 
