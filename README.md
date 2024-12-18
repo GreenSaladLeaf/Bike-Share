@@ -1796,9 +1796,8 @@ GROUP BY
 ORDER BY 
   num_of_trips DESC
 
-
 ```
 
-
+![image](https://github.com/user-attachments/assets/f744817d-0b2c-488f-9cce-585e020b731f)
 
 
