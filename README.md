@@ -1742,6 +1742,7 @@ FROM
 |9	|dusable lake shore dr & monroe st|shedd aquarium|4165|11.36|88.64|
 |10	|dusable lake shore dr & north blvd|streeter dr & grand ave|4090|20.29|79.71|
 
+![image](https://github.com/user-attachments/assets/9fb963ff-06ae-4634-96b3-e461dc41605f)
 
 ```sql
 WITH SeasonalData AS (
