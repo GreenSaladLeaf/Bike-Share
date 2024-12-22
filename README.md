@@ -1741,13 +1741,13 @@ LIMIT 10
 
 -- Calculate percentage of member and casual trips for each route
 SELECT
-  start_station,
-  end_station,
+  CONCAT(start_station, ' - ',end_station) AS route,
   num_of_trips,
   ROUND((num_of_member_trips / num_of_trips) * 100, 2) AS member_percentage,
   ROUND((num_of_casual_trips / num_of_trips) * 100, 2) AS casual_percentage
 FROM 
   route_user_type
+
 ```
 
 |Row	|start_station|end_station|num_of_trips|member_percentage|casual_percentage|
@@ -1763,7 +1763,7 @@ FROM
 |9	|dusable lake shore dr & monroe st|shedd aquarium|4165|11.36|88.64|
 |10	|dusable lake shore dr & north blvd|streeter dr & grand ave|4090|20.29|79.71|
 
-![image](https://github.com/user-attachments/assets/9fb963ff-06ae-4634-96b3-e461dc41605f)
+![image](https://github.com/user-attachments/assets/a889e63d-6e7a-4341-89bb-82f45b21383a)
 
 
 
