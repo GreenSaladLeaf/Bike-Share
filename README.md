@@ -1765,6 +1765,10 @@ FROM
 
 ![image](https://github.com/user-attachments/assets/9fb963ff-06ae-4634-96b3-e461dc41605f)
 
+
+
+#### Cyclistic's Top 10 Routes: Seasonal Usage
+
 ```sql
 WITH SeasonalData AS (
   SELECT
@@ -1786,8 +1790,7 @@ WITH SeasonalData AS (
 
 -- Aggregate trips by route and season, and then calculate the percentages
 SELECT 
-  start_station,
-  end_station,
+  CONCAT(start_station, ' - ',end_station) AS route,
   COUNT(DISTINCT ride_id) AS num_of_trips,
   
   -- Calculate season percentages for each route
@@ -1814,11 +1817,14 @@ SELECT
 FROM 
   SeasonalData
 GROUP BY 
-  start_station, end_station
+  route
 ORDER BY 
   num_of_trips DESC
+LIMIT 10
 ```
 
-![image](https://github.com/user-attachments/assets/f744817d-0b2c-488f-9cce-585e020b731f)
+![image](https://github.com/user-attachments/assets/36862796-889f-4ce8-bc79-c0b33ca6eca5)
+
+
 
 
