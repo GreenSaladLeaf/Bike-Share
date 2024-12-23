@@ -1319,6 +1319,8 @@ FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 |--- |--- |--- |
 |1	|65.48 |34.52|
 
+![image](https://github.com/user-attachments/assets/61f7715a-16f5-4697-a168-190c028bf09f)
+
 - Members account for 65.48% of all trips, while casual riders account for 34.52%.
 
 ### Preferred Bike Types by Rider Type
@@ -1340,6 +1342,8 @@ GROUP BY
 |3	|electric_bike |casual |965,443|
 |4	|classic_bike |casual |857,927|
 |5	|docked_bike |casual |26,841|
+
+![image](https://github.com/user-attachments/assets/8f0ee8cc-58bb-418a-a203-2fc3c78f1e28)
 
 The percentages for bike type preferences among riders are as follows:
 ```sql
