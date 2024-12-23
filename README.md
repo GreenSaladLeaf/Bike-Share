@@ -1343,7 +1343,8 @@ GROUP BY
 |4	|classic_bike |casual |857,927|
 |5	|docked_bike |casual |26,841|
 
-![image](https://github.com/user-attachments/assets/8f0ee8cc-58bb-418a-a203-2fc3c78f1e28)
+![image](https://github.com/user-attachments/assets/a67bfff8-872c-4768-b8c1-43b91189557e)
+
 
 The percentages for bike type preferences among riders are as follows:
 ```sql
