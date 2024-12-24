@@ -1431,6 +1431,7 @@ GROUP BY
 |4	|casual |classic_bike |25.0|
 |5	|casual |docked_bike |49.0|
 
+![image](https://github.com/user-attachments/assets/2764ab89-0066-49f1-a0de-b31bc746d401)
 - **Electric bikes** tend to have shorter trip durations for both member and casual riders, with members averaging 11 minutes and casual riders averaging 15 minutes.
 - **Classic bikes** have longer average trip durations, especially for casual riders (25 minutes on average).
 - **Docked bikes** show significantly longer trip durations, particularly for casual riders (49 minutes on average). This may reflect longer trips or specific usage patterns.
