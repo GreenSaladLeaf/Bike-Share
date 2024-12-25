@@ -1520,6 +1520,25 @@ GROUP BY
 #### Trip Distance by Bike Type
 The trip distance analysis by bike type highlights preferences and patterns in the use of different bike types by rider type.
 
+- **Median Distance by Bike Type**:
+```sql
+SELECT DISTINCT
+  member_casual AS rider_type,
+  rideable_type AS bike_type,
+  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER(PARTITION BY member_casual, rideable_type))  AS median_distance
+FROM
+  `bike-share-case-study-430704.Bike_share.cleaned_table`
+ORDER BY 
+  rider_type DESC
+```
+|Row	|rider_type|bike_type|median_distance|
+|---|---|---|---|
+|1	|member|electric_bike|1882.0|
+|2	|member|classic_bike|1431.0|
+|3	|casual|docked_bike|2009.0|
+|4	|casual|electric_bike|1791.0|
+|5	|casual|classic_bike|1719.0|
+
 - **Average Distance by Bike Type**:
 
 ```sql
