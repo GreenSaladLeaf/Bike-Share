@@ -1539,7 +1539,8 @@ ORDER BY
 |4	|casual|electric_bike|1791.0|
 |5	|casual|classic_bike|1719.0|
 
-![image](https://github.com/user-attachments/assets/1d18f517-8ab1-4b3c-bff9-cc419dd6ad04)
+![image](https://github.com/user-attachments/assets/669df180-9f70-4812-8672-cb30c5976ae9)
+
 
 - **Average Distance by Bike Type**:
 
@@ -1566,7 +1567,10 @@ ORDER BY
 |4	|casual|electric_bike|2355.0|
 |5	|casual|classic_bike|2303.0|
 
-- **Electric bikes**: Members traveling on electric bikes have the longest average trip distance of 2487 meters (2.49 km), which could be due to the comfort and efficiency of electric bikes for longer trips. Casual riders using electric bikes have an average distance of 2355 meters (2.36 km).
+![image](https://github.com/user-attachments/assets/d6b471bc-34a5-4c7f-b776-6cc81fcfb27f)
+
+
+- **Electric bikes**: Members traveling on electric bikes have the longer average trip distance of 2487 meters (2.49 km), which could be due to the comfort and efficiency of electric bikes for longer trips. Casual riders using electric bikes have an average distance of 2355 meters (2.36 km).
 - **Classic bikes**: Members have an average trip distance of 1996 meters (1.99 km), while casual riders have a slightly higher average at 2303 meters (2.30 km).
 - **Docked bikes**: Casual riders using docked bikes travel the farthest, with an average distance of 2691 meters (2.69 km), indicating that docked bikes are used for relatively longer, planned trips.
 
