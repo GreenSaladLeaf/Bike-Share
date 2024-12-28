@@ -1599,10 +1599,10 @@ ORDER BY trip_count DESC
 
 |Row	|distance_category |trip_count|percentage|
 |---|---|---|---|
-|1	|Short (10m-2km)|3147188|58.72|
-|2	|Medium (2km-5km)|1754597|32.74|
-|3	|Long (5km-10km)|416437|7.77|
-|4	|Very Long (10km+)|40975|0.76|
+|1	|Short (10m-2km)|3,147,188|58.72|
+|2	|Medium (2km-5km)|1,754,597|32.74|
+|3	|Long (5km-10km)|416,437|7.77|
+|4	|Very Long (10km+)|40,975|0.76|
 
 ![image](https://github.com/user-attachments/assets/c38c999f-ed61-437b-9bb8-1fda42e80098)
 
@@ -1621,9 +1621,9 @@ FROM (
   SELECT
     CASE 
       WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-      WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
-      WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
-      ELSE 'Very Long (20km+)' 
+       WHEN distance_meters BETWEEN 2001 AND 5000 THEN 'Medium (2km-5km)'
+      WHEN distance_meters BETWEEN 5001 AND 10000 THEN 'Long (5km-10km)'
+    ELSE 'Very Long (10km+)'
     END AS distance_category,
     member_casual,
     distance_meters
@@ -1635,13 +1635,16 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 |Row	|distance_category|rider_type|trip_count|percentage_within_rider_type|
 |---|---|---|---|---|
 |1	|Short (10m-2km)|casual|1,045,942|56.53|
-|2	|Medium (2km-10km)|casual|786,755|42.52|
-|3	|Long (10km-20km)|casual|16,772|0.91|
-|4	|Very Long (20km+)|casual|742|0.04|
+|2	|Medium (2km-5km)|casual|648,190|35.03|
+|3	|Long (5km-10km)|casual|138,516|7.49|
+|4	|Very Long (10km+)|casual|17,563|0.95|
 |5	|Short (10m-2km)|member|2,101,246|59.88|
-|6	|Medium (2km-10km)|member|1,138,446|39.45|
-|7	|Long (10km-20km)|member|22,355|0.64|
-|8	|Very Long (20km+)|member|922|0.03|
+|6	|Medium (2km-5km)|member|1,106,407|31.53|
+|7	|Long (5km-10km)|member|277,921|7.92|
+|8	|Very Long (10km+)|member|23,412|0.67|
+
+![image](https://github.com/user-attachments/assets/d6a90eb8-0666-4a78-b1dd-d3782866a07f)
+
 
 ---
 Rider Type Behavior:
