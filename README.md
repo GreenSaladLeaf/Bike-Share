@@ -1574,6 +1574,8 @@ ORDER BY
 - **Classic bikes**: Members have an average trip distance of 1996 meters (1.99 km), while casual riders have a slightly higher average at 2303 meters (2.30 km).
 - **Docked bikes**: Casual riders using docked bikes travel the farthest, with an average distance of 2691 meters (2.69 km), indicating that docked bikes are used for relatively longer, planned trips.
 
+- Members and casual riders both seems to prefer electric bikes over classic bike for longer distance trips.
+
 #### Distance Distribution
 The distance analysis highlights the patterns in trip lengths within the bike-sharing system, segmented into distinct categories:
 
@@ -1584,9 +1586,9 @@ Trips were categorized by their lengths into four groups:
 SELECT
   CASE 
     WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-    WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
-    WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
-    ELSE 'Very Long (20km+)' 
+    WHEN distance_meters BETWEEN 2001 AND 5000 THEN 'Medium (2km-5km)'
+    WHEN distance_meters BETWEEN 5001 AND 10000 THEN 'Long (5km-10km)'
+    ELSE 'Very Long (10km+)' 
   END AS distance_category,
   COUNT(*) AS trip_count,
   ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS percentage
@@ -1598,9 +1600,12 @@ ORDER BY trip_count DESC
 |Row	|distance_category |trip_count|percentage|
 |---|---|---|---|
 |1	|Short (10m-2km)|3147188|58.72|
-|2	|Medium (2km-10km)|2171218|40.51|
-|3	|Long (10km-20km)|39127|0.73|
-|4	|Very Long (20km+)|1664|0.03|
+|2	|Medium (2km-5km)|1754597|32.74|
+|3	|Long (5km-10km)|416437|7.77|
+|4	|Very Long (10km+)|40975|0.76|
+
+![image](https://github.com/user-attachments/assets/c38c999f-ed61-437b-9bb8-1fda42e80098)
+
 
 Trip Distribution Across Categories:
 - The majority of trips fall under the "Short" category (10m-2km), making up 58.72% of all rides. "Medium" trips (2km-10km) are the second most common at 40.51%, while "Long" (0.73%) and "Very Long" (0.03%) trips are rare. This indicates that the bike-sharing system is primarily used for short, local trips.
