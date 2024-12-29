@@ -1670,27 +1670,28 @@ FROM (
   FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 ) AS categorized
 GROUP BY distance_category, bike_type
-ORDER BY distance_category, percentage_bike_type DESC
+ORDER BY distance_category, percentage_within_bike_type DESC
 ```
 |Row	|distance_category|bike_type|trip_count|percentage_bike_type|
 |---|---|---|---|---|
-|1	|Long (10km-20km)|electric_bike|23231|59.37|
-|2	|Long (10km-20km)|classic_bike|15435|39.45|
-|3	|Long (10km-20km)|docked_bike|461|1.18|
-|4	|Medium (2km-10km)|electric_bike|1198750|55.21|
-|5	|Medium (2km-10km)|classic_bike|959457|44.19|
-|6	|Medium (2km-10km)|docked_bike|13011|0.6|
+|1	|Long (5km-10km)|electric_bike|239,309|57.47|
+|2	|Long (5km-10km)|classic_bike|174,204|41.83|
+|3	|Long (5km-10km)|docked_bike|2924|0.7|
+|4	|Medium (2km-5km)|electric_bike|959356|54.68|
+|5	|Medium (2km-5km)|classic_bike|785155|44.75|
+|6	|Medium (2km-5km)|docked_bike|10086|0.57|
 |7	|Short (10m-2km)|classic_bike|1691499|53.75|
 |8	|Short (10m-2km)|electric_bike|1442329|45.83|
 |9	|Short (10m-2km)|docked_bike|13360|0.42|
-|10	|Very Long (20km+)|electric_bike|832|50.0|
-|11	|Very Long (20km+)|classic_bike|823|49.46|
-|12	|Very Long (20km+)|docked_bike|9|0.54|
+|10	|Very Long (10km+)|electric_bike|24148|58.93|
+|11	|Very Long (10km+)|classic_bike|16356|39.92|
+|12	|Very Long (10km+)|docked_bike|471|1.15|
 
-- Electric Bikes are preferred for medium (55.21%), long (59.37%), and very long trips (50.0%) due to their efficiency over greater distances.
-- Classic Bikes dominate short trips (53.75%) but also contribute significantly to medium (44.19%) and long trips (39.45%), reflecting their versatility.
-- Docked Bikes account for a minimal share across all categories, with their highest usage in short (0.42%) and medium trips (0.6%).
-- For very long trips, usage is nearly balanced between electric (50.0%) and classic bikes (49.46%), highlighting varied rider preferences.
+![image](https://github.com/user-attachments/assets/c87c5b92-5d88-4356-ba40-f4d45f9de578)
+
+- Electric Bikes are preferred for medium (54.68%), long (57.47%), and very long trips (58.93%) due to their efficiency over greater distances.
+- Classic Bikes dominate short trips (53.75%) but also contribute significantly to medium (44.75%) and long trips (41.83%), reflecting their versatility.
+- Docked Bikes account for a minimal share across all categories, with their highest usage in very long trips(1.15%).
 
 ___
 Behavior Differences:
