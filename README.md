@@ -1608,7 +1608,7 @@ ORDER BY trip_count DESC
 
 
 Trip Distribution Across Categories:
-- The majority of trips fall under the "Short" category (10m-2km), making up 58.72% of all rides. "Medium" trips (2km-10km) are the second most common at 40.51%, while "Long" (0.73%) and "Very Long" (0.03%) trips are rare. This indicates that the bike-sharing system is primarily used for short, local trips.
+- The majority of trips fall under the "Short" category (10m-2km), making up 58.72% of all rides. "Medium" trips (2km-5km) are the second most common at 32.74%, while "Long" (7.77%) and "Very Long" (0.76%) trips are rare. This indicates that the bike-sharing system is primarily used for short, local trips.
 
 **Distance Breakdown by Rider Type**:
 ```sql
@@ -1646,10 +1646,9 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 ![image](https://github.com/user-attachments/assets/d6a90eb8-0666-4a78-b1dd-d3782866a07f)
 
 
----
-Rider Type Behavior:
+**Rider Type Behavior**:
 - Both casual riders and members follow similar patterns, with most trips being short, followed by medium. However, members account for a larger volume of rides overall, particularly in the "Short" and "Medium" categories. This suggests that members use the system more frequently, likely for commuting or routine tasks, whereas casual riders engage with it for occasional, leisurely activities.
----
+
 
 **Distance Breakdown by Bike Type**:
 ```sql
@@ -1662,9 +1661,9 @@ FROM (
   SELECT
     CASE 
       WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-      WHEN distance_meters BETWEEN 2001 AND 10000 THEN 'Medium (2km-10km)'
-      WHEN distance_meters BETWEEN 10001 AND 20000 THEN 'Long (10km-20km)'
-      ELSE 'Very Long (20km+)' 
+      WHEN distance_meters BETWEEN 2001 AND 5000 THEN 'Medium (2km-5km)'
+      WHEN distance_meters BETWEEN 5001 AND 10000 THEN 'Long (5km-10km)'
+      ELSE 'Very Long (10km+)' 
     END AS distance_category,
     rideable_type AS bike_type,
     distance_meters
