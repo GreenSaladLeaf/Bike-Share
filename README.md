@@ -1729,7 +1729,8 @@ FROM
     `bike-share-case-study-430704.Bike_share.cleaned_table`
 ```
 
-Seasonality Effects: Exploring how bike usage varies throughout the year, identifying any seasonal trends.
+![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
+
 
 ```sql
   -- Top 10 popular routes and counts for member and casual user trips
