@@ -1728,6 +1728,19 @@ SELECT *
 FROM 
     `bike-share-case-study-430704.Bike_share.cleaned_table`
 ```
+![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
+
+**Top Chart (Avg. Distance in Meters by Hour of Day)**:
+- Members generally cover slightly longer distances during most hours compared to casual users.
+- Casual users exhibit more variability in average distance throughout the day.
+- There's a noticeable peak in distance covered by member users around early morning.
+
+**Bottom Chart (Average Trip Duration in Minutes by Hour of Day)**:
+- Casual users have significantly longer trip durations, especially during midday (around noon).
+- Members maintain more consistent trip durations throughout the day, averaging about 10–15 minutes.
+- Casual users’ average trip duration spikes sharply around 10 a.m. to 2 p.m. and decreases in the evening.
+
+
 
 ![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
 
