@@ -1740,6 +1740,34 @@ FROM
 - Members maintain more consistent trip durations throughout the day, averaging about 10–15 minutes.
 - Casual users’ average trip duration spikes sharply around 10 a.m. to 2 p.m. and decreases in the evening.
 
+![image](https://github.com/user-attachments/assets/85e338f3-5747-4b9e-ba2b-8b022dca8ff1)
+
+**Casual Users vs. Members: Behavioral Differences**
+- Casual users consistently take longer trips in terms of duration compared to members, with peak trip durations occurring on weekends and during summer months. This indicates recreational use, especially during leisure periods.
+- Members have shorter and more consistent trip durations throughout the week and across seasons, aligning with routine commuting behavior.
+
+**Hourly Trends Summary**:
+1. Trip Distance:
+  - There is a noticeable peak in the distance covered by members during the early morning hours, likely corresponding to their commute times.
+  - The lowest average distance for members occurs around midday, whereas casual users tend to cover longer distances during this period, reflecting recreational usage.
+
+2. Trip Duration:
+  - Casual users consistently have significantly longer trip durations than members, with a prominent spike around midday (approximately noon).
+  - Members maintain more consistent trip durations throughout the day, averaging around 10 to 13 minutes, reflecting routine and predictable travel patterns.
+
+**Weekly Trends**:
+1. Trip Distance:
+   - Both members and casual users cover longer distances on the weekends compared to weekdays, indicating increased recreational and leisure activities during weekends.
+   - During weekdays, members maintain a steady average trip distance, while casual users cover relatively lower distances.
+
+2. Trip Duration:
+  - Casual users show a significant increase in average trip duration on weekends, indicating more leisurely and recreational rides.
+  - Members, on the other hand, maintain steady and predictable trip durations throughout the week, reinforcing their usage pattern for commuting and routine travel.
+
+**Seasonal Trends (Monthly Patterns)**:
+  - Both casual users and members take longer trips (in terms of distance) during summer months (June to August).
+  - Casual users' trip durations peak in June, suggesting increased recreational cycling during warm weather.
+  - Members maintain relatively stable trip durations throughout the year(10 to 13 minutes), with a slight increase during summer.
 
 
 ![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
