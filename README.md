@@ -1728,6 +1728,24 @@ SELECT *
 FROM 
     `bike-share-case-study-430704.Bike_share.cleaned_table`
 ```
+![image](https://github.com/user-attachments/assets/5e79c97b-7e85-4277-a2fb-7db18527bcf6)
+
+Member Usage Patterns:
+Members exhibit distinct peaks in trip volume during typical commuting hours:
+- Morning peak: Around 8 AM.
+- Evening peak: Around 5 PM.
+This pattern suggests that members primarily use the service for work-related trips during weekdays.
+
+Casual User Usage Patterns:
+- Casual users display a steady increase in trips throughout the morning, with a pronounced peak around midday (5 PM).
+- This suggests that casual users tend to use Cyclistic more for leisurely or occasional trips, often in the late afternoon and evening.
+
+Comparison of Member vs. Casual User Trends:
+- Peak usage times: Members dominate during peak commuting hours (8 AM and 5 PM), while casual users have their peak mainly around 5 PM.
+- Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
+
+
+
 ![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
 
 **Top Chart (Avg. Distance in Meters by Hour of Day)**:
