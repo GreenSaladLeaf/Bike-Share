@@ -1728,7 +1728,8 @@ SELECT *
 FROM 
     `bike-share-case-study-430704.Bike_share.cleaned_table`
 ```
-![image](https://github.com/user-attachments/assets/5e79c97b-7e85-4277-a2fb-7db18527bcf6)
+![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
+
 
 Member Usage Patterns:
 Members exhibit distinct peaks in trip volume during typical commuting hours:
