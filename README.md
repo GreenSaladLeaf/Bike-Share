@@ -1707,6 +1707,7 @@ Optimization Opportunities:
 - Increase the availability of electric bikes, especially in areas with higher demand for medium and long trips.
 ---
 
+** Cyclistic Trip Frequency and Patterns by User Type: Hourly, Daily, Weekly, and Seasonal Trends**
 
 ```sql
 SELECT 
@@ -1733,37 +1734,39 @@ FROM
 
 ![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
 
-**Member Usage Patterns**:
+- **Member Usage Patterns**:
 Members exhibit distinct peaks in trip volume during typical commuting hours:
-- Morning peak: Around 8 AM.
-- Evening peak: Around 5 PM.
+  - Morning peak: Around 8 AM.
+  - Evening peak: Around 5 PM.
 This pattern suggests that members primarily use the service for work-related trips during weekdays.
 
-**Casual User Usage Patterns**:
-- Casual users display a steady increase in trips throughout the morning, with a pronounced peak around midday (5 PM).
-- This suggests that casual users tend to use Cyclistic more for leisurely or occasional trips, often in the late afternoon and evening.
+- **Casual User Usage Patterns**:
+  - Casual users display a steady increase in trips throughout the morning, with a pronounced peak around midday (5 PM).
+  - This suggests that casual users tend to use Cyclistic more for leisurely or occasional trips, often in the late afternoon and evening.
 
-**Comparison of Member vs. Casual User Trends**:
-- Peak usage times: Members dominate during peak commuting hours (8 AM and 5 PM), while casual users have their peak mainly around 5 PM.
-- Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
+- **Comparison of Member vs. Casual User Trends**:
+  - Peak usage times: Members dominate during peak commuting hours (8 AM and 5 PM), while casual users have their peak mainly around 5 PM.
+  - Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
 
 **Cyclistic Trips by Day of the Week**
 ![image](https://github.com/user-attachments/assets/284b87c4-9549-48f5-965f-f9f37dd18446)
 
-**Distinct Usage Patterns**:
-- Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
-- Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
+- **Distinct Usage Patterns**:
+  - Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
+  - Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
+ 
+
 ![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
 
 **Top Chart (Avg. Distance in Meters by Hour of Day)**:
-- Members generally cover slightly longer distances during most hours compared to casual users.
-- Casual users exhibit more variability in average distance throughout the day.
-- There's a noticeable peak in distance covered by member users around early morning.
+  - Members generally cover slightly longer distances during most hours compared to casual users.
+  - Casual users exhibit more variability in average distance throughout the day.
+  - There's a noticeable peak in distance covered by member users around early morning.
 
 **Bottom Chart (Average Trip Duration in Minutes by Hour of Day)**:
-- Casual users have significantly longer trip durations, especially during midday (around noon).
-- Members maintain more consistent trip durations throughout the day, averaging about 10–15 minutes.
-- Casual users’ average trip duration spikes sharply around 10 a.m. to 2 p.m. and decreases in the evening.
+  - Casual users have significantly longer trip durations, especially during midday (around noon).
+  - Members maintain more consistent trip durations throughout the day, averaging about 10–15 minutes.
+  - Casual users’ average trip duration spikes sharply around 10 a.m. to 2 p.m. and decreases in the evening.
 
 
 ![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
