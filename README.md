@@ -1707,7 +1707,7 @@ Optimization Opportunities:
 - Increase the availability of electric bikes, especially in areas with higher demand for medium and long trips.
 ---
 
-** Cyclistic Trip Frequency and Patterns by User Type: Hourly, Daily, Weekly, and Seasonal Trends**
+**Cyclistic Trip Frequency and Patterns by User Type: Hourly, Daily, Weekly, and Seasonal Trends**
 
 ```sql
 SELECT 
