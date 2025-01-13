@@ -1731,7 +1731,6 @@ FROM
 ```
 
 **Hourly Trip Volume Trends: Member vs. Casual Users**
-
 ![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
 
 - **Member Usage Patterns**:
@@ -1748,6 +1747,7 @@ This pattern suggests that members primarily use the service for work-related tr
   - Peak usage times: Members dominate during peak commuting hours (8 AM and 5 PM), while casual users have their peak mainly around 5 PM.
   - Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
 
+
 **Cyclistic Trips by Day of the Week**
 ![image](https://github.com/user-attachments/assets/284b87c4-9549-48f5-965f-f9f37dd18446)
 
@@ -1755,6 +1755,10 @@ This pattern suggests that members primarily use the service for work-related tr
   - Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
   - Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
  
+
+**Cyclistic Monthly Trip Trends**
+![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
+
 
 ![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
 
