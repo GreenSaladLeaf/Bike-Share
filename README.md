@@ -1759,6 +1759,23 @@ This pattern suggests that members primarily use the service for work-related tr
 **Cyclistic Monthly Trip Trends**
 ![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
 
+This analysis highlights seasonal patterns in trip usage by members and casual riders throughout the year.
+
+- **Peak Usage Periods**:
+  - Members: The number of trips by members peaks in August, with approximately 437,000 trips recorded.
+  - Casual: Casual usage peaks slightly earlier, in July, with about 297,000 trips.
+The peak summer months (June to August) account for the highest share of trips for both user groups.
+
+- **Seasonal Variation**:
+  - Both members and casual users show significant seasonal variation:
+  - Members display a relatively steady rise and fall in trip numbers, indicating regular, year-round use.
+  - Casual riders exhibit a more pronounced increase in trips during the warmer months, suggesting greater sensitivity to weather and seasonal conditions.
+  - Winter months (December to February) have the lowest usage for both groups, but casual ridership drops more dramatically during this period.
+ 
+- **Member vs. Casual Trends**:
+  - Members consistently take more trips than casual riders across all months of the year.
+  - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
+
 
 ![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
 
