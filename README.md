@@ -1776,7 +1776,7 @@ The peak summer months (June to August) account for the highest share of trips f
   - Members consistently take more trips than casual riders across all months of the year.
   - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
 
-
+**Cyclistic Riders' Average Trip Distance and Duration by Hour of Day**
 ![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
 
 **Top Chart (Avg. Distance in Meters by Hour of Day)**:
@@ -1788,6 +1788,22 @@ The peak summer months (June to August) account for the highest share of trips f
   - Casual users have significantly longer trip durations, especially during midday (around noon).
   - Members maintain more consistent trip durations throughout the day, averaging about 10–15 minutes.
   - Casual users’ average trip duration spikes sharply around 10 a.m. to 2 p.m. and decreases in the evening.
+
+**Cyclistic Riders' Average Trip Distance and Duration by Day of Week**
+![image](https://github.com/user-attachments/assets/56d9b81b-f17d-43f6-b284-ceab263f8cd1)
+
+Casual Riders:
+- Take longer trips (both in distance and duration) than members, especially on weekends.
+Average trip duration and distance peak on Sundays, indicating leisure or recreational rides.
+
+Members:
+- Consistent trip distance and duration throughout the week, aligning with commuter or short errand trips.
+Smaller fluctuations suggest trips are more utilitarian in nature.
+
+Comparison:
+- The difference in trip behavior between casual and member users supports the idea that casual riders use Cyclistic bikes primarily for recreational purposes, while members use them more for practical purposes.
+
+
 
 
 ![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
