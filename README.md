@@ -1803,8 +1803,32 @@ Smaller fluctuations suggest trips are more utilitarian in nature.
 Comparison:
 - The difference in trip behavior between casual and member users supports the idea that casual riders use Cyclistic bikes primarily for recreational purposes, while members use them more for practical purposes.
 
+**Cyclistic Riders' Average Trip Distance and Duration by Month of Year**
+![image](https://github.com/user-attachments/assets/70e9e13d-3677-4996-9b17-f6791fab02d3)
 
+Casual Riders Take Longer Trips
+- Casual riders consistently have longer average trip durations than members.
+- The difference is most pronounced in the summer months (May–August) when casual riders’ trips peak at around 20 minutes, while members’ trips remain around 12–13 minutes.
+- This suggests that casual riders may be using bikes more for leisure and sightseeing, rather than for commuting or quick trips.
 
+Trip Distances Are Similar, but Casual Riders Travel Slightly Less Overall
+- Both groups have their longest average trip distances in June and July (~2.4 km).
+- However, casual riders’ trip distances decline more steeply after the summer, whereas members maintain a relatively stable distance year-round.
+- This implies that casual riders are more seasonal users, while members have a more consistent and practical biking habit.
+
+Casual Riders’ Usage Drops in the Off-Season
+- As temperatures drop (September–December), casual riders' trip duration and distance decrease significantly, while members maintain more stable behavior.
+- This seasonal drop suggests that casual riders are likely tourists or occasional users, and marketing efforts should focus on converting them into year-round users.
+
+Marketing Implications & Strategies:
+Target Leisure Riders with Membership Benefits
+Since casual riders take longer trips in summer, Cyclistic could promote seasonal membership discounts or "unlimited ride" options during peak months to encourage commitment.
+Highlight the Convenience of Membership for Frequent Trips
+Members' trips are shorter but consistent, indicating they likely use the service for daily commutes or errands.
+Cyclistic could advertise membership benefits like cost savings for frequent riders, exclusive docking privileges, or priority access to bikes to encourage casual users to switch.
+Retain Casual Riders Beyond Summer
+Since casual riders significantly reduce their trips in the off-season, Cyclistic could launch fall/winter promotions (e.g., discounted first-month membership, loyalty rewards for repeated rides).
+Providing comfortable, weather-resistant bikes and partnering with local businesses for incentives (e.g., discounts at coffee shops for members) might also help.
 
 ![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
 
