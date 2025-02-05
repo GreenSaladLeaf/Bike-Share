@@ -1323,9 +1323,29 @@ FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 |1	|65.48 |34.52|
 
 
+### Monthly Trip Trends
+- **Peak Usage Periods**:
+  - Members: The number of trips by members peaks in August, with approximately 437,000 trips recorded.
+  - Casual: Casual usage peaks slightly earlier, in July, with about 297,000 trips.
+The peak summer months (June to August) account for the highest share of trips for both user groups.
 
+- **Seasonal Variation**:
+  - Both members and casual users show significant seasonal variation:
+  - Members display a relatively steady rise and fall in trip numbers, indicating regular, year-round use.
+  - Casual riders exhibit a more pronounced increase in trips during the warmer months, suggesting greater sensitivity to weather and seasonal conditions.
+  - Winter months (December to February) have the lowest usage for both groups, but casual ridership drops more dramatically during this period.
+ 
+- **Member vs. Casual Trends**:
+  - Members consistently take more trips than casual riders across all months of the year.
+  - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
 
+Members show consistent year-round usage, with a steady number of trips each month. This indicates that members primarily use Cyclistic for commuting and regular travel rather than seasonal activities.
 
+Casual riders exhibit strong seasonality, with trip volume peaking in the summer months (June–August) and dropping sharply in winter (December–February). This suggests that casual users rely on Cyclistic more for recreational or tourism-related activities.
+
+Marketing Implication: Target casual riders with seasonal promotions in spring and early summer, encouraging them to convert to membership before peak usage months.
+
+![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
 
 ### Preferred Bike Types by Rider Type
 The following query explores bike preferences among members and casual riders:
