@@ -1292,9 +1292,12 @@ Result: No data to display.
 ## Analysis
 With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. The goal of the analysis is to uncover trends and patterns related to bike usage, user behavior, and station performance. This includes examining trip durations, ride types, popular routes, and the impact of seasonality on bike usage.
 
-### Member vs. Casual Rider Trips
-The breakdown of trips by rider type is as follows:
+### Total Number Of Member vs. Casual Rider Trips
+- Members account for **65.48%** of all trips, while casual riders account for 34.52%.
+- Casual riders make up **34.52%** offer a strong opportunity for conversion.
 
+![image](https://github.com/user-attachments/assets/61f7715a-16f5-4697-a168-190c028bf09f)
+  
 ```sql
 SELECT 
   member_casual,
@@ -1319,9 +1322,10 @@ FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 |--- |--- |--- |
 |1	|65.48 |34.52|
 
-![image](https://github.com/user-attachments/assets/61f7715a-16f5-4697-a168-190c028bf09f)
 
-- Members account for 65.48% of all trips, while casual riders account for 34.52%.
+
+
+
 
 ### Preferred Bike Types by Rider Type
 The following query explores bike preferences among members and casual riders:
@@ -1723,11 +1727,7 @@ FROM
 GROUP BY 
     member_casual, hour_of_day, day_of_week, month_of_year
 ORDER BY 
-    hour_of_day, avg_distance_meters DESC
-
-SELECT *
-FROM 
-    `bike-share-case-study-430704.Bike_share.cleaned_table`
+    hour_of_day, avg_distance_meters DESC\
 ```
 
 **Hourly Trip Volume Trends: Member vs. Casual Users**
