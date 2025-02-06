@@ -1296,32 +1296,20 @@ With the dataset cleaned and prepared, the next step focuses on analyzing the da
 - Members account for **65.48%** of all trips, while casual riders account for 34.52%.
 - Casual riders make up **34.52%** offer a strong opportunity for conversion.
 
-![image](https://github.com/user-attachments/assets/61f7715a-16f5-4697-a168-190c028bf09f)
-  
+![image](https://github.com/user-attachments/assets/849aa71c-c56c-46f3-83c2-31efa7f3ae2e)
+
 ```sql
 SELECT 
   member_casual,
-  COUNT(*) AS ride_count
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
-GROUP BY
-  member_casual
+  COUNT(*) AS ride_count,
+  ROUND((COUNT(*) * 100.0) / SUM(COUNT(*)) OVER (), 2) AS percentage
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY member_casual
 ```
-|Row |member_casual |ride_count |
-|--- |--- |--- |
-|1 |casual |1,850,211|
-|2 |member |3,508,986|
-
-The percentage of trips taken by member and casual riders:
-```sql
-SELECT 
-  ROUND((COUNT(CASE WHEN member_casual = 'member' THEN 1 END) / COUNT(*)) * 100, 2) AS percentage_of_member,
-  ROUND((COUNT(CASE WHEN member_casual = 'casual'  THEN 1 END) / COUNT(*)) * 100, 2) AS percentage_of_casual
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
-```
-|Row	|percentage_of_member |percentage_of_casual|
-|--- |--- |--- |
-|1	|65.48 |34.52|
-
+|Row |member_casual |ride_count |percentage|
+|--- |--- |--- |--- |
+|1 |casual |1,850,211|34.52|
+|2 |member |3,508,986|65.48|
 
 ### Monthly Trip Trends
 - **Peak Usage Periods**:
