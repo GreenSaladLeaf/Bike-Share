@@ -1396,6 +1396,38 @@ ORDER BY ride_count DESC, member_casual
 
 - This breakdown shows that casual riders prefer electric bikes (52.18%), while members prefer classic bikes (51.56%) over electric bikes (48.44%) . The preference for docked bikes is minimal with no member riders uses it.
 
+### 4. Top 10 Routes
+```sql
+WITH route_user_type AS (
+  -- Top 10 popular routes and counts for member and casual user trips
+  SELECT
+    LEAST(start_station_name, end_station_name) AS start_station,
+    GREATEST(start_station_name, end_station_name) AS end_station,
+    COUNT(DISTINCT ride_id) AS num_of_trips,
+    COUNT(DISTINCT CASE WHEN member_casual = 'member' THEN ride_id END) AS num_of_member_trips,
+    COUNT(DISTINCT CASE WHEN member_casual = 'casual' THEN ride_id END) AS num_of_casual_trips
+  FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+  GROUP BY 
+    start_station, end_station
+  ORDER BY 
+    num_of_trips DESC
+  LIMIT 10
+)
+
+-- Add percentage calculations for member and casual users
+SELECT
+  CONCAT(start_station, ' - ', end_station) AS route,
+  num_of_trips,
+  num_of_member_trips,
+  num_of_casual_trips,
+  ROUND((num_of_member_trips / num_of_trips) * 100, 2) AS member_percentage,
+  ROUND((num_of_casual_trips / num_of_trips) * 100, 2) AS casual_percentage
+FROM 
+  route_user_type
+```
+![image](https://github.com/user-attachments/assets/089b1e5c-c40a-4698-ad67-3a796965b5eb)
+
 ### Trip Duration Analysis
 This section explores trip duration patterns to understand user engagement.
 - Overall Trends: What is the typical trip length?
