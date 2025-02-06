@@ -1353,27 +1353,28 @@ This pattern suggests that members primarily use the service for work-related tr
 ![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
 
 
-
-
 ### Preferred Bike Types by Rider Type
 The following query explores bike preferences among members and casual riders:
 ```sql
-SELECT DISTINCT
-  rideable_type,
-  member_casual,
-  COUNT(*) AS ride_count
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table` 
-GROUP BY
-  rideable_type,
-  member_casual
+SELECT 
+  rideable_type AS bike_type,
+  member_casual AS rider_type,
+  COUNT(*) AS ride_count,
+  ROUND((COUNT(*) * 100.0) / SUM(COUNT(*)) OVER (PARTITION BY member_casual), 2) AS ride_percentage
+FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY rideable_type, member_casual
+ORDER BY ride_count DESC, member_casual
 ```
-|Row	|rideable_type |member_casual |ride_count|
-|--- |---|---|---|
-|1	|electric_bike |member| 1,699,699|
-|2	|classic_bike |member |1,809,287|
-|3	|electric_bike |casual |965,443|
-|4	|classic_bike |casual |857,927|
-|5	|docked_bike |casual |26,841|
+|Row	|bike_type |rider_type |ride_count|ride_percentage|
+|--- |---|---|---|---|
+|1	|classic_bike |member |1,809,287|51.56|
+|2	|electric_bike |member| 1,699,699|48.44|
+|3	|electric_bike |casual |965,443|52.18|
+|4	|classic_bike |casual |857,927|46.37|
+|5	|docked_bike |casual |26,841|1.45|
+
+![image](https://github.com/user-attachments/assets/bab45232-fbeb-47af-b1e9-22d08112da92)
+
 
 ![image](https://github.com/user-attachments/assets/a67bfff8-872c-4768-b8c1-43b91189557e)
 
