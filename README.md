@@ -1295,8 +1295,7 @@ With the dataset cleaned and prepared, the next step focuses on analyzing the da
 ### Total Number Of Member vs. Casual Rider Trips
 - Members account for **65.48%** of all trips, while casual riders account for 34.52%.
 - Casual riders make up **34.52%** offer a strong opportunity for conversion.
-
-![image](https://github.com/user-attachments/assets/849aa71c-c56c-46f3-83c2-31efa7f3ae2e)
+![image](https://github.com/user-attachments/assets/fdded2d1-8f9e-43c2-9537-5dbd70b6c44e)
 
 ```sql
 SELECT 
@@ -1310,6 +1309,7 @@ GROUP BY member_casual
 |--- |--- |--- |--- |
 |1 |casual |1,850,211|34.52|
 |2 |member |3,508,986|65.48|
+
 
 ### Monthly Trip Trends
 - **Peak Usage Periods**:
