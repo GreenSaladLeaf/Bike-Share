@@ -1430,17 +1430,17 @@ FROM
 - Ellis Ave & 60th St - University Ave & 57th St is another highly traveled route, indicating a potential hub near educational institutions.
 - Routes near Dusable Lake Shore Dr appear multiple times, suggesting high tourist or recreational traffic.
 - The top routes are clustered around South Chicago, suggesting areas of high commuter or leisure activity.
-![image](https://github.com/user-attachments/assets/089b1e5c-c40a-4698-ad67-3a796965b5eb)
+![image](https://github.com/user-attachments/assets/42ef4315-6615-4254-b312-7cdf337d486b)
 
 #### Top 10 Routes: Member vs. Casual Usage Breakdown
-**High Member Rider Usage Routes**:
-- Calumet Ave & 33rd St - State St & 33rd St has the highest member usage (96.03%), indicating a strong reliance on this route for commuting or regular travel.
-- Other heavily member-dominated routes include MLK Jr Dr & 29th St - State St & 33rd St (96.16%) and Loomis St & Lexington St - Morgan St & Polk St (93.73%). These routes likely serve commuters and frequent users.
+- **High Member Rider Usage Routes**:
+  - Calumet Ave & 33rd St - State St & 33rd St has the highest member usage (96.03%), indicating a strong reliance on this route for commuting or regular travel.
+  - Other heavily member-dominated routes include MLK Jr Dr & 29th St - State St & 33rd St (96.16%) and Loomis St & Lexington St - Morgan St & Polk St (93.73%). These routes likely serve commuters and frequent users.
 
-**High Casual Rider Usage Routes**:
-- Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave is dominated by casual riders (88.49%), suggesting that tourists or leisure riders heavily use this route.
-- Dusable Lake Shore Dr & Monroe St - Shedd Aquarium (88.64%) further confirms that casual riders prefer lakefront and recreational destinations.
-- Marketing Implication: Target casual riders with short-term promotions, flexible rental options, and discounts at these locations to increase engagement.
+- **High Casual Rider Usage Routes**:
+  - Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave is dominated by casual riders (88.49%), suggesting that tourists or leisure riders heavily use this route.
+  - Dusable Lake Shore Dr & Monroe St - Shedd Aquarium (88.64%) further confirms that casual riders prefer lakefront and recreational destinations.
+  - Marketing Implication: Target casual riders with short-term promotions, flexible rental options, and discounts at these locations to increase engagement.
 
 ![image](https://github.com/user-attachments/assets/570e5245-1498-40f6-9bc6-4b2bb41aa1de)
 
