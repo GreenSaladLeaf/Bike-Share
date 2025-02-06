@@ -1373,7 +1373,11 @@ ORDER BY ride_count DESC, member_casual
 |4	|classic_bike |casual |857,927|46.37|
 |5	|docked_bike |casual |26,841|1.45|
 
-![image](https://github.com/user-attachments/assets/bab45232-fbeb-47af-b1e9-22d08112da92)
+![image](https://github.com/user-attachments/assets/e7ac1780-7ad3-4274-99ee-3c6c76f61e79)
+
+
+
+
 
 
 ![image](https://github.com/user-attachments/assets/a67bfff8-872c-4768-b8c1-43b91189557e)
