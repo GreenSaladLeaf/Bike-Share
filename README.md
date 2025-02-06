@@ -1311,7 +1311,25 @@ GROUP BY member_casual
 |2 |member |3,508,986|65.48|
 
 
-### 2. Monthly Trip Trends
+### 2. Trip Frequency and Patterns by User Type: Daily, Weekly, and Seasonal Trends
+
+```sql
+SELECT 
+    member_casual,
+    EXTRACT(HOUR FROM cleaned_started_at) AS hour_of_day,
+    EXTRACT(DAYOFWEEK FROM cleaned_started_at) AS day_of_week,
+    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
+    ROUND(AVG(distance_meters),2) AS avg_distance_meters,
+    ROUND(AVG(trip_duration),2) AS avg_trip_duration_minutes,
+    COUNT(*) AS trips
+FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY 
+    member_casual, hour_of_day, day_of_week, month_of_year
+ORDER BY 
+    hour_of_day, avg_distance_meters DESC\
+```
+#### Monthly Trip Trends
 - **Peak Usage Periods**:
   - The number of trips by members peaks in August, with approximately 437,000 trips recorded.
   - Casual usage peaks slightly earlier, in July, with about 297,000 trips.
@@ -1329,13 +1347,14 @@ The peak summer months (June to August) account for the highest share of trips f
     
 ![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
 
-### 3. Weekly Trip Trends
+#### Weekly Trip Trends
 - **Distinct Usage Patterns**:
   - Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
   - Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
+    
 ![image](https://github.com/user-attachments/assets/284b87c4-9549-48f5-965f-f9f37dd18446) 
 
-### 4. Hourly Trip Trends
+#### Daily Trip Trends
 - **Member Usage Patterns**:
 Members exhibit distinct peaks in trip volume during typical commuting hours:
   - Morning peak: Around 8 AM.
@@ -1353,7 +1372,7 @@ This pattern suggests that members primarily use the service for work-related tr
 ![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
 
 
-### Preferred Bike Types by Rider Type
+### 3. Preferred Bike Types by Rider Type
 The following query explores bike preferences among members and casual riders:
 ```sql
 SELECT 
@@ -1375,34 +1394,7 @@ ORDER BY ride_count DESC, member_casual
 
 ![image](https://github.com/user-attachments/assets/e7ac1780-7ad3-4274-99ee-3c6c76f61e79)
 
-
-
-
-
-
-![image](https://github.com/user-attachments/assets/a67bfff8-872c-4768-b8c1-43b91189557e)
-
-
-The percentages for bike type preferences among riders are as follows:
-```sql
-SELECT
-  member_casual AS rider_type,
-  ROUND((COUNT(CASE WHEN rideable_type = 'electric_bike' THEN 1 END) / SUM(COUNT(*)) OVER(PARTITION BY member_casual)) * 100, 2) AS electric_percentage,
-  ROUND((COUNT(CASE WHEN rideable_type = 'classic_bike' THEN 1 END) / SUM(COUNT(*)) OVER(PARTITION BY member_casual)) * 100, 2) AS classic_percentage,
-  ROUND((COUNT(CASE WHEN rideable_type = 'docked_bike' THEN 1 END) / SUM(COUNT(*)) OVER(PARTITION BY member_casual)) * 100, 2) AS docked_percentage,
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY
-  member_casual
-ORDER BY
-  member_casual4.Bike_share.cleaned_table` 
-```
-|Row	|rider_type |electric_percentage |classic_percentage |docked_percentage|
-|---|---|---|---|---|
-|1	|casual|52.18|46.37|1.45|
-|2	|member|48.44|51.56|0.0|
-
-This breakdown shows that casual riders prefer electric bikes (52.18%), while members have a more balanced preference between electric (48.44%) and classic bikes (51.56%). The preference for docked bikes is minimal among both groups.
+- This breakdown shows that casual riders prefer electric bikes (52.18%), while members prefer classic bikes (51.56%) over electric bikes (48.44%) . The preference for docked bikes is minimal with no member riders uses it.
 
 ### Trip Duration Analysis
 This section explores trip duration patterns to understand user engagement.
