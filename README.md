@@ -1430,7 +1430,8 @@ FROM
 - Ellis Ave & 60th St - University Ave & 57th St is another highly traveled route, indicating a potential hub near educational institutions.
 - Routes near Dusable Lake Shore Dr appear multiple times, suggesting high tourist or recreational traffic.
 - The top routes are clustered around South Chicago, suggesting areas of high commuter or leisure activity.
-![image](https://github.com/user-attachments/assets/42ef4315-6615-4254-b312-7cdf337d486b)
+
+![image](https://github.com/user-attachments/assets/99899821-7bc0-4b7d-9d28-a7ccde8d0a8d)
 
 #### Top 10 Routes: Member vs. Casual Usage Breakdown
 - **High Member Rider Usage Routes**:
