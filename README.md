@@ -1292,7 +1292,7 @@ Result: No data to display.
 ## Analysis
 With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. The goal of the analysis is to uncover trends and patterns related to bike usage, user behavior, and station performance. This includes examining trip durations, ride types, popular routes, and the impact of seasonality on bike usage.
 
-### Total Number Of Member vs. Casual Rider Trips
+### 1. Total Number Of Member vs. Casual Rider Trips
 - Members account for **65.48%** of all trips, while casual riders account for 34.52%.
 - Casual riders make up **34.52%** offer a strong opportunity for conversion.
 ![image](https://github.com/user-attachments/assets/fdded2d1-8f9e-43c2-9537-5dbd70b6c44e)
@@ -1311,10 +1311,10 @@ GROUP BY member_casual
 |2 |member |3,508,986|65.48|
 
 
-### Monthly Trip Trends
+### 2. Monthly Trip Trends
 - **Peak Usage Periods**:
-  - Members: The number of trips by members peaks in August, with approximately 437,000 trips recorded.
-  - Casual: Casual usage peaks slightly earlier, in July, with about 297,000 trips.
+  - The number of trips by members peaks in August, with approximately 437,000 trips recorded.
+  - Casual usage peaks slightly earlier, in July, with about 297,000 trips.
 The peak summer months (June to August) account for the highest share of trips for both user groups.
 
 - **Seasonal Variation**:
@@ -1326,14 +1326,36 @@ The peak summer months (June to August) account for the highest share of trips f
 - **Member vs. Casual Trends**:
   - Members consistently take more trips than casual riders across all months of the year.
   - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
-
-Members show consistent year-round usage, with a steady number of trips each month. This indicates that members primarily use Cyclistic for commuting and regular travel rather than seasonal activities.
-
-Casual riders exhibit strong seasonality, with trip volume peaking in the summer months (June–August) and dropping sharply in winter (December–February). This suggests that casual users rely on Cyclistic more for recreational or tourism-related activities.
-
-Marketing Implication: Target casual riders with seasonal promotions in spring and early summer, encouraging them to convert to membership before peak usage months.
-
 ![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
+
+### 3. Weekly Trip Trends
+![image](https://github.com/user-attachments/assets/284b87c4-9549-48f5-965f-f9f37dd18446)
+
+- **Distinct Usage Patterns**:
+  - Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
+  - Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
+ 
+
+### 4. Hourly Trip Trends
+![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
+
+- **Member Usage Patterns**:
+Members exhibit distinct peaks in trip volume during typical commuting hours:
+  - Morning peak: Around 8 AM.
+  - Evening peak: Around 5 PM.
+This pattern suggests that members primarily use the service for work-related trips during weekdays.
+
+- **Casual User Usage Patterns**:
+  - Casual users display a steady increase in trips throughout the morning, with a pronounced peak around midday (5 PM).
+  - This suggests that casual users tend to use Cyclistic more for leisurely or occasional trips, often in the late afternoon and evening.
+
+- **Comparison of Member vs. Casual User Trends**:
+  - Peak usage times: Members dominate during peak commuting hours (8 AM and 5 PM), while casual users have their peak mainly around 5 PM.
+  - Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
+
+
+
+
 
 ### Preferred Bike Types by Rider Type
 The following query explores bike preferences among members and casual riders:
