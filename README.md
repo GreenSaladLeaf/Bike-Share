@@ -1500,6 +1500,34 @@ ORDER BY
   num_of_trips DESC
 LIMIT 10
 ```
+
+- **1. Casual-Dominated Routes: Strong Summer Peaks, Sharp Winter Decline**
+
+  - Routes such as:
+     - "Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave"
+     - "Dusable Lake Shore Dr & North Blvd - Streeter Dr & Grand Ave"
+     - "Dusable Lake Shore Dr & Monroe St - Shedd Aquarium"
+
+    These routes show a high percentage of trips in summer (above 40%) but drop significantly in winter. They are also heavily used by casual riders, reinforcing that these routes are likely tourist or leisure-friendly.
+
+    These routes align with locations that are popular attractions in Chicago.
+    
+- **2. Member-Dominated Routes: Fall Peaks and More Even Seasonal Distribution**
+
+  - Routes such as:
+    - "Mik Jr Dr & 29th St - State St & 33rd St"
+    - "Calumet Ave & 33rd St - State St & 33rd St"
+    - "Loomis St & Lexington St - Morgan St & Polk St"
+
+    These routes show a higher percentage of trips in fall (above 40%) and a more evenly distributed seasonal pattern compared to casual-heavy routes. While winter remains the lowest period, these routes retain higher winter usage than tourist-dominated routes.
+
+    Member percentage remains consistently high, suggesting reliance on these routes for transportation rather than leisure.
+    
+- **3. General Seasonal Trends: Winter Usage Drops Across All Routes**
+
+Regardless of membership type, winter consistently has the lowest trip volume.
+Member-dominant routes retain some winter usage, but casual-heavy routes see near-total drop-off.
+This suggests that weather plays a critical role in ridership behavior, especially among casual users.
 ![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
 
 
