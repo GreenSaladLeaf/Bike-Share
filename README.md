@@ -1445,8 +1445,62 @@ FROM
 
 ![image](https://github.com/user-attachments/assets/570e5245-1498-40f6-9bc6-4b2bb41aa1de)
 
+#### Top 10 Routes: Seasonal Usage
 
+```sql
+WITH SeasonalData AS (
+  SELECT
+    LEAST(start_station_name, end_station_name) AS start_station,
+    GREATEST(start_station_name, end_station_name) AS end_station,
+    ride_id,
+    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
+    
+    -- Seasonal classification based on Chicago's weather
+    CASE
+      WHEN EXTRACT(MONTH FROM cleaned_started_at) BETWEEN 3 AND 5 THEN 'Spring'
+      WHEN EXTRACT(MONTH FROM cleaned_started_at) BETWEEN 6 AND 8 THEN 'Summer'
+      WHEN EXTRACT(MONTH FROM cleaned_started_at) BETWEEN 9 AND 11 THEN 'Fall'
+      WHEN EXTRACT(MONTH FROM cleaned_started_at) IN (12, 1, 2) THEN 'Winter'
+    END AS season
+  FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+)
 
+-- Aggregate trips by route and season, and then calculate the percentages
+SELECT 
+  CONCAT(start_station, ' - ',end_station) AS route,
+  COUNT(DISTINCT ride_id) AS num_of_trips,
+  
+  -- Calculate season percentages for each route
+  ROUND(
+    (SUM(CASE WHEN season = 'Spring' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
+    2
+  ) AS spring_percentage,
+
+  ROUND(
+    (SUM(CASE WHEN season = 'Summer' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
+    2
+  ) AS summer_percentage,
+
+  ROUND(
+    (SUM(CASE WHEN season = 'Fall' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
+    2
+  ) AS fall_percentage,
+
+  ROUND(
+    (SUM(CASE WHEN season = 'Winter' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
+    2
+  ) AS winter_percentage
+
+FROM 
+  SeasonalData
+GROUP BY 
+  route
+ORDER BY 
+  num_of_trips DESC
+LIMIT 10
+```
+![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
 
 
 ### Trip Duration Analysis
