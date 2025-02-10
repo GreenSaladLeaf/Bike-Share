@@ -1537,40 +1537,39 @@ This section explores trip duration patterns to understand user engagement.
 - Rider and Bike Type Breakdown: How do durations vary across rider and bike types?
 
 #### Average and Median Trip Durations by Rider Type
-To understand the differences in trip durations between members and casual riders, the median and average durations are calculated:
-
-- **Median Trip Duration**: The query calculates the median trip duration by rider type using the PERCENTILE_CONT function:
-
 ```sql
-SELECT DISTINCT
-  member_casual,
-  PERCENTILE_CONT(trip_duration,0.5) OVER(PARTITION BY member_casual)  AS median_trip_duration_minutes
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table` 
-```
-|Row	 |member_casual |median_trip_duration_minutes|
-|---|---|---|
-|1	|member |8.0|
-|2 	|casual |12.0 |
+WITH median_duration AS (
+  SELECT 
+    member_casual AS rider_type,
+    PERCENTILE_CONT(trip_duration, 0.5) OVER (PARTITION BY member_casual) AS median_trip_duration_minutes
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+)
 
-- **Average Trip Duration**: The average trip duration for each rider type is calculated:
+,average_duration AS (
+  SELECT 
+    member_casual AS rider_type,
+    ROUND(AVG(trip_duration)) AS average_trip_duration_minutes
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+  GROUP BY member_casual
+)
 
-```sql
-SELECT
-  member_casual,
-  ROUND(AVG(trip_duration)) AS average_trip_duration_minutes
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table` 
-GROUP BY
-  member_casual
+SELECT DISTINCT 
+  m.rider_type, 
+  m.median_trip_duration_minutes, 
+  a.average_trip_duration_minutes
+FROM median_duration AS m
+JOIN average_duration AS a
+ON m.rider_type = a.rider_type
 ```
-|Row	|member_casual|average_trip_duration_minutes|
-|---|---|---|
-|1	|casual |20.0|
-|2	|member |12.0|
+|Row	 |rider_type |median_trip_duration_minutes|average_trip_duration_minutes|
+|---|---|---|---|
+|1	|casual |12.0|20.0|
+|2 	|member |8.0 |12.0|
 
 - Casual riders tend to take longer trips on average (20 minutes) compared to members (12 minutes).
 - The median trip durations show a smaller difference: 8 minutes for members and 12 minutes for casual riders.
+
+![image](https://github.com/user-attachments/assets/b80c23e9-42ce-4494-8de0-c322d7bcb6b3)
 
 #### Trip Durations by Bike Type
 Trip durations are further analyzed by bike type for both rider categories:
