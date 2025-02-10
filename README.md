@@ -1568,6 +1568,7 @@ ON m.rider_type = a.rider_type
 
 - Casual riders tend to take longer trips on average (20 minutes) compared to members (12 minutes).
 - The median trip durations show a smaller difference: 8 minutes for members and 12 minutes for casual riders.
+![image](https://github.com/user-attachments/assets/93d67b94-9cdf-489e-b8fc-f2d6ae734eaa)
 
 ![image](https://github.com/user-attachments/assets/b80c23e9-42ce-4494-8de0-c322d7bcb6b3)
 
