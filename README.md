@@ -1595,13 +1595,23 @@ GROUP BY
 |4	|casual |classic_bike |25.0|
 |5	|casual |docked_bike |49.0|
 
-- **Electric bikes** tend to have shorter trip durations for both member and casual riders, with members averaging 11 minutes and casual riders averaging 15 minutes.
-- **Classic bikes** have longer average trip durations, especially for casual riders (25 minutes on average).
-- **Docked bikes** show significantly longer trip durations, particularly for casual riders (49 minutes on average). This may reflect longer trips or specific usage patterns.
-
-**Key Insights**:
-- **Casual riders on docked bikes** have the longest average trip duration (49 minutes), likely due to the nature of docked bike usage, where riders may be more inclined to take longer trips, especially for one-time or less frequent uses.
-- **Members** tend to have shorter and more efficient trips, regardless of bike type. This suggests that members use the service more frequently and for shorter, routine trips compared to casual riders, whose trips tend to be longer or less regular.
+- Electric Bikes have the shortest trip durations:
+  - Members average 11 minutes, while casual riders take 15 minutes—a 4-minute difference.
+  - This suggests efficiency and ease of use might attract members to electric bikes.
+- Classic Bikes Show a Large Gap:
+  - Members average 13 minutes per trip, while casual riders take nearly twice as long.
+  - Possible reasons: route familiarity, confidence, or pricing differences between members and casual users.
+- Docked Bikes Have the Longest Trips (Casual Only):
+  - 49 minutes on average—far exceeding other bike types.
+  - Indicates casual users may be leisure riders, tourists, or struggling with docking locations.
+    
+**Business Strategies**:
+- Promote Membership for Casual Riders Using Docked & Classic Bikes
+Since casual riders take longer trips, offering discounts or incentives for long rides with membership could convert them.
+- Expand Electric Bike Usage Among Casual Riders
+Casual riders already use electric bikes for quicker trips, so targeted promotions, trial offers, or lower e-bike rates could encourage membership.
+- Optimize Docking Station Locations & Pricing
+If docked bike trips are long due to limited station availability, improving station placement could reduce trip times and enhance rider experience.
 
 ![image](https://github.com/user-attachments/assets/97e48bcb-b4b0-4851-a71a-c621a968add6)
 
