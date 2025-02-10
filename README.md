@@ -1566,8 +1566,14 @@ ON m.rider_type = a.rider_type
 |1	|casual |12.0|20.0|
 |2 	|member |8.0 |12.0|
 
-- Casual riders tend to take longer trips on average (20 minutes) compared to members (12 minutes).
-- The median trip durations show a smaller difference: 8 minutes for members and 12 minutes for casual riders.
+**Member vs. Casual Usage Patterns**
+- Casual riders have a median trip duration of 12 minutes but an average of 20 minutes, suggesting that longer trips are skewing the average.
+- Members show a more consistent pattern, with a median of 8 minutes and an average of 12 minutes, indicating predictable commuting behavior.
+- Casual riders are likely using bikes for leisure or tourism, whereas members' shorter, consistent trips suggest regular commuting.
+
+**Business Strategies**
+- Casual riders take longer trips, membership perks for extended rides could attract sign-ups.
+- Members' predictable, shorter trips suggest commuter-focused incentives might work best for retention.
 
 ![image](https://github.com/user-attachments/assets/b80c23e9-42ce-4494-8de0-c322d7bcb6b3)
 
@@ -1614,81 +1620,51 @@ If docked bike trips are long due to limited station availability, improving sta
 
 ![image](https://github.com/user-attachments/assets/97e48bcb-b4b0-4851-a71a-c621a968add6)
 
-### Trip Distance Analysis
-This analysis explores trip distances to assess Cyclistic's geographical reach and user behavior.
-- Overall Trends: Are trips typically short or long?
-- Rider and Bike Type Breakdown: How do distances vary by rider type (casual vs. member) and bike type (classic, docked, electric)?
-
-#### Overall Trip Distance
-The median and average distances for all trips provide an overview of the typical distances traveled.
-- **Median Trip Distance**: 
+### Trip Distance Analysis: Member vs. Casual Riders
+This analysis examines how far Cyclistic users typically travel, comparing median and average trip distances for casual riders and members.
 
 ```sql
-SELECT DISTINCT
-  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER()) AS median_distance_meters
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table`
+WITH median_distance AS (
+  SELECT 
+    member_casual AS rider_type,
+    ROUND(PERCENTILE_CONT(distance_meters, 0.5) OVER(PARTITION BY member_casual) / 1000, 2) AS median_distance_km
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+)
+
+,average_distance AS (
+  SELECT 
+    member_casual AS rider_type,
+    ROUND(AVG(distance_meters) / 1000, 2) AS average_distance_km
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+  GROUP BY member_casual
+)
+
+SELECT DISTINCT 
+  m.rider_type,
+  m.median_distance_km, 
+  a.average_distance_km
+FROM median_distance AS m
+JOIN average_distance AS a 
+ON m.rider_type = a.rider_type
+
 ```
 
-|Row	|median_distance_meters|
-|---|---|
-|1	|1658.0|
+|Row	|rider_type|median_distance_km|average_distance_km|
+|---|---|---|---|
+|1	|casual|1.76|2.34|
+|2	|member|1.62|2.23|
 
-The median trip distance is 1658 meters (or approximately 1.65 kilometers), indicating that half of the trips are shorter than this distance.
+- Casual riders travel slightly longer distances than members, with a median trip of 1.76 km vs. 1.62 km.
+- The average distance is higher than the median for both groups, indicating that some longer trips are skewing the average.
+- The difference between members and casual riders is not drastic, but casual riders tend to have more variability in their trip lengths.
 
-- **Average Trip Distance**:
+**Business Strategies**:
+- Since casual riders already take slightly longer trips, offering membership perks for extended rides (e.g., reduced rates after a certain distance) may encourage sign-ups.
+- Improving Member Experience:
+  - Members have slightly shorter and more consistent trip distances, indicating a focus on commuting and routine travel.
+  - Enhancing services like better bike availability at key commuter hubs could increase member retention.
 
-```sql
-SELECT 
-  ROUND(AVG(distance_meters)) AS average_distance_meters
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
-```
-
-|Row	|average_distance_meters|
-|---|---|
-|1	|2269.0|
-
-The average trip distance is 2269 meters (or approximately 2.27 kilometers), which is slightly higher than the median, reflecting the impact of longer trips in the dataset.
-
-#### Trip Distance by Rider Type
-The average and median distances differ between member and casual riders, suggesting variations in how frequently they use the service and the nature of their trips.
-
-- **Median Distance by Rider Type**:
-
-```sql
-SELECT DISTINCT
-  member_casual AS rider_type,
-  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER(PARTITION BY member_casual))  AS median_distance
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table`
-```
-
-|Row	|rider_type|median_distance|
-|---|---|---|
-|1	|member|1620.0|
-|2	|casual|1756.0|
-
-Members have a median distance of 1620 meters (1.62 km), while casual riders have a median distance of 1756 meters (1.76 km). Casual riders, on average, tend to take slightly longer trips than members.
-
-- **Average Distance by Rider Type**:
-
-```sql
-SELECT
-  member_casual AS rider_type,
-  ROUND(AVG(distance_meters)) AS avg_distance
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table` 
-GROUP BY
-  rider_type
-```
-
-|Row|	rider_type|avg_distance|
-|---|---|---|
-|1	|casual|2336.0|
-|2	|member|2234.0|
-
-- Casual riders have an average trip distance of 2336 meters (2.34 km), while members have an average of 2234 meters (2.23 km).
-- This indicates that casual riders, who might use the service for leisure or irregular trips, tend to travel slightly further than members, who may use bikes more frequently for short, routine trips.
+![image](https://github.com/user-attachments/assets/54f3dec5-31f8-4cc5-81f4-aed1f02a38b1)
 
 #### Trip Distance by Bike Type
 The trip distance analysis by bike type highlights preferences and patterns in the use of different bike types by rider type.
