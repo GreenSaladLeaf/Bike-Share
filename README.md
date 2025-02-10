@@ -1594,9 +1594,7 @@ GROUP BY
 |3	|casual |electric_bike |15.0|
 |4	|casual |classic_bike |25.0|
 |5	|casual |docked_bike |49.0|
-![image](https://github.com/user-attachments/assets/34a6f61c-7e23-4587-b152-848fe3940fe0)
 
-![image](https://github.com/user-attachments/assets/2764ab89-0066-49f1-a0de-b31bc746d401)
 - **Electric bikes** tend to have shorter trip durations for both member and casual riders, with members averaging 11 minutes and casual riders averaging 15 minutes.
 - **Classic bikes** have longer average trip durations, especially for casual riders (25 minutes on average).
 - **Docked bikes** show significantly longer trip durations, particularly for casual riders (49 minutes on average). This may reflect longer trips or specific usage patterns.
@@ -1605,6 +1603,7 @@ GROUP BY
 - **Casual riders on docked bikes** have the longest average trip duration (49 minutes), likely due to the nature of docked bike usage, where riders may be more inclined to take longer trips, especially for one-time or less frequent uses.
 - **Members** tend to have shorter and more efficient trips, regardless of bike type. This suggests that members use the service more frequently and for shorter, routine trips compared to casual riders, whose trips tend to be longer or less regular.
 
+![image](https://github.com/user-attachments/assets/97e48bcb-b4b0-4851-a71a-c621a968add6)
 
 ### Trip Distance Analysis
 This analysis explores trip distances to assess Cyclistic's geographical reach and user behavior.
