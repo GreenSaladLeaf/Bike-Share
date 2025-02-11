@@ -1531,7 +1531,7 @@ This suggests that weather plays a critical role in ridership behavior, especial
 ![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
 
 
-### Trip Duration Analysis
+### Trip Duration Analysis: Member vs. Casual Riders
 This section explores trip duration patterns to understand user engagement.
 - Overall Trends: What is the typical trip length?
 - Rider and Bike Type Breakdown: How do durations vary across rider and bike types?
@@ -1581,48 +1581,48 @@ ON m.rider_type = a.rider_type
 Trip durations are further analyzed by bike type for both rider categories:
 
 ```sql
-SELECT
-  member_casual,
-  rideable_type,
-  ROUND(AVG(trip_duration)) AS average_trip_duration_minutes
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table` 
-GROUP BY
-  member_casual,
-  rideable_type
+SELECT DISTINCT
+  member_casual AS rider_type,
+  rideable_type AS bike_type,
+  PERCENTILE_CONT(trip_duration, 0.5) OVER (PARTITION BY member_casual, rideable_type) AS median_trip_duration_minutes
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+ORDER BY 
+  rider_type DESC
 ```
 
-|Row	|member_casual |rideable_type |average_trip_duration_minutes|
+|Row	|rider_type |bike_type |median_trip_duration_minutes|
 |---|---|---|---|
-|1	|member |electric_bike |11.0|
-|2	|member |classic_bike |13.0|
-|3	|casual |electric_bike |15.0|
-|4	|casual |classic_bike |25.0|
-|5	|casual |docked_bike |49.0|
+|1	|member |electric_bike |8.0|
+|2	|member |classic_bike |9.0|
+|3	|casual |electric_bike |10.0|
+|4	|casual |classic_bike |14.0|
+|5	|casual |docked_bike |26.0|
 
-- Electric Bikes have the shortest trip durations:
-  - Members average 11 minutes, while casual riders take 15 minutes—a 4-minute difference.
-  - This suggests efficiency and ease of use might attract members to electric bikes.
-- Classic Bikes Show a Large Gap:
-  - Members average 13 minutes per trip, while casual riders take nearly twice as long.
-  - Possible reasons: route familiarity, confidence, or pricing differences between members and casual users.
-- Docked Bikes Have the Longest Trips (Casual Only):
-  - 49 minutes on average—far exceeding other bike types.
-  - Indicates casual users may be leisure riders, tourists, or struggling with docking locations.
+**Casual Riders Take Longer Trips Across All Bike Types**
+- Casual riders have longer median trip durations compared to members, suggesting more leisure-oriented or exploratory rides.
+- The biggest gap is seen in docked bikes, where casual riders have a median duration of 26 minutes, much longer than any other bike type.
+
+**Members Have More Consistent and Shorter Rides**
+- Members have shorter and more predictable trip durations, reinforcing the idea that they primarily use Cyclistic for commuting or frequent short trips.
+- The difference between classic and electric bikes is minimal for members (8 min vs. 9 min), showing they choose bikes based on availability rather than trip length.
+
+**Bike Type Preferences and Usage Patterns**
+- Electric bikes: Both members (8 min) and casuals (10 min) have the shortest trip durations, likely due to the convenience and speed of e-bikes.
+- Classic bikes: Casual riders (14 min) use classic bikes for longer rides than members (9 min), possibly for sightseeing or recreation.
+- Docked bikes (casual riders only): With the longest median trip duration (26 min), these are likely used for leisure or necessity when no other bikes are available.
     
 **Business Strategies**:
-- Promote Membership for Casual Riders Using Docked & Classic Bikes
-Since casual riders take longer trips, offering discounts or incentives for long rides with membership could convert them.
-- Expand Electric Bike Usage Among Casual Riders
-Casual riders already use electric bikes for quicker trips, so targeted promotions, trial offers, or lower e-bike rates could encourage membership.
-- Optimize Docking Station Locations & Pricing
-If docked bike trips are long due to limited station availability, improving station placement could reduce trip times and enhance rider experience.
+- Encouraging membership for casual riders: Since casual users take longer rides, offering membership perks for extended rides (e.g., discounts on longer rentals) could appeal to them.
+- Targeted pricing strategies: Cyclistic could introduce a pricing structure that makes shorter casual trips less expensive with membership, nudging casuals to convert.
+- Bike availability and placement: Since casual riders take the longest trips on docked bikes, increasing availability in key leisure areas may improve overall ridership.
+  
+![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
-![image](https://github.com/user-attachments/assets/97e48bcb-b4b0-4851-a71a-c621a968add6)
 
 ### Trip Distance Analysis: Member vs. Casual Riders
 This analysis examines how far Cyclistic users typically travel, comparing median and average trip distances for casual riders and members.
 
+#### Average and Median Trip Durations by Rider Type
 ```sql
 WITH median_distance AS (
   SELECT 
@@ -1669,61 +1669,40 @@ ON m.rider_type = a.rider_type
 #### Trip Distance by Bike Type
 The trip distance analysis by bike type highlights preferences and patterns in the use of different bike types by rider type.
 
-- **Median Distance by Bike Type**:
 ```sql
 SELECT DISTINCT
   member_casual AS rider_type,
   rideable_type AS bike_type,
-  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER(PARTITION BY member_casual, rideable_type))  AS median_distance
+  ROUND(PERCENTILE_CONT(distance_meters,0.5) OVER(PARTITION BY member_casual, rideable_type)/1000,2) AS median_distance_km
 FROM
   `bike-share-case-study-430704.Bike_share.cleaned_table`
 ORDER BY 
   rider_type DESC
 ```
-|Row	|rider_type|bike_type|median_distance|
+|Row	|rider_type|bike_type|median_distance_km|
 |---|---|---|---|
-|1	|member|electric_bike|1882.0|
-|2	|member|classic_bike|1431.0|
-|3	|casual|docked_bike|2009.0|
-|4	|casual|electric_bike|1791.0|
-|5	|casual|classic_bike|1719.0|
+|1	|member|electric_bike|1.88|
+|2	|member|classic_bike|1.43|
+|3	|casual|electric_bike|1.79|
+|4	|casual|classic_bike|1.72|
+|5	|casual|docked_bike|2.01|
 
-![image](https://github.com/user-attachments/assets/669df180-9f70-4812-8672-cb30c5976ae9)
+**Casual vs. Member Riding Behavior**:
+- Casual riders tend to take longer trips than members across all bike types, suggesting more leisure-oriented usage.
+- Members have shorter, more consistent trip distances, indicating routine commuting patterns.
 
+**Bike Type Preferences & Usage Patterns**:
+- Electric bikes: Members travel the farthest on electric bikes (1.88 km median distance), likely due to their efficiency and speed for commuting. Casual riders take slightly shorter trips (1.79 km), possibly for convenience.
+- Classic bikes: Members travel shorter distances (1.43 km) compared to casual riders (1.72 km), suggesting that casual users may take longer scenic or recreational rides.
+- Docked bikes (casual riders only): Casual users take the longest trips on docked bikes (2.01 km), potentially due to station-based limitations requiring them to return the bike to a specific location.
 
-- **Average Distance by Bike Type**:
+**Business Strategy Implications**:
+- To convert casual riders into members, Cyclistic could promote membership perks for longer rides on docked and classic bikes.
+- For electric bikes, emphasizing time savings and convenience could attract both casual users and retain members.
+- Since casual riders take longer trips, targeted discounts on multi-hour rides or bundled trip passes could encourage sign-ups.
 
-```sql
-SELECT
-  member_casual AS rider_type,
-  rideable_type AS bike_type,
-  ROUND(AVG(distance_meters)) AS avg_distance
-FROM
-  `bike-share-case-study-430704.Bike_share.cleaned_table` 
-GROUP BY
-  rider_type,
-  bike_type
-ORDER BY
-  rider_type DESC,
-  avg_distance DESC
-```
+![image](https://github.com/user-attachments/assets/c78fda88-cd84-4256-8c72-3139616c5e8e)
 
-|Row	|rider_type|bike_type|avg_distance|
-|---|---|---|---|
-|1	|member|electric_bike|2487.0|
-|2	|member|classic_bike|1996.0|
-|3	|casual|docked_bike|2691.0|
-|4	|casual|electric_bike|2355.0|
-|5	|casual|classic_bike|2303.0|
-
-![image](https://github.com/user-attachments/assets/d6b471bc-34a5-4c7f-b776-6cc81fcfb27f)
-
-
-- **Electric bikes**: Members traveling on electric bikes have the longer average trip distance of 2487 meters (2.49 km), which could be due to the comfort and efficiency of electric bikes for longer trips. Casual riders using electric bikes have an average distance of 2355 meters (2.36 km).
-- **Classic bikes**: Members have an average trip distance of 1996 meters (1.99 km), while casual riders have a slightly higher average at 2303 meters (2.30 km).
-- **Docked bikes**: Casual riders using docked bikes travel the farthest, with an average distance of 2691 meters (2.69 km), indicating that docked bikes are used for relatively longer, planned trips.
-
-- Members and casual riders both seems to prefer electric bikes over classic bike for longer distance trips.
 
 #### Distance Distribution
 The distance analysis highlights the patterns in trip lengths within the bike-sharing system, segmented into distinct categories:
