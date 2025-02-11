@@ -1707,37 +1707,6 @@ ORDER BY
 #### Distance Distribution
 The distance analysis highlights the patterns in trip lengths within the bike-sharing system, segmented into distinct categories:
 
-**Trip Categories**:
-Trips were categorized by their lengths into four groups:
-
-```sql
-SELECT
-  CASE 
-    WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-    WHEN distance_meters BETWEEN 2001 AND 5000 THEN 'Medium (2km-5km)'
-    WHEN distance_meters BETWEEN 5001 AND 10000 THEN 'Long (5km-10km)'
-    ELSE 'Very Long (10km+)' 
-  END AS distance_category,
-  COUNT(*) AS trip_count,
-  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS percentage
-FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY distance_category
-ORDER BY trip_count DESC
-```
-
-|Row	|distance_category |trip_count|percentage|
-|---|---|---|---|
-|1	|Short (10m-2km)|3,147,188|58.72|
-|2	|Medium (2km-5km)|1,754,597|32.74|
-|3	|Long (5km-10km)|416,437|7.77|
-|4	|Very Long (10km+)|40,975|0.76|
-
-![image](https://github.com/user-attachments/assets/c38c999f-ed61-437b-9bb8-1fda42e80098)
-
-
-Trip Distribution Across Categories:
-- The majority of trips fall under the "Short" category (10m-2km), making up 58.72% of all rides. "Medium" trips (2km-5km) are the second most common at 32.74%, while "Long" (7.77%) and "Very Long" (0.76%) trips are rare. This indicates that the bike-sharing system is primarily used for short, local trips.
-
 **Distance Breakdown by Rider Type**:
 ```sql
 SELECT
@@ -1773,15 +1742,19 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 
 **Rider Type Behavior**:
 -Both casual and member riders display a similar pattern in their trip distances. For both groups, the vast majority of trips are short, followed by medium, long, and extra long trips. 
-- Notably, for casual riders, short trips (56.53%) combined with medium trips (35.03%) make up over 91% of their total trips, highlighting that they predominantly use the service for shorter journeys.
-
+  
+- Notably,for casual riders, short trips (56.53%) combined with medium trips (35.03%) make up over 91% of their total trips, highlighting that they predominantly use the service for shorter journeys.
+  
 **Business Strategy**:
 - Bundle Rides at a Discount:
 Create bundled packages specifically tailored for short and medium trips (e.g., “Buy 10 rides at a special price”). This package can demonstrate immediate cost savings compared to individual rides, making the membership upgrade more appealing to casual users.
 - Dynamic Pricing Incentives:
 Offer targeted discounts or loyalty rewards for riders who frequently take short and medium trips. For example, after a set number of rides, provide a discount or bonus credits if they convert to a membership. This approach leverages their typical usage pattern to deliver tangible value.
 
-![image](https://github.com/user-attachments/assets/d6a90eb8-0666-4a78-b1dd-d3782866a07f)
+![image](https://github.com/user-attachments/assets/40fc9f58-08fe-44d7-aaba-b4fc48014721)
+
+![image](https://github.com/user-attachments/assets/c22733ba-e522-4cfa-b25c-3284bbe76206)
+
 
 
 **Distance Breakdown by Bike Type**:
