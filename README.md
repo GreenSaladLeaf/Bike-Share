@@ -1696,7 +1696,7 @@ ORDER BY
 - Classic bikes: Members travel shorter distances (1.43 km) compared to casual riders (1.72 km), suggesting that casual users may take longer scenic or recreational rides.
 - Docked bikes (casual riders only): Casual users take the longest trips on docked bikes (2.01 km), potentially due to station-based limitations requiring them to return the bike to a specific location.
 
-**Business Strategy Implications**:
+**Business Strategy**:
 - To convert casual riders into members, Cyclistic could promote membership perks for longer rides on docked and classic bikes.
 - For electric bikes, emphasizing time savings and convenience could attract both casual users and retain members.
 - Since casual riders take longer trips, targeted discounts on multi-hour rides or bundled trip passes could encourage sign-ups.
@@ -1771,11 +1771,17 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 |7	|Long (5km-10km)|member|277,921|7.92|
 |8	|Very Long (10km+)|member|23,412|0.67|
 
-![image](https://github.com/user-attachments/assets/d6a90eb8-0666-4a78-b1dd-d3782866a07f)
-
-
 **Rider Type Behavior**:
-- Both casual riders and members follow similar patterns, with most trips being short, followed by medium. However, members account for a larger volume of rides overall, particularly in the "Short" and "Medium" categories. This suggests that members use the system more frequently, likely for commuting or routine tasks, whereas casual riders engage with it for occasional, leisurely activities.
+-Both casual and member riders display a similar pattern in their trip distances. For both groups, the vast majority of trips are short, followed by medium, long, and extra long trips. 
+- Notably, for casual riders, short trips (56.53%) combined with medium trips (35.03%) make up over 91% of their total trips, highlighting that they predominantly use the service for shorter journeys.
+
+**Business Strategy**:
+- Bundle Rides at a Discount:
+Create bundled packages specifically tailored for short and medium trips (e.g., “Buy 10 rides at a special price”). This package can demonstrate immediate cost savings compared to individual rides, making the membership upgrade more appealing to casual users.
+- Dynamic Pricing Incentives:
+Offer targeted discounts or loyalty rewards for riders who frequently take short and medium trips. For example, after a set number of rides, provide a discount or bonus credits if they convert to a membership. This approach leverages their typical usage pattern to deliver tangible value.
+
+![image](https://github.com/user-attachments/assets/d6a90eb8-0666-4a78-b1dd-d3782866a07f)
 
 
 **Distance Breakdown by Bike Type**:
