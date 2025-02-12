@@ -1379,7 +1379,8 @@ ORDER BY ride_count DESC, member_casual
 |4	|classic_bike |casual |857,927|46.37|
 |5	|docked_bike |casual |26,841|1.45|
 
-![image](https://github.com/user-attachments/assets/e7ac1780-7ad3-4274-99ee-3c6c76f61e79)
+![image](https://github.com/user-attachments/assets/7c6979c7-5005-4c1c-aab2-7e3fde1b163b)
+
 
 ### 4. Top 10 Routes
 ```sql
