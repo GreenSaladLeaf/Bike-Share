@@ -1310,47 +1310,24 @@ GROUP BY member_casual
 
 ![image](https://github.com/user-attachments/assets/ef7e3504-49e9-4bfe-8e93-6b03a784284c)
 
-### 2. Trip Frequency and Patterns by User Type: Daily, Weekly, and Seasonal Trends
+### 2. Trip Frequency and Patterns by User Type: Hourly, Weekly, and Monthly Trends
 #### Monthly Trip Trends
 - **Peak Usage Periods**:
-  - The number of trips by members peaks in **August**, with approximately 437,000 trips recorded.
-  - Casual usage peaks slightly earlier, in **July**, with about 297,000 trips.
-The peak summer months (June to August) account for the highest share of trips for both user groups.
+  - The number of trips by members peaks in **August(~437,000 trips)**, while casual riders peak in **July (~297,000 trips)**.
+  - **Summer months** (June–August) see the highest trip volumes for both groups.
 
-- **Seasonal Variation**:
-  - Both members and casual users show significant seasonal variation:
-  - Members display a relatively steady rise and fall in trip numbers, indicating regular, year-round use.
-  - Casual riders exhibit a more pronounced increase in trips during the warmer months, suggesting greater sensitivity to weather and seasonal conditions.
-  - Winter months (December to February) have the lowest usage for both groups, but casual ridership drops more dramatically during this period.
- 
 - **Member vs. Casual Trends**:
   - Members consistently take more trips than casual riders across all months of the year.
   - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
-```sql
-SELECT 
-    member_casual,
-    EXTRACT(HOUR FROM cleaned_started_at) AS hour_of_day,
-    EXTRACT(DAYOFWEEK FROM cleaned_started_at) AS day_of_week,
-    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
-    ROUND(AVG(distance_meters),2) AS avg_distance_meters,
-    ROUND(AVG(trip_duration),2) AS avg_trip_duration_minutes,
-    COUNT(*) AS trips
-FROM 
-    `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY 
-    member_casual, hour_of_day, day_of_week, month_of_year
-ORDER BY 
-    hour_of_day, avg_distance_meters DESC\
-```
+ 
+![image](https://github.com/user-attachments/assets/9cc4646c-5476-46c8-bdff-5a497aef7295)
 
-    
-![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
 
 #### Weekly Trip Trends
-- **Distinct Usage Patterns**:
-  - Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
-  - Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
-    
+- Members dominate usage on weekdays, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
+
+- Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
+
 ![image](https://github.com/user-attachments/assets/284b87c4-9549-48f5-965f-f9f37dd18446) 
 
 #### Daily Trip Trends
@@ -1369,6 +1346,23 @@ This pattern suggests that members primarily use the service for work-related tr
   - Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
 
 ![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
+
+```sql
+SELECT 
+    member_casual AS rider_type,
+    EXTRACT(HOUR FROM cleaned_started_at) AS hour_of_day,
+    EXTRACT(DAYOFWEEK FROM cleaned_started_at) AS day_of_week,
+    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
+    ROUND(AVG(distance_meters),2) AS avg_distance_meters,
+    ROUND(AVG(trip_duration),2) AS avg_trip_duration_minutes,
+    COUNT(*) AS trips
+FROM 
+    `bike-share-case-study-430704.Bike_share.cleaned_table`
+GROUP BY 
+    member_casual, hour_of_day, day_of_week, month_of_year
+ORDER BY 
+    hour_of_day, avg_distance_meters DESC
+```
 
 
 ### 3. Preferred Bike Types by Rider Type
