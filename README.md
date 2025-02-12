@@ -1290,29 +1290,42 @@ HAVING
 Result: No data to display.
 
 ## Analysis
-With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. The goal of the analysis is to uncover trends and patterns related to bike usage, user behavior, and station performance. This includes examining trip durations, ride types, popular routes, and the impact of seasonality on bike usage.
+With the dataset cleaned and prepared, the next step focuses on analyzing the data to derive meaningful insights. This analysis uncovers trends in trip frequency, bike type preferences, popular routes, and how usage patterns differ between casual riders and members.
 
 ### 1. Total Number Of Member vs. Casual Rider Trips
-- Members account for **65.48%** of all trips, while casual riders account for 34.52%.
-- Casual riders make up **34.52%** offer a strong opportunity for conversion.
-![image](https://github.com/user-attachments/assets/ef7e3504-49e9-4bfe-8e93-6b03a784284c)
-
+- **Members account for 65.48%** of all trips, while **casual riders make up 34.52%**, presenting a strong opportunity for conversion.
+  
 ```sql
 SELECT 
-  member_casual,
+  member_casual AS rider_type,
   COUNT(*) AS ride_count,
   ROUND((COUNT(*) * 100.0) / SUM(COUNT(*)) OVER (), 2) AS percentage
 FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
 GROUP BY member_casual
 ```
-|Row |member_casual |ride_count |percentage|
+|Row |rider_type |ride_count |percentage|
 |--- |--- |--- |--- |
 |1 |casual |1,850,211|34.52|
 |2 |member |3,508,986|65.48|
 
+![image](https://github.com/user-attachments/assets/ef7e3504-49e9-4bfe-8e93-6b03a784284c)
 
 ### 2. Trip Frequency and Patterns by User Type: Daily, Weekly, and Seasonal Trends
+#### Monthly Trip Trends
+- **Peak Usage Periods**:
+  - The number of trips by members peaks in **August**, with approximately 437,000 trips recorded.
+  - Casual usage peaks slightly earlier, in **July**, with about 297,000 trips.
+The peak summer months (June to August) account for the highest share of trips for both user groups.
 
+- **Seasonal Variation**:
+  - Both members and casual users show significant seasonal variation:
+  - Members display a relatively steady rise and fall in trip numbers, indicating regular, year-round use.
+  - Casual riders exhibit a more pronounced increase in trips during the warmer months, suggesting greater sensitivity to weather and seasonal conditions.
+  - Winter months (December to February) have the lowest usage for both groups, but casual ridership drops more dramatically during this period.
+ 
+- **Member vs. Casual Trends**:
+  - Members consistently take more trips than casual riders across all months of the year.
+  - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
 ```sql
 SELECT 
     member_casual,
@@ -1329,21 +1342,7 @@ GROUP BY
 ORDER BY 
     hour_of_day, avg_distance_meters DESC\
 ```
-#### Monthly Trip Trends
-- **Peak Usage Periods**:
-  - The number of trips by members peaks in August, with approximately 437,000 trips recorded.
-  - Casual usage peaks slightly earlier, in July, with about 297,000 trips.
-The peak summer months (June to August) account for the highest share of trips for both user groups.
 
-- **Seasonal Variation**:
-  - Both members and casual users show significant seasonal variation:
-  - Members display a relatively steady rise and fall in trip numbers, indicating regular, year-round use.
-  - Casual riders exhibit a more pronounced increase in trips during the warmer months, suggesting greater sensitivity to weather and seasonal conditions.
-  - Winter months (December to February) have the lowest usage for both groups, but casual ridership drops more dramatically during this period.
- 
-- **Member vs. Casual Trends**:
-  - Members consistently take more trips than casual riders across all months of the year.
-  - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
     
 ![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
 
@@ -1531,7 +1530,7 @@ This suggests that weather plays a critical role in ridership behavior, especial
 ![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
 
 
-### Trip Duration Analysis: Member vs. Casual Riders
+### 5. Trip Duration Analysis: Member vs. Casual Riders
 This section explores trip duration patterns to understand user engagement.
 - Overall Trends: What is the typical trip length?
 - Rider and Bike Type Breakdown: How do durations vary across rider and bike types?
@@ -1619,7 +1618,7 @@ ORDER BY
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
 
-### Trip Distance Analysis: Member vs. Casual Riders
+### 6. Trip Distance Analysis: Member vs. Casual Riders
 This analysis examines how far Cyclistic users typically travel, comparing median and average trip distances for casual riders and members.
 
 #### Average and Median Trip Durations by Rider Type
@@ -1754,410 +1753,5 @@ Offer targeted discounts or loyalty rewards for riders who frequently take short
 ![image](https://github.com/user-attachments/assets/40fc9f58-08fe-44d7-aaba-b4fc48014721)
 
 ![image](https://github.com/user-attachments/assets/c22733ba-e522-4cfa-b25c-3284bbe76206)
-
-
-
-**Distance Breakdown by Bike Type**:
-```sql
-SELECT
-  distance_category,
-  bike_type,
-  COUNT(*) AS trip_count,
-  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY distance_category), 2) AS percentage_within_bike_type
-FROM (
-  SELECT
-    CASE 
-      WHEN distance_meters BETWEEN 10 AND 2000 THEN 'Short (10m-2km)'
-      WHEN distance_meters BETWEEN 2001 AND 5000 THEN 'Medium (2km-5km)'
-      WHEN distance_meters BETWEEN 5001 AND 10000 THEN 'Long (5km-10km)'
-      ELSE 'Very Long (10km+)' 
-    END AS distance_category,
-    rideable_type AS bike_type,
-    distance_meters
-  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
-) AS categorized
-GROUP BY distance_category, bike_type
-ORDER BY distance_category, percentage_within_bike_type DESC
-```
-|Row	|distance_category|bike_type|trip_count|percentage_bike_type|
-|---|---|---|---|---|
-|1	|Long (5km-10km)|electric_bike|239,309|57.47|
-|2	|Long (5km-10km)|classic_bike|174,204|41.83|
-|3	|Long (5km-10km)|docked_bike|2924|0.7|
-|4	|Medium (2km-5km)|electric_bike|959356|54.68|
-|5	|Medium (2km-5km)|classic_bike|785155|44.75|
-|6	|Medium (2km-5km)|docked_bike|10086|0.57|
-|7	|Short (10m-2km)|classic_bike|1691499|53.75|
-|8	|Short (10m-2km)|electric_bike|1442329|45.83|
-|9	|Short (10m-2km)|docked_bike|13360|0.42|
-|10	|Very Long (10km+)|electric_bike|24148|58.93|
-|11	|Very Long (10km+)|classic_bike|16356|39.92|
-|12	|Very Long (10km+)|docked_bike|471|1.15|
-
-![image](https://github.com/user-attachments/assets/c87c5b92-5d88-4356-ba40-f4d45f9de578)
-
-- Electric Bikes are preferred for medium (54.68%), long (57.47%), and very long trips (58.93%) due to their efficiency over greater distances.
-- Classic Bikes dominate short trips (53.75%) but also contribute significantly to medium (44.75%) and long trips (41.83%), reflecting their versatility.
-- Docked Bikes account for a minimal share across all categories, with their highest usage in very long trips(1.15%).
-
-___
-Behavior Differences:
-- Casual riders may use the system more for leisure or one-off longer trips, while members lean towards practical, short-distance rides for daily routines.
----
----
-Electric Bike Popularity:
-- The preference for electric bikes in longer trips highlights their role in expanding the system's reach, making them crucial for encouraging higher usage and reducing physical effort.
----
----
-Optimization Opportunities:
-- Promote membership plans targeting casual users with medium or long-distance usage patterns.
-- Increase the availability of electric bikes, especially in areas with higher demand for medium and long trips.
----
-
-**Cyclistic Trip Frequency and Patterns by User Type: Hourly, Daily, Weekly, and Seasonal Trends**
-
-```sql
-SELECT 
-    member_casual,
-    EXTRACT(HOUR FROM cleaned_started_at) AS hour_of_day,
-    EXTRACT(DAYOFWEEK FROM cleaned_started_at) AS day_of_week,
-    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
-    ROUND(AVG(distance_meters),2) AS avg_distance_meters,
-    ROUND(AVG(trip_duration),2) AS avg_trip_duration_minutes,
-    COUNT(*) AS trips
-FROM 
-    `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY 
-    member_casual, hour_of_day, day_of_week, month_of_year
-ORDER BY 
-    hour_of_day, avg_distance_meters DESC\
-```
-
-**Hourly Trip Volume Trends: Member vs. Casual Users**
-![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
-
-- **Member Usage Patterns**:
-Members exhibit distinct peaks in trip volume during typical commuting hours:
-  - Morning peak: Around 8 AM.
-  - Evening peak: Around 5 PM.
-This pattern suggests that members primarily use the service for work-related trips during weekdays.
-
-- **Casual User Usage Patterns**:
-  - Casual users display a steady increase in trips throughout the morning, with a pronounced peak around midday (5 PM).
-  - This suggests that casual users tend to use Cyclistic more for leisurely or occasional trips, often in the late afternoon and evening.
-
-- **Comparison of Member vs. Casual User Trends**:
-  - Peak usage times: Members dominate during peak commuting hours (8 AM and 5 PM), while casual users have their peak mainly around 5 PM.
-  - Low-activity period: Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
-
-
-**Cyclistic Trips by Day of the Week**
-![image](https://github.com/user-attachments/assets/284b87c4-9549-48f5-965f-f9f37dd18446)
-
-- **Distinct Usage Patterns**:
-  - Members dominate usage on weekdays, with consistent trips from Monday to Friday, peaking on Wednesday with around 565,000 trips. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
-  - Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on Saturday (374,000 trips) and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
- 
-
-**Cyclistic Monthly Trip Trends**
-![image](https://github.com/user-attachments/assets/eeb85501-0d3e-4277-83bc-a401f7cefedd)
-
-This analysis highlights seasonal patterns in trip usage by members and casual riders throughout the year.
-
-- **Peak Usage Periods**:
-  - Members: The number of trips by members peaks in August, with approximately 437,000 trips recorded.
-  - Casual: Casual usage peaks slightly earlier, in July, with about 297,000 trips.
-The peak summer months (June to August) account for the highest share of trips for both user groups.
-
-- **Seasonal Variation**:
-  - Both members and casual users show significant seasonal variation:
-  - Members display a relatively steady rise and fall in trip numbers, indicating regular, year-round use.
-  - Casual riders exhibit a more pronounced increase in trips during the warmer months, suggesting greater sensitivity to weather and seasonal conditions.
-  - Winter months (December to February) have the lowest usage for both groups, but casual ridership drops more dramatically during this period.
- 
-- **Member vs. Casual Trends**:
-  - Members consistently take more trips than casual riders across all months of the year.
-  - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
-
-**Cyclistic Riders' Average Trip Distance and Duration by Hour of Day**
-![image](https://github.com/user-attachments/assets/c398ee04-b7b9-4c1d-9270-b0d5264c36a7)
-
-**Top Chart (Avg. Distance in Meters by Hour of Day)**:
-  - Members generally cover slightly longer distances during most hours compared to casual users.
-  - Casual users exhibit more variability in average distance throughout the day.
-  - There's a noticeable peak in distance covered by member users around early morning.
-
-**Bottom Chart (Average Trip Duration in Minutes by Hour of Day)**:
-  - Casual users have significantly longer trip durations, especially during midday (around noon).
-  - Members maintain more consistent trip durations throughout the day, averaging about 10–15 minutes.
-  - Casual users’ average trip duration spikes sharply around 10 a.m. to 2 p.m. and decreases in the evening.
-
-**Cyclistic Riders' Average Trip Distance and Duration by Day of Week**
-![image](https://github.com/user-attachments/assets/56d9b81b-f17d-43f6-b284-ceab263f8cd1)
-
-Casual Riders:
-- Take longer trips (both in distance and duration) than members, especially on weekends.
-Average trip duration and distance peak on Sundays, indicating leisure or recreational rides.
-
-Members:
-- Consistent trip distance and duration throughout the week, aligning with commuter or short errand trips.
-Smaller fluctuations suggest trips are more utilitarian in nature.
-
-Comparison:
-- The difference in trip behavior between casual and member users supports the idea that casual riders use Cyclistic bikes primarily for recreational purposes, while members use them more for practical purposes.
-
-**Cyclistic Riders' Average Trip Distance and Duration by Month of Year**
-![image](https://github.com/user-attachments/assets/70e9e13d-3677-4996-9b17-f6791fab02d3)
-
-Casual Riders Take Longer Trips
-- Casual riders consistently have longer average trip durations than members.
-- The difference is most pronounced in the summer months (May–August) when casual riders’ trips peak at around 20 minutes, while members’ trips remain around 12–13 minutes.
-- This suggests that casual riders may be using bikes more for leisure and sightseeing, rather than for commuting or quick trips.
-
-Trip Distances Are Similar, but Casual Riders Travel Slightly Less Overall
-- Both groups have their longest average trip distances in June and July (~2.4 km).
-- However, casual riders’ trip distances decline more steeply after the summer, whereas members maintain a relatively stable distance year-round.
-- This implies that casual riders are more seasonal users, while members have a more consistent and practical biking habit.
-
-Casual Riders’ Usage Drops in the Off-Season
-- As temperatures drop (September–December), casual riders' trip duration and distance decrease significantly, while members maintain more stable behavior.
-- This seasonal drop suggests that casual riders are likely tourists or occasional users, and marketing efforts should focus on converting them into year-round users.
-
-Marketing Implications & Strategies:
-Target Leisure Riders with Membership Benefits
-Since casual riders take longer trips in summer, Cyclistic could promote seasonal membership discounts or "unlimited ride" options during peak months to encourage commitment.
-Highlight the Convenience of Membership for Frequent Trips
-Members' trips are shorter but consistent, indicating they likely use the service for daily commutes or errands.
-Cyclistic could advertise membership benefits like cost savings for frequent riders, exclusive docking privileges, or priority access to bikes to encourage casual users to switch.
-Retain Casual Riders Beyond Summer
-Since casual riders significantly reduce their trips in the off-season, Cyclistic could launch fall/winter promotions (e.g., discounted first-month membership, loyalty rewards for repeated rides).
-Providing comfortable, weather-resistant bikes and partnering with local businesses for incentives (e.g., discounts at coffee shops for members) might also help.
-
-![image](https://github.com/user-attachments/assets/d711a5bc-694b-4881-85e5-2db658548428)
-
-Trip Volume Trends Summary
-
-Hourly Trends:
-
-Members show a gradual increase in trip volume during commuting hours (6–9 AM and 4–7 PM), with peaks corresponding to typical work hours.
-
-Casual users have a pronounced peak in trip volume around midday, indicating higher recreational usage during non-commute hours.
-
-Weekly Trends:
-
-Members have a more consistent trip volume throughout the week, with slightly higher activity on weekdays, suggesting regular commuting patterns.
-
-Casual users, on the other hand, experience a noticeable increase in trip volume on weekends, reflecting recreational or leisure-based activity.
-
-Monthly Trends:
-
-Both user groups see the highest trip volumes during the summer months (June, July, and August), aligning with warm weather and longer daylight hours.
-
-There is a sharp decline in trip volume during the winter months (December, January, and February) due to colder weather.
-
-Members maintain relatively steady activity during the colder months compared to casual users, who exhibit highly seasonal behavior.
-
-
-![image](https://github.com/user-attachments/assets/85e338f3-5747-4b9e-ba2b-8b022dca8ff1)
-
-Trip Distance and Duration Trends Summary
-
-Hourly Trends:
-
-Trip Distance: Members generally cover slightly longer distances during most hours of the day compared to casual users.
-
-There is a noticeable peak in the distance covered by members during early morning hours, likely corresponding to commute times.
-
-The lowest average distance for members occurs around midday, whereas casual users tend to cover longer distances during this period, reflecting recreational usage.
-
-Trip Duration: Casual users consistently have significantly longer trip durations than members, with a prominent spike around midday (approximately noon).
-
-Members maintain more consistent trip durations throughout the day, averaging around 10 to 15 minutes, reflecting routine and predictable travel patterns.
-
-Weekly Trends:
-
-Trip Distance: Both members and casual users cover longer distances on the weekends compared to weekdays, indicating increased recreational and leisure activities during weekends.
-
-During weekdays, members maintain a steady average trip distance, while casual users cover relatively lower distances.
-
-Trip Duration: Casual users show a significant increase in average trip duration on weekends, indicating more leisurely and recreational rides.
-
-Members, on the other hand, maintain steady and predictable trip durations throughout the week, reinforcing their usage pattern for commuting and routine travel.
-
-Monthly Trends:
-
-Trip Volume: Both members and casual users exhibit the highest trip volumes during the summer months (June, July, and August), which aligns with favorable weather conditions for biking.
-
-Member vs. Casual Patterns: Members maintain a relatively higher trip volume during colder months compared to casual users, suggesting year-round commuting behavior.
-
-Casual users' trips are highly seasonal, with a significant increase during warmer months, reflecting recreational or tourist-based usage patterns.
-
-
-
-**Casual Users vs. Members: Behavioral Differences**
-- Casual users consistently take longer trips in terms of duration compared to members, with peak trip durations occurring on weekends and during summer months. This indicates recreational use, especially during leisure periods.
-- Members have shorter and more consistent trip durations throughout the week and across seasons, aligning with routine commuting behavior.
-
-**Hourly Trends Summary**:
-1. Trip Distance:
-  - There is a noticeable peak in the distance covered by members during the early morning hours, likely corresponding to their commute times.
-  - The lowest average distance for members occurs around midday, whereas casual users tend to cover longer distances during this period, reflecting recreational usage.
-
-2. Trip Duration:
-  - Casual users consistently have significantly longer trip durations than members, with a prominent spike around midday (approximately noon).
-  - Members maintain more consistent trip durations throughout the day, averaging around 10 to 13 minutes, reflecting routine and predictable travel patterns.
-
-**Weekly Trends**:
-1. Trip Distance:
-  - Both members and casual users cover longer distances on the weekends compared to weekdays, indicating increased recreational and leisure activities during weekends.
-  - During weekdays, members maintain a steady average trip distance, while casual users cover relatively lower distances.
-
-3. Trip Duration:
-  - Casual users show a significant increase in average trip duration on weekends, indicating more leisurely and recreational rides.
-  - Members, on the other hand, maintain steady and predictable trip durations throughout the week, reinforcing their usage pattern for commuting and routine travel.
-
-**Seasonal Trends (Monthly Patterns)**:
-  - Both casual users and members take longer trips (in terms of distance) during summer months (June to August).
-  - Casual users' trip durations peak in June, suggesting increased recreational cycling during warm weather.
-  - Members maintain relatively stable trip durations throughout the year(10 to 13 minutes), with a slight increase during summer.
-
-
-
-
-
-```sql
-  -- Top 10 popular routes and counts for member and casual user trips
-SELECT
-    LEAST(start_station_name, end_station_name) AS start_station,
-    GREATEST(start_station_name, end_station_name) AS end_station,
-    COUNT(DISTINCT ride_id) AS num_of_trips,
-    COUNT(DISTINCT CASE WHEN member_casual = 'member' THEN ride_id END) AS num_of_member_trips,
-    COUNT(DISTINCT CASE WHEN member_casual = 'casual' THEN ride_id END) AS num_of_casual_trips
-FROM 
-    `bike-share-case-study-430704.Bike_share.cleaned_table`
-GROUP BY 
-    start_station, end_station
-ORDER BY 
-  num_of_trips DESC
-LIMIT 10
-```
-|Row	|start_station|end_station|num_of_trips|num_of_member_trips|num_of_casual_trips|
-|---|---|---|---|---|---|
-|1	|calumet ave & 33rd st|state st & 33rd st|11823|11354|469|
-|2	|ellis ave & 55th st|ellis ave & 60th st|10985|7405|3580|
-|3	|ellis ave & 60th st|university ave & 57th st|10609|8141|2468|
-|4	|dusable lake shore dr & monroe st|streeter dr & grand ave|8243|949|7294|
-|5	|loomis st & lexington st|morgan st & polk st|6177|5790|387|
-|6	|kimbark ave & 53rd st|university ave & 57th st|5107|3789|1318|
-|7	|mlk jr dr & 29th st|state st & 33rd st|4844|4658|186|
-|8	|lake park ave & 56th st|university ave & 57th st|4667|3520|1147|
-|9	|dusable lake shore dr & monroe st|shedd aquarium|4165|473|3692|
-|10	|dusable lake shore dr & north blvd|streeter dr & grand ave|4090|830|3260|
-
-```sql
-WITH route_user_type AS (
-  -- Top 10 popular routes and counts for member and casual user trips
-  SELECT
-    LEAST(start_station_name, end_station_name) AS start_station,
-    GREATEST(start_station_name, end_station_name) AS end_station,
-    COUNT(DISTINCT ride_id) AS num_of_trips,
-    COUNT(DISTINCT CASE WHEN member_casual = 'member' THEN ride_id END) AS num_of_member_trips,
-    COUNT(DISTINCT CASE WHEN member_casual = 'casual' THEN ride_id END) AS num_of_casual_trips
-  FROM 
-    `bike-share-case-study-430704.Bike_share.cleaned_table`
-  GROUP BY 
-    start_station, end_station
-ORDER BY 
-  num_of_trips DESC
-LIMIT 10
-)
-
--- Calculate percentage of member and casual trips for each route
-SELECT
-  CONCAT(start_station, ' - ',end_station) AS route,
-  num_of_trips,
-  ROUND((num_of_member_trips / num_of_trips) * 100, 2) AS member_percentage,
-  ROUND((num_of_casual_trips / num_of_trips) * 100, 2) AS casual_percentage
-FROM 
-  route_user_type
-
-```
-
-|Row	|start_station|end_station|num_of_trips|member_percentage|casual_percentage|
-|---|---|---|---|---|---|
-|1	|calumet ave & 33rd st|state st & 33rd st|11823|96.03|3.97|
-|2	|ellis ave & 55th st|ellis ave & 60th st|10985|67.41|32.59|
-|3	|ellis ave & 60th st|university ave & 57th st|10609|76.74|23.26|
-|4	|dusable lake shore dr & monroe st|streeter dr & grand ave|8243|11.51|88.49|
-|5	|loomis st & lexington st|morgan st & polk st|6177|93.73|6.27|
-|6	|kimbark ave & 53rd st|university ave & 57th st|5107|74.19|25.81|
-|7	|mlk jr dr & 29th st|state st & 33rd st|4844|96.16|3.84|
-|8	|lake park ave & 56th st|university ave & 57th st|4667|75.42|24.58|
-|9	|dusable lake shore dr & monroe st|shedd aquarium|4165|11.36|88.64|
-|10	|dusable lake shore dr & north blvd|streeter dr & grand ave|4090|20.29|79.71|
-
-![image](https://github.com/user-attachments/assets/a889e63d-6e7a-4341-89bb-82f45b21383a)
-
-
-
-#### Cyclistic's Top 10 Routes: Seasonal Usage
-
-```sql
-WITH SeasonalData AS (
-  SELECT
-    LEAST(start_station_name, end_station_name) AS start_station,
-    GREATEST(start_station_name, end_station_name) AS end_station,
-    ride_id,
-    EXTRACT(MONTH FROM cleaned_started_at) AS month_of_year,
-    
-    -- Seasonal classification based on Chicago's weather
-    CASE
-      WHEN EXTRACT(MONTH FROM cleaned_started_at) BETWEEN 3 AND 5 THEN 'Spring'
-      WHEN EXTRACT(MONTH FROM cleaned_started_at) BETWEEN 6 AND 8 THEN 'Summer'
-      WHEN EXTRACT(MONTH FROM cleaned_started_at) BETWEEN 9 AND 11 THEN 'Fall'
-      WHEN EXTRACT(MONTH FROM cleaned_started_at) IN (12, 1, 2) THEN 'Winter'
-    END AS season
-  FROM 
-    `bike-share-case-study-430704.Bike_share.cleaned_table`
-)
-
--- Aggregate trips by route and season, and then calculate the percentages
-SELECT 
-  CONCAT(start_station, ' - ',end_station) AS route,
-  COUNT(DISTINCT ride_id) AS num_of_trips,
-  
-  -- Calculate season percentages for each route
-  ROUND(
-    (SUM(CASE WHEN season = 'Spring' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
-    2
-  ) AS spring_percentage,
-
-  ROUND(
-    (SUM(CASE WHEN season = 'Summer' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
-    2
-  ) AS summer_percentage,
-
-  ROUND(
-    (SUM(CASE WHEN season = 'Fall' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
-    2
-  ) AS fall_percentage,
-
-  ROUND(
-    (SUM(CASE WHEN season = 'Winter' THEN 1 ELSE 0 END) / COUNT(DISTINCT ride_id)) * 100, 
-    2
-  ) AS winter_percentage
-
-FROM 
-  SeasonalData
-GROUP BY 
-  route
-ORDER BY 
-  num_of_trips DESC
-LIMIT 10
-```
-
-![image](https://github.com/user-attachments/assets/36862796-889f-4ce8-bc79-c0b33ca6eca5)
-
-
 
 
