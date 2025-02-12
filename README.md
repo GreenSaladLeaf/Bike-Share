@@ -1310,27 +1310,25 @@ GROUP BY member_casual
 
 ![image](https://github.com/user-attachments/assets/ef7e3504-49e9-4bfe-8e93-6b03a784284c)
 
-### 2. Trip Frequency and Patterns by User Type: Hourly, Weekly, and Monthly Trends
+### 2. Trip Frequency and Patterns by User Type
 #### Monthly Trip Trends
-- **Peak Usage Periods**:
-  - The number of trips by members peaks in **August(~437,000 trips)**, while casual riders peak in **July (~297,000 trips)**.
-  - **Summer months** (June–August) see the highest trip volumes for both groups.
 
-- **Member vs. Casual Trends**:
-  - Members consistently take more trips than casual riders across all months of the year.
-  - Both groups show a similar pattern of rising trip counts in spring, peaking in summer, and dropping in winter, indicating that both casual and member users are influenced by seasonal factors.
+- **Members** peaks in **August(~437,000 trips)**.
+- **Casual** riders peak in **July (~297,000 trips)**.
+- Members consistently take more trips than casual riders across all months of the year.
+- Both groups show a similar seasonal pattern, with trip counts rising in spring, peaking in summer, and dropping in winter. This indicates that both casual and member users are influenced by seasonal factors.
  
 #### Weekly Trip Trends
-- Members dominate usage on weekdays, peaking on **Wednesday with around 565,000 trips**. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
+- **Members** dominate usage on weekdays, peaking on **Wednesday (~565,000 trips)**. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
 
-- Casual users have a different pattern, with fewer trips during the weekdays and a significant spike in trips on **Saturday (374,000 trips) and Sunday**. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
+- **Casual users** show a different pattern, with fewer trips during the weekdays and a significant spike in trips on **Saturday (~374,000 trips)** and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
 
 #### Daily Trip Trends
-- Members exhibit distinct peaks in trip volume during typical commuting hours:
-  - Morning peak: Around 8 AM.
-  - Evening peak: Around 5 PM.
+- **Members** exhibit distinct peaks in trip volume during typical commuting hours:
+  - **Morning peak**: Around 8 AM.
+  - **Evening peak**: Around 5 PM.
 
-- Casual users display a steady increase in trips throughout the morning, peak around midday (5 PM), suggesting more flexible, leisure-based trips.
+- **Casual users** display a steady increase in trips throughout the morning, peak around early evening(5 PM), suggesting more flexible, leisure-based trips.
 
 - Both user types experience a significant drop in activity late at night, with the lowest volumes occurring between 12 AM and 5 AM.
 
@@ -1355,10 +1353,14 @@ ORDER BY
 
 ![image](https://github.com/user-attachments/assets/d45b51fa-c2eb-4cae-b462-40833c105b68)
 
-![image](https://github.com/user-attachments/assets/6230e3f6-2a3c-4d85-a0ca-bc796c9fd677)
+![image](https://github.com/user-attachments/assets/7468a3fd-ba0e-47f7-8857-36f4b47d9239)
+
 
 ### 3. Preferred Bike Types by Rider Type
-The following query explores bike preferences among members and casual riders:
+- **Casual riders** prefer **electric bikes (52.18%)** over **classic bikes (46.37%)**.
+- **Members** prefer **classic bikes (51.56%)** over **electric bikes (48.44%)**.
+- **Docked bikes** have minimal preference, with **casual riders (1.45%)** being the only group to use them.
+  
 ```sql
 SELECT 
   rideable_type AS bike_type,
@@ -1378,8 +1380,6 @@ ORDER BY ride_count DESC, member_casual
 |5	|docked_bike |casual |26,841|1.45|
 
 ![image](https://github.com/user-attachments/assets/e7ac1780-7ad3-4274-99ee-3c6c76f61e79)
-
-- This breakdown shows that casual riders prefer electric bikes (52.18%), while members prefer classic bikes (51.56%) over electric bikes (48.44%) . The preference for docked bikes is minimal with no member riders uses it.
 
 ### 4. Top 10 Routes
 ```sql
