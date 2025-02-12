@@ -1524,7 +1524,7 @@ LIMIT 10
 ### 5. Trip Duration Analysis: Member vs. Casual Riders
 To understand trip engagement levels, we analyzed trip duration by rider type and bike type.
 
-#### Median Vs. Average Trip Durations by Rider Type
+#### 5.1 Median Vs. Average Trip Durations by Rider Type
 - Casual riders take longer trips than members on both average and median measures.
 - On average, casual trips last **20 minutes**, which is **8 minutes longer** than member trips (12 minutes).
 - The median trip duration for casual riders is **12 minutes**, compared to **8 minutes** for members, reinforcing a trend of longer rides among casual users.
@@ -1561,8 +1561,19 @@ ON m.rider_type = a.rider_type
 
 ![image](https://github.com/user-attachments/assets/b80c23e9-42ce-4494-8de0-c322d7bcb6b3)
 
-#### Trip Durations by Bike Type
-Trip durations are further analyzed by bike type for both rider categories:
+#### 5.2 Trip Durations by Bike Type
+**Casual Riders Take Longer Trips Across All Bike Types**
+- Casual riders have longer median trip durations compared to members, suggesting more leisure-oriented or exploratory rides.
+- Especially on docked bikes, where casual riders have a median duration of 26 minutes, much longer than any other bike type.
+
+**Members Have More Consistent and Shorter Rides**
+- Members have shorter and more predictable trip durations, reinforcing the idea that they primarily use Cyclistic for commuting or frequent short trips.
+- The difference between classic and electric bikes is minimal for members (8 min vs. 9 min), showing they choose bikes based on availability rather than trip length.
+
+**Bike Type Preferences and Usage Patterns**
+- Electric bikes: Both members (8 min) and casuals (10 min) have the shortest trip durations, likely due to the convenience and speed of e-bikes.
+- Classic bikes: Casual riders (14 min) use classic bikes for longer rides than members (9 min), possibly for sightseeing or recreation.
+- Docked bikes (casual riders only): With the longest median trip duration (26 min), these are likely used for leisure or necessity when no other bikes are available.
 
 ```sql
 SELECT DISTINCT
@@ -1581,24 +1592,6 @@ ORDER BY
 |3	|casual |electric_bike |10.0|
 |4	|casual |classic_bike |14.0|
 |5	|casual |docked_bike |26.0|
-
-**Casual Riders Take Longer Trips Across All Bike Types**
-- Casual riders have longer median trip durations compared to members, suggesting more leisure-oriented or exploratory rides.
-- The biggest gap is seen in docked bikes, where casual riders have a median duration of 26 minutes, much longer than any other bike type.
-
-**Members Have More Consistent and Shorter Rides**
-- Members have shorter and more predictable trip durations, reinforcing the idea that they primarily use Cyclistic for commuting or frequent short trips.
-- The difference between classic and electric bikes is minimal for members (8 min vs. 9 min), showing they choose bikes based on availability rather than trip length.
-
-**Bike Type Preferences and Usage Patterns**
-- Electric bikes: Both members (8 min) and casuals (10 min) have the shortest trip durations, likely due to the convenience and speed of e-bikes.
-- Classic bikes: Casual riders (14 min) use classic bikes for longer rides than members (9 min), possibly for sightseeing or recreation.
-- Docked bikes (casual riders only): With the longest median trip duration (26 min), these are likely used for leisure or necessity when no other bikes are available.
-    
-**Business Strategies**:
-- Encouraging membership for casual riders: Since casual users take longer rides, offering membership perks for extended rides (e.g., discounts on longer rentals) could appeal to them.
-- Targeted pricing strategies: Cyclistic could introduce a pricing structure that makes shorter casual trips less expensive with membership, nudging casuals to convert.
-- Bike availability and placement: Since casual riders take the longest trips on docked bikes, increasing availability in key leisure areas may improve overall ridership.
   
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
@@ -1606,7 +1599,10 @@ ORDER BY
 ### 6. Trip Distance Analysis: Member vs. Casual Riders
 This analysis examines how far Cyclistic users typically travel, comparing median and average trip distances for casual riders and members.
 
-#### Average and Median Trip Durations by Rider Type
+#### 6.1 Average and Median Trip Distances by Rider Type
+- Casual riders travel slightly longer distances than members, with a median trip of **1.76 km** vs. **1.62 km** for members.
+- **Average** distance is **higher than the median** for both groups, indicating that some longer trips are skewing the average.
+
 ```sql
 WITH median_distance AS (
   SELECT 
@@ -1632,26 +1628,22 @@ JOIN average_distance AS a
 ON m.rider_type = a.rider_type
 
 ```
-
 |Row	|rider_type|median_distance_km|average_distance_km|
 |---|---|---|---|
 |1	|casual|1.76|2.34|
 |2	|member|1.62|2.23|
 
-- Casual riders travel slightly longer distances than members, with a median trip of 1.76 km vs. 1.62 km.
-- The average distance is higher than the median for both groups, indicating that some longer trips are skewing the average.
-- The difference between members and casual riders is not drastic, but casual riders tend to have more variability in their trip lengths.
-
-**Business Strategies**:
-- Since casual riders already take slightly longer trips, offering membership perks for extended rides (e.g., reduced rates after a certain distance) may encourage sign-ups.
-- Improving Member Experience:
-  - Members have slightly shorter and more consistent trip distances, indicating a focus on commuting and routine travel.
-  - Enhancing services like better bike availability at key commuter hubs could increase member retention.
-
 ![image](https://github.com/user-attachments/assets/54f3dec5-31f8-4cc5-81f4-aed1f02a38b1)
 
-#### Trip Distance by Bike Type
-The trip distance analysis by bike type highlights preferences and patterns in the use of different bike types by rider type.
+#### 6.2 Trip Distance by Bike Type
+**Casual vs. Member Riding Behavior**:
+- Casual riders tend to take longer trips than members across all bike types, suggesting more leisure-oriented usage.
+- Members have shorter, more consistent trip distances, indicating routine commuting patterns.
+
+**Bike Type Preferences & Usage Patterns**:
+- Electric bikes: Members travel the farthest on electric bikes (1.88 km median distance), likely due to their efficiency and speed for commuting. Casual riders take slightly shorter trips (1.79 km), possibly for convenience.
+- Classic bikes: Members travel shorter distances (1.43 km) compared to casual riders (1.72 km), suggesting that casual users may take longer scenic or recreational rides.
+- Docked bikes (casual riders only): Casual users take the longest trips on docked bikes (2.01 km), potentially due to station-based limitations requiring them to return the bike to a specific location.
 
 ```sql
 SELECT DISTINCT
@@ -1671,26 +1663,15 @@ ORDER BY
 |4	|casual|classic_bike|1.72|
 |5	|casual|docked_bike|2.01|
 
-**Casual vs. Member Riding Behavior**:
-- Casual riders tend to take longer trips than members across all bike types, suggesting more leisure-oriented usage.
-- Members have shorter, more consistent trip distances, indicating routine commuting patterns.
-
-**Bike Type Preferences & Usage Patterns**:
-- Electric bikes: Members travel the farthest on electric bikes (1.88 km median distance), likely due to their efficiency and speed for commuting. Casual riders take slightly shorter trips (1.79 km), possibly for convenience.
-- Classic bikes: Members travel shorter distances (1.43 km) compared to casual riders (1.72 km), suggesting that casual users may take longer scenic or recreational rides.
-- Docked bikes (casual riders only): Casual users take the longest trips on docked bikes (2.01 km), potentially due to station-based limitations requiring them to return the bike to a specific location.
-
-**Business Strategy**:
-- To convert casual riders into members, Cyclistic could promote membership perks for longer rides on docked and classic bikes.
-- For electric bikes, emphasizing time savings and convenience could attract both casual users and retain members.
-- Since casual riders take longer trips, targeted discounts on multi-hour rides or bundled trip passes could encourage sign-ups.
-
 ![image](https://github.com/user-attachments/assets/c78fda88-cd84-4256-8c72-3139616c5e8e)
 
-
-#### Distance Distribution
+#### 6.3 Distance Distribution
 The distance analysis highlights the patterns in trip lengths within the bike-sharing system, segmented into distinct categories:
 
+- Both casual and member riders display a similar pattern in their trip distances. For both groups, the vast majority of trips are short, followed by medium, long, and extra long trips. 
+  
+- Notably,for casual riders, short trips (56.53%) combined with medium trips (35.03%) make up over 91% of their total trips, highlighting that they predominantly use the service for shorter journeys.
+  
 **Distance Breakdown by Rider Type**:
 ```sql
 SELECT
@@ -1724,17 +1705,6 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 |7	|Long (5km-10km)|member|277,921|7.92|
 |8	|Very Long (10km+)|member|23,412|0.67|
 
-**Rider Type Behavior**:
--Both casual and member riders display a similar pattern in their trip distances. For both groups, the vast majority of trips are short, followed by medium, long, and extra long trips. 
-  
-- Notably,for casual riders, short trips (56.53%) combined with medium trips (35.03%) make up over 91% of their total trips, highlighting that they predominantly use the service for shorter journeys.
-  
-**Business Strategy**:
-- Bundle Rides at a Discount:
-Create bundled packages specifically tailored for short and medium trips (e.g., “Buy 10 rides at a special price”). This package can demonstrate immediate cost savings compared to individual rides, making the membership upgrade more appealing to casual users.
-- Dynamic Pricing Incentives:
-Offer targeted discounts or loyalty rewards for riders who frequently take short and medium trips. For example, after a set number of rides, provide a discount or bonus credits if they convert to a membership. This approach leverages their typical usage pattern to deliver tangible value.
-
 ![image](https://github.com/user-attachments/assets/40fc9f58-08fe-44d7-aaba-b4fc48014721)
 
 ![image](https://github.com/user-attachments/assets/c22733ba-e522-4cfa-b25c-3284bbe76206)
@@ -1742,7 +1712,33 @@ Offer targeted discounts or loyalty rewards for riders who frequently take short
 
 
 ---
-
+Median vs. Average Trip Durations by rider type
 **Business Strategies**
 - Casual riders take longer trips, membership perks for extended rides could attract sign-ups.
 - Members' predictable, shorter trips suggest commuter-focused incentives might work best for retention.
+
+Trip Duration by Bike Type:    
+**Business Strategies**:
+- Encouraging membership for casual riders: Since casual users take longer rides, offering membership perks for extended rides (e.g., discounts on longer rentals) could appeal to them.
+- Targeted pricing strategies: Cyclistic could introduce a pricing structure that makes shorter casual trips less expensive with membership, nudging casuals to convert.
+- Bike availability and placement: Since casual riders take the longest trips on docked bikes, increasing availability in key leisure areas may improve overall ridership.
+
+6.1 Average and Median Trip Distances by Rider Type
+**Business Strategies**:
+- Since casual riders already take slightly longer trips, offering membership perks for extended rides (e.g., reduced rates after a certain distance) may encourage sign-ups.
+- Improving Member Experience:
+  - Members have slightly shorter and more consistent trip distances, indicating a focus on commuting and routine travel.
+  - Enhancing services like better bike availability at key commuter hubs could increase member retention.
+
+6.2
+**Business Strategy**:
+- To convert casual riders into members, Cyclistic could promote membership perks for longer rides on docked and classic bikes.
+- For electric bikes, emphasizing time savings and convenience could attract both casual users and retain members.
+- Since casual riders take longer trips, targeted discounts on multi-hour rides or bundled trip passes could encourage sign-ups.
+
+6.3
+**Business Strategy**:
+- Bundle Rides at a Discount:
+Create bundled packages specifically tailored for short and medium trips (e.g., “Buy 10 rides at a special price”). This package can demonstrate immediate cost savings compared to individual rides, making the membership upgrade more appealing to casual users.
+- Dynamic Pricing Incentives:
+Offer targeted discounts or loyalty rewards for riders who frequently take short and medium trips. For example, after a set number of rides, provide a discount or bonus credits if they convert to a membership. This approach leverages their typical usage pattern to deliver tangible value.
