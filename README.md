@@ -1522,11 +1522,14 @@ LIMIT 10
 
 
 ### 5. Trip Duration Analysis: Member vs. Casual Riders
-This section explores trip duration patterns to understand user engagement.
-- Overall Trends: What is the typical trip length?
-- Rider and Bike Type Breakdown: How do durations vary across rider and bike types?
+To understand trip engagement levels, we analyzed trip duration by rider type and bike type.
 
-#### Average and Median Trip Durations by Rider Type
+#### Median Vs. Average Trip Durations by Rider Type
+- Casual riders take longer trips than members on both average and median measures.
+- On average, casual trips last **20 minutes**, which is **8 minutes longer** than member trips (12 minutes).
+- The median trip duration for casual riders is **12 minutes**, compared to **8 minutes** for members, reinforcing a trend of longer rides among casual users.
+- Members, on the other hand, show a more consistent pattern with shorter trips.
+
 ```sql
 WITH median_duration AS (
   SELECT 
@@ -1555,15 +1558,6 @@ ON m.rider_type = a.rider_type
 |---|---|---|---|
 |1	|casual |12.0|20.0|
 |2 	|member |8.0 |12.0|
-
-**Member vs. Casual Usage Patterns**
-- Casual riders have a median trip duration of 12 minutes but an average of 20 minutes, suggesting that longer trips are skewing the average.
-- Members show a more consistent pattern, with a median of 8 minutes and an average of 12 minutes, indicating predictable commuting behavior.
-- Casual riders are likely using bikes for leisure or tourism, whereas members' shorter, consistent trips suggest regular commuting.
-
-**Business Strategies**
-- Casual riders take longer trips, membership perks for extended rides could attract sign-ups.
-- Members' predictable, shorter trips suggest commuter-focused incentives might work best for retention.
 
 ![image](https://github.com/user-attachments/assets/b80c23e9-42ce-4494-8de0-c322d7bcb6b3)
 
@@ -1746,3 +1740,9 @@ Offer targeted discounts or loyalty rewards for riders who frequently take short
 ![image](https://github.com/user-attachments/assets/c22733ba-e522-4cfa-b25c-3284bbe76206)
 
 
+
+---
+
+**Business Strategies**
+- Casual riders take longer trips, membership perks for extended rides could attract sign-ups.
+- Members' predictable, shorter trips suggest commuter-focused incentives might work best for retention.
