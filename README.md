@@ -1432,7 +1432,8 @@ SELECT
 FROM 
   route_user_type
 ```
-![image](https://github.com/user-attachments/assets/570e5245-1498-40f6-9bc6-4b2bb41aa1de)
+![image](https://github.com/user-attachments/assets/dcce08a5-7c09-4b39-95ec-49d5098e4f9c)
+
 
 #### Top 10 Routes: Seasonal Usage
 
