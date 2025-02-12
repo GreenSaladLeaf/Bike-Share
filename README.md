@@ -1435,17 +1435,16 @@ FROM
 ![image](https://github.com/user-attachments/assets/dcce08a5-7c09-4b39-95ec-49d5098e4f9c)
 
 
-#### Top 10 Routes: Seasonal Usage
-- **1. Casual-Dominated Routes: Strong Summer Peaks, Sharp Winter Decline**
+#### 4.3 Top 10 Routes: Seasonal Usage Patterns
+- **1. Casual-Dominated Routes: Strong Summer Peaks, Drop in Winter**
 
   - Routes such as:
      - "Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave"
      - "Dusable Lake Shore Dr & North Blvd - Streeter Dr & Grand Ave"
      - "Dusable Lake Shore Dr & Monroe St - Shedd Aquarium"
+show a high percentage of trips in summer (above 40%) but drop significantly in winter. They are heavily used by casual riders, reinforcing that these routes are likely tourist or leisure-friendly.
 
-    These routes show a high percentage of trips in summer (above 40%) but drop significantly in winter. They are also heavily used by casual riders, reinforcing that these routes are likely tourist or leisure-friendly.
-
-    These routes align with locations that are popular attractions in Chicago.
+  - These routes align with locations that are popular attractions in Chicago.
     
 - **2. Member-Dominated Routes: Fall Peaks and More Even Seasonal Distribution**
 
@@ -1456,13 +1455,13 @@ FROM
 
     These routes show a higher percentage of trips in fall (above 40%) and a more evenly distributed seasonal pattern compared to casual-heavy routes. While winter remains the lowest period, these routes retain higher winter usage than tourist-dominated routes.
 
-    Member percentage remains consistently high, suggesting reliance on these routes for transportation rather than leisure.
+  - Member percentage remains consistently high, suggesting reliance on these routes for transportation rather than leisure.
     
 - **3. General Seasonal Trends: Winter Usage Drops Across All Routes**
 
-Regardless of membership type, winter consistently has the lowest trip volume.
+  - Regardless of membership type, winter consistently has the lowest trip volume.
 Member-dominant routes retain some winter usage, but casual-heavy routes see near-total drop-off.
-This suggests that weather plays a critical role in ridership behavior, especially among casual users.
+  - This suggests that weather plays a critical role in ridership behavior, especially among casual users.
 
 
 ```sql
