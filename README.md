@@ -1311,19 +1311,19 @@ GROUP BY member_casual
 ![image](https://github.com/user-attachments/assets/ef7e3504-49e9-4bfe-8e93-6b03a784284c)
 
 ### 2. Trip Frequency and Patterns by User Type
-#### Monthly Trip Trends
+#### 2.1 Monthly Trip Trends
 
 - **Members** peaks in **August(~437,000 trips)**.
 - **Casual** riders peak in **July (~297,000 trips)**.
 - Members consistently take more trips than casual riders across all months of the year.
 - Both groups show a similar seasonal pattern, with trip counts rising in spring, peaking in summer, and dropping in winter. This indicates that both casual and member users are influenced by seasonal factors.
  
-#### Weekly Trip Trends
+#### 2.2 Weekly Trip Trends
 - **Members** dominate usage on weekdays, peaking on **Wednesday (~565,000 trips)**. This trend indicates that members primarily use Cyclistic for weekday commuting, likely for work or school.
 
 - **Casual users** show a different pattern, with fewer trips during the weekdays and a significant spike in trips on **Saturday (~374,000 trips)** and Sunday. This suggests that casual users mainly use the service for leisure and recreational purposes over the weekend.
 
-#### Daily Trip Trends
+#### 2.3 Daily Trip Trends
 - **Members** exhibit distinct peaks in trip volume during typical commuting hours:
   - **Morning peak**: Around 8 AM.
   - **Evening peak**: Around 5 PM.
@@ -1382,7 +1382,27 @@ ORDER BY ride_count DESC, member_casual
 ![image](https://github.com/user-attachments/assets/7c6979c7-5005-4c1c-aab2-7e3fde1b163b)
 
 
-### 4. Top 10 Routes
+### 4. Top 10 Popular Routes
+#### 4.1 Overview of the Top 10 Routes
+- The most frequently used route is **Calumet Ave & 33rd St - State St & 33rd St** with **11,823 trips**.
+- Many top routes are clustered around **South Chicago**, highlighting areas of concentrated commuter and leisure activity.
+
+![image](https://github.com/user-attachments/assets/99899821-7bc0-4b7d-9d28-a7ccde8d0a8d)
+
+#### 4.2 Rider Type Breakdown: Member vs. Casual Users
+
+- **High Member Rider Usage Routes**:
+  - Calumet Ave & 33rd St - State St & 33rd St (96.03% member trips)
+  - MLK Jr Dr & 29th St - State St & 33rd St (96.16%)
+  - Loomis St & Lexington St - Morgan St & Polk St (93.73%)
+  - Likely used for daily commuting by regular users.
+
+- **High Casual Rider Usage Routes**:
+  - Dusable Lake Shore Dr & Monroe St - Shedd Aquarium (88.64%)
+  - Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave (88.49% casual trips)
+  - Dusable Lake Shore Dr & North Blvd - Streeter Dr & Grand Ave (79.71%)
+  - Indicates heavy tourist & leisure activity near lakefront attractions.
+
 ```sql
 WITH route_user_type AS (
   -- Top 10 popular routes and counts for member and casual user trips
@@ -1412,23 +1432,6 @@ SELECT
 FROM 
   route_user_type
 ```
-- The most frequently used route is "Calumet Ave & 33rd St - State St & 33rd St" with 11,823 trips.
-- Ellis Ave & 60th St - University Ave & 57th St is another highly traveled route, indicating a potential hub near educational institutions.
-- Routes near Dusable Lake Shore Dr appear multiple times, suggesting high tourist or recreational traffic.
-- The top routes are clustered around South Chicago, suggesting areas of high commuter or leisure activity.
-
-![image](https://github.com/user-attachments/assets/99899821-7bc0-4b7d-9d28-a7ccde8d0a8d)
-
-#### Top 10 Routes: Member vs. Casual Usage Breakdown
-- **High Member Rider Usage Routes**:
-  - Calumet Ave & 33rd St - State St & 33rd St has the highest member usage (96.03%), indicating a strong reliance on this route for commuting or regular travel.
-  - Other heavily member-dominated routes include MLK Jr Dr & 29th St - State St & 33rd St (96.16%) and Loomis St & Lexington St - Morgan St & Polk St (93.73%). These routes likely serve commuters and frequent users.
-
-- **High Casual Rider Usage Routes**:
-  - Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave is dominated by casual riders (88.49%), suggesting that tourists or leisure riders heavily use this route.
-  - Dusable Lake Shore Dr & Monroe St - Shedd Aquarium (88.64%) further confirms that casual riders prefer lakefront and recreational destinations.
-  - Marketing Implication: Target casual riders with short-term promotions, flexible rental options, and discounts at these locations to increase engagement.
-
 ![image](https://github.com/user-attachments/assets/570e5245-1498-40f6-9bc6-4b2bb41aa1de)
 
 #### Top 10 Routes: Seasonal Usage
