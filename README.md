@@ -1583,7 +1583,7 @@ ORDER BY
 |3	|casual |electric_bike |10.0|
 |4	|casual |classic_bike |14.0|
 |5	|casual |docked_bike |26.0|
-  
+
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
 ### 6. Trip Distance Analysis: Member vs. Casual Riders
@@ -1706,130 +1706,57 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 ## Recommendations: Converting Casual Riders to Members
 Based on the analysis, casual riders make up **34.52%** of all trips, representing a strong conversion opportunity. To increase membership sign-ups, Cyclistic should implement targeted strategies based on casual riders' behavior, preferences, and motivations.
 
-### Trip Frequency and Patterns by User Type
-1. Targeted Membership Promotions Based on Seasonal Usage Patterns
-- Offer Time-Limited Discounts Before Peak Riding Seasons
-Casual ridership peaks in summer (July-August), making it the best time to promote memberships.
-Recommendation: Launch pre-summer membership promotions (e.g., “Sign up in May & get your first month free”) to encourage conversion before peak riding months.
-Winter Strategy: Offer off-season discounts (e.g., “Winter membership deal: 30% off for first 3 months”) to encourage year-round sign-ups.
+### 1. Targeted Membership Promotions Based on Seasonal Usage Patterns
+- **Offer Time-Limited Discounts Before Peak Riding Seasons**
+  - Casual ridership peaks in **summer (July-August)**, making it the best time to promote memberships.
+  - **Recommendation**: Launch **pre-summer membership promotions** (e.g., **“Sign up in May & get your first month free”**) to encourage conversion before peak riding months.
+  - **Winter Strategy**: Offer off-season discounts (e.g., **“Winter membership deal: 30% off for first 3 months”**) to encourage year-round sign-ups.
 
-- Introduce a "Weekend-Only" Membership Plan
-Many casual riders use Cyclistic only on weekends.
-Recommendation: Offer a lower-cost membership that provides unlimited rides on Saturdays & Sundays, appealing to leisure riders.
+- **Introduce a "Weekend-Only" Membership Plan**
+  - Many casual riders use Cyclistic primarily on weekends.
+  - **Recommendation**: Offer a **lower-cost membership** that provides **unlimited rides on Saturdays & Sundays**, appealing to leisure riders who prefer weekend outings.
 
-one for 5pm
+- **Optimize Promotions Based on Casual Rider Peak Hours**
+  - Casual riders are most active between **12 PM and 7 PM, with a peak at 5 PM**.
+  - **Recommendation**: Launch "**Join Now, Ride Free This Evening" promotions** between **3 PM and 7 PM** to encourage **on-the-spot membership sign-ups**.
+  - **Recommendation**: Use **push notifications at 5 PM** offering a **special membership deal** for casual riders currently using the service.
 
-### 3. Preferred Bike Types by Rider Type
-Casual riders prefer electric bikes (52.18%) → Offer exclusive e-bike benefits to members.
-🎯 Electric Bikes: Emphasizing Speed & Convenience
-Casual riders use electric bikes for quicker trips (avg. 15 min).
-Strategy: Market e-bike membership perks to both casual and current members:
-Exclusive member-only discounted e-bike rates
-Priority access to e-bikes in high-demand areas
-Fast-track docking zones for quicker commutes
-
-🎯 Classic & Docked Bikes: Perks for Leisure Riders
-Casual riders take the longest trips on docked bikes (49 min avg).
-Strategy: Promote membership benefits that enhance leisure rides:
-- Discounted rates for multi-hour rides
-- Weekend-long rental bundles with classic bikes
-- Priority dock access in key tourist-heavy zones
-
-  🎯 Expand Docked Bike Access in Leisure Zones
-Casual riders take the longest trips on docked bikes, indicating leisure-oriented rides.
-Strategy: Increase docked bike placement in parks, lakefront paths, and tourist hotspots to boost casual ridership and encourage membership upgrades.
-
-
-### 4. 4.3 Top 10 Routes: Seasonal Usage Patterns
-🎯 Advertise Membership Benefits at High-Casual-Use Stations
-Casual riders are concentrated around tourist & lakefront routes.
-Recommendation: Place QR codes at docking stations in casual-heavy areas, allowing riders to instantly check how much they’d save with a membership.
-
-### 5. Trip Duration Analysis: Member vs. Casual Riders
-
-Casual riders take longer trips than members across all bike types.
-Strategy: Introduce membership perks for extended rides, such as:
-Lower per-minute rates for rides beyond 30 minutes
-Flat-rate pricing for long rides on classic and docked bikes
-
-Unlimited weekend ride pass with membership
- Targeted Pricing for Short & Medium Trips
+### 2. Tailor Membership Incentives by Bike Type
+- **Leverage Electric Bike Popularity to Drive Membership Sign-Ups**
+  - Casual riders prefer **electric bike(52%)**, using them for **shorter, efficient rides** (10 min, 1.79 km).
+  - **Recommendation**: Provide **priority e-bike access** or **discounted per-minute pricing for members only**, making membership the best value option.
+- **Introduce a "Leisure Rider Membership" for Classic & Docked Bike Users**
+  - Casual riders take **longer trips** on **classic bikes (14 min, 1.72 km)** and **docked bikes (26 min, 2.01 km)**.
+  - **Recommendation**: Offer **extended ride time perks** for members using **classic and docked bikes**, catering to riders who prefer longer, more relaxed rides.
+- **Optimize Docked Bike Station Availability**
+  - Since casual riders take longer trips on docked bikes, **expanding docked bike access in key leisure areas** can improve accessibility..
+  - **Recommendation**: Introduce **"Members-Only Reserved Docking Spots"** to encourage frequent docked bike users to **upgrade to membership**.
  
-Members’ trips are shorter and more consistent, likely due to commuting patterns.
-Strategy: Offer a dynamic pricing structure that makes shorter casual trips less expensive with membership, nudging frequent casual riders to sign up.
+### 3.Leverage Popular Routes to Encourage Membership Sign-Ups
+- **Capitalize on High-Traffic Summer Routes for Membership Conversions**
+  - Casual riders frequently use these **three routes in summer, with over 40% of trips occurring on each route**:
+    - **Dusable Lake Shore Dr & Monroe St → Streeter Dr & Grand Ave**
+    - **Dusable Lake Shore Dr & North Blvd → Streeter Dr & Grand Ave**
+    - **Dusable Lake Shore Dr & Monroe St → Shedd Aquarium**
+  - **Recommendation**: Place **membership promotion signage and QR codes** for instant sign-ups at key stations along these routes.
+  - **Recommendation**:Introduce a **"Summer Ride Bundle"** that includes **discount on multiple trips** along these routes, with **additional perks for members** and an **easy upgrade** path to full membership.
+    - **Example: “Unlock bigger savings this summer! Get a discounted ride bundle for your favorite routes—plus an exclusive offer to upgrade to a full membership at a special rate after your first few rides."**
+    - This allows casual riders to **experience multiple trips at a lower cost** while making membership the **natural next step**.
 
-### 6. Trip Distance Analysis: Member vs. Casual Riders
+### 4. Use Ride Distance & Duration Insights to Tailor Membership Perks
+- **Casual riders take slightly longer trips than members**
+  - Casual **median trip duration: 12 mins** vs. member median: **8 mins**
+  - Casual **median trip distance: 1.76 km** vs. member median: **1.62 km**
+  - **Recommendation**: Introduce **membership perks for extended rides**, such as:
+    - Lower per-minute rates for rides beyond **10 minutes**.
+    - **Flat-rate pricing** for **longer classic & docked bike rides**, making membership the best choice for longer trips.
+  - **Recommendation**: Offer **distance-based membership perks** (e.g., **"Ride further for less—members save on longer rides"**) to target casual users who take longer trips.
+ 
+### 5. Optimize Membership Offers for Short & Medium Distance Riders
+- **Most Casual Riders Take Short or Medium Distance Trips**
+  - **56.5%** of casual trips fall into the **short distance category (1-2 km, ~10 min trips)**.
+  - **35%** of casual trips fall into the **medium distance category (2-5 km)**.
+  - **Recommendation**: Introduce a **"Frequent Rider Membership"** tailored for short/medium trips.
+  - Offer a **low-cost monthly plan** that includes **unlimited short rides (up to 2 km)** or **discounted fares on medium rides**.
+  - Promote this through **in-app messages and push notifications** when casual riders complete short/medium trips, showing them **how much they could save as members**.
 
-🎯 Bundled Ride Passes for Short & Medium Trips
-Casual riders frequently take short (under 2 miles) and medium trips (2-4 miles).
-Strategy: Offer discounted ride bundles for casual users, encouraging them to see membership as a cost-saving alternative.
-Example: “Buy 10 short rides for $XX” – showing savings vs. single-trip rates
-Offer multi-hour packages for long-distance riders
-🎯 Loyalty Rewards to Nudge Membership Upgrades
-Many casual riders take multiple rides per month but don’t commit to membership.
-Strategy: Implement a "Frequent Rider" program where casuals earn:
-Ride credits toward membership discounts
-Exclusive perks after 5+ rides in a month (e.g., free ride day, priority access)
-Dynamic pricing rewards (e.g., casual riders pay less per ride as they approach membership cost)
-
-
-
-🎯 Introduce a "First Ride Free" or "Trial Membership" Offer
-Many casual riders may hesitate to commit to a full membership without experiencing the benefits.
-Recommendation: Offer a "Try Before You Buy" model—after 3 casual trips within a month, users receive a free 7-day membership trial.
-
-3. Enhance Perks & Benefits for Casual Riders to Upgrade
-🎯 Create a "Frequent Rider" Program for Casual Users
-Some casual riders use Cyclistic regularly but haven't committed to membership.
-Recommendation: Introduce a loyalty-based discount system:
-Ride 5 times in a month? Get a discount on your next ride.
-Ride 10 times? Get a 25% discount on membership.
-This encourages casual users to see the value in upgrading.
-
-
-5. Improve Marketing & Communication Targeting Casual Riders
-🎯 Leverage App Notifications & Personalized Emails
-Many casual riders might not even be aware of membership benefits.
-Recommendation:
-Post-ride prompts: After a casual rider takes 3-5 rides, send a personalized notification:
-“You’ve taken 5 rides this month! A membership would have saved you $X. Try it for free!”
-Targeted emails: Send ride history recaps with estimated cost savings if they were members.
-
-6. Adjust Pricing & Plan Flexibility to Match Casual User Behavior
-
-🎯 Bundle Memberships with Other City Services
-Tourists and leisure riders may already be using other Chicago transit services.
-Recommendation: Partner with CTA (public transport), local hotels, or museums to offer discounted Cyclistic memberships as part of visitor packages.
-
-
----
-Median vs. Average Trip Durations by rider type
-**Business Strategies**
-- Casual riders take longer trips, membership perks for extended rides could attract sign-ups.
-- Members' predictable, shorter trips suggest commuter-focused incentives might work best for retention.
-
-Trip Duration by Bike Type:    
-**Business Strategies**:
-- Encouraging membership for casual riders: Since casual users take longer rides, offering membership perks for extended rides (e.g., discounts on longer rentals) could appeal to them.
-- Targeted pricing strategies: Cyclistic could introduce a pricing structure that makes shorter casual trips less expensive with membership, nudging casuals to convert.
-- Bike availability and placement: Since casual riders take the longest trips on docked bikes, increasing availability in key leisure areas may improve overall ridership.
-
-6.1 Average and Median Trip Distances by Rider Type
-**Business Strategies**:
-- Since casual riders already take slightly longer trips, offering membership perks for extended rides (e.g., reduced rates after a certain distance) may encourage sign-ups.
-- Improving Member Experience:
-  - Members have slightly shorter and more consistent trip distances, indicating a focus on commuting and routine travel.
-  - Enhancing services like better bike availability at key commuter hubs could increase member retention.
-
-6.2
-**Business Strategy**:
-- To convert casual riders into members, Cyclistic could promote membership perks for longer rides on docked and classic bikes.
-- For electric bikes, emphasizing time savings and convenience could attract both casual users and retain members.
-- Since casual riders take longer trips, targeted discounts on multi-hour rides or bundled trip passes could encourage sign-ups.
-
-6.3
-**Business Strategy**:
-- Bundle Rides at a Discount:
-Create bundled packages specifically tailored for short and medium trips (e.g., “Buy 10 rides at a special price”). This package can demonstrate immediate cost savings compared to individual rides, making the membership upgrade more appealing to casual users.
-- Dynamic Pricing Incentives:
-Offer targeted discounts or loyalty rewards for riders who frequently take short and medium trips. For example, after a set number of rides, provide a discount or bonus credits if they convert to a membership. This approach leverages their typical usage pattern to deliver tangible value.
