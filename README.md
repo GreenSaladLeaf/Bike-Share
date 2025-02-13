@@ -1312,7 +1312,6 @@ GROUP BY member_casual
 
 ### 2. Trip Frequency and Patterns by User Type
 #### 2.1 Monthly Trip Trends
-
 - **Members** peaks in **August(~437,000 trips)**.
 - **Casual** riders peak in **July (~297,000 trips)**.
 - Members consistently take more trips than casual riders across all months of the year.
@@ -1390,7 +1389,6 @@ ORDER BY ride_count DESC, member_casual
 ![image](https://github.com/user-attachments/assets/99899821-7bc0-4b7d-9d28-a7ccde8d0a8d)
 
 #### 4.2 Rider Type Breakdown: Member vs. Casual Users
-
 - **High Member Rider Usage Routes**:
   - Calumet Ave & 33rd St - State St & 33rd St (96.03% member trips)
   - MLK Jr Dr & 29th St - State St & 33rd St (96.16%)
@@ -1398,8 +1396,8 @@ ORDER BY ride_count DESC, member_casual
   - Likely used for daily commuting by regular users.
 
 - **High Casual Rider Usage Routes**:
-  - Dusable Lake Shore Dr & Monroe St - Shedd Aquarium (88.64%)
-  - Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave (88.49% casual trips)
+  - Dusable Lake Shore Dr & Monroe St - Shedd Aquarium (88.64% casual trips)
+  - Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave (88.49%)
   - Dusable Lake Shore Dr & North Blvd - Streeter Dr & Grand Ave (79.71%)
   - Indicates heavy tourist & leisure activity near lakefront attractions.
 
@@ -1434,35 +1432,29 @@ FROM
 ```
 ![image](https://github.com/user-attachments/assets/dcce08a5-7c09-4b39-95ec-49d5098e4f9c)
 
-
 #### 4.3 Top 10 Routes: Seasonal Usage Patterns
 - **1. Casual-Dominated Routes: Strong Summer Peaks, Drop in Winter**
-
   - Routes such as:
      - "Dusable Lake Shore Dr & Monroe St - Streeter Dr & Grand Ave"
      - "Dusable Lake Shore Dr & North Blvd - Streeter Dr & Grand Ave"
      - "Dusable Lake Shore Dr & Monroe St - Shedd Aquarium"
 show a high percentage of trips in summer (above 40%) but drop significantly in winter. They are heavily used by casual riders, reinforcing that these routes are likely tourist or leisure-friendly.
-
   - These routes align with locations that are popular attractions in Chicago.
     
 - **2. Member-Dominated Routes: Fall Peaks and More Even Seasonal Distribution**
-
   - Routes such as:
-    - "Mik Jr Dr & 29th St - State St & 33rd St"
+    - "Mlk Jr Dr & 29th St - State St & 33rd St"
     - "Calumet Ave & 33rd St - State St & 33rd St"
     - "Loomis St & Lexington St - Morgan St & Polk St"
 
-    These routes show a higher percentage of trips in fall (above 40%) and a more evenly distributed seasonal pattern compared to casual-heavy routes. While winter remains the lowest period, these routes retain higher winter usage than tourist-dominated routes.
+  - These routes show a higher percentage of trips in fall (above 40%) and a more evenly distributed seasonal pattern compared to casual-heavy routes. While winter remains the lowest period, these routes retain higher winter usage than tourist-dominated routes.
 
   - Member percentage remains consistently high, suggesting reliance on these routes for transportation rather than leisure.
     
 - **3. General Seasonal Trends: Winter Usage Drops Across All Routes**
-
   - Regardless of membership type, winter consistently has the lowest trip volume.
 Member-dominant routes retain some winter usage, but casual-heavy routes see near-total drop-off.
   - This suggests that weather plays a critical role in ridership behavior, especially among casual users.
-
 
 ```sql
 WITH SeasonalData AS (
@@ -1519,7 +1511,6 @@ LIMIT 10
 ```
 
 ![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
-
 
 ### 5. Trip Duration Analysis: Member vs. Casual Riders
 To understand trip engagement levels, we analyzed trip duration by rider type and bike type.
@@ -1595,7 +1586,6 @@ ORDER BY
   
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
-
 ### 6. Trip Distance Analysis: Member vs. Casual Riders
 This analysis examines how far Cyclistic users typically travel, comparing median and average trip distances for casual riders and members.
 
@@ -1665,14 +1655,18 @@ ORDER BY
 
 ![image](https://github.com/user-attachments/assets/c78fda88-cd84-4256-8c72-3139616c5e8e)
 
-#### 6.3 Distance Distribution
-The distance analysis highlights the patterns in trip lengths within the bike-sharing system, segmented into distinct categories:
+#### 6.3 Distance Distribution by Rider Type
+To better understand trip patterns, trip distances are categorized into four groups:
+- **Short (10m - 2km)**
+- **Medium (2km - 5km)**
+- **Long (5km - 10km)**
+- **Very Long (10km+)**
 
-- Both casual and member riders display a similar pattern in their trip distances. For both groups, the vast majority of trips are short, followed by medium, long, and extra long trips. 
+- **Both casual and member riders display a similar trip distribution patterns**, with short trips being the most common, followed by medium, long, and very long trips. 
+- **Casual riders**: Over 91% of trips fall within the short (56.53%) and medium (35.03%) distance categories.
+- **Members**: Follow a similar pattern, with 59.88% of trips being short and 31.53% being medium.
+- The small percentage of **very long trips** (0.95% for casuals, 0.67% for members) suggests that long-distance rides are rare in Cyclistic’s system.
   
-- Notably,for casual riders, short trips (56.53%) combined with medium trips (35.03%) make up over 91% of their total trips, highlighting that they predominantly use the service for shorter journeys.
-  
-**Distance Breakdown by Rider Type**:
 ```sql
 SELECT
   distance_category,
@@ -1709,6 +1703,103 @@ ORDER BY member_casual, percentage_within_rider_type DESC
 
 ![image](https://github.com/user-attachments/assets/c22733ba-e522-4cfa-b25c-3284bbe76206)
 
+## Recommendations: Converting Casual Riders to Members
+Based on the analysis, casual riders make up **34.52%** of all trips, representing a strong conversion opportunity. To increase membership sign-ups, Cyclistic should implement targeted strategies based on casual riders' behavior, preferences, and motivations.
+
+### Trip Frequency and Patterns by User Type
+1. Targeted Membership Promotions Based on Seasonal Usage Patterns
+- Offer Time-Limited Discounts Before Peak Riding Seasons
+Casual ridership peaks in summer (July-August), making it the best time to promote memberships.
+Recommendation: Launch pre-summer membership promotions (e.g., “Sign up in May & get your first month free”) to encourage conversion before peak riding months.
+Winter Strategy: Offer off-season discounts (e.g., “Winter membership deal: 30% off for first 3 months”) to encourage year-round sign-ups.
+
+- Introduce a "Weekend-Only" Membership Plan
+Many casual riders use Cyclistic only on weekends.
+Recommendation: Offer a lower-cost membership that provides unlimited rides on Saturdays & Sundays, appealing to leisure riders.
+
+one for 5pm
+
+### 3. Preferred Bike Types by Rider Type
+Casual riders prefer electric bikes (52.18%) → Offer exclusive e-bike benefits to members.
+🎯 Electric Bikes: Emphasizing Speed & Convenience
+Casual riders use electric bikes for quicker trips (avg. 15 min).
+Strategy: Market e-bike membership perks to both casual and current members:
+Exclusive member-only discounted e-bike rates
+Priority access to e-bikes in high-demand areas
+Fast-track docking zones for quicker commutes
+
+🎯 Classic & Docked Bikes: Perks for Leisure Riders
+Casual riders take the longest trips on docked bikes (49 min avg).
+Strategy: Promote membership benefits that enhance leisure rides:
+- Discounted rates for multi-hour rides
+- Weekend-long rental bundles with classic bikes
+- Priority dock access in key tourist-heavy zones
+
+  🎯 Expand Docked Bike Access in Leisure Zones
+Casual riders take the longest trips on docked bikes, indicating leisure-oriented rides.
+Strategy: Increase docked bike placement in parks, lakefront paths, and tourist hotspots to boost casual ridership and encourage membership upgrades.
+
+
+### 4. 4.3 Top 10 Routes: Seasonal Usage Patterns
+🎯 Advertise Membership Benefits at High-Casual-Use Stations
+Casual riders are concentrated around tourist & lakefront routes.
+Recommendation: Place QR codes at docking stations in casual-heavy areas, allowing riders to instantly check how much they’d save with a membership.
+
+### 5. Trip Duration Analysis: Member vs. Casual Riders
+
+Casual riders take longer trips than members across all bike types.
+Strategy: Introduce membership perks for extended rides, such as:
+Lower per-minute rates for rides beyond 30 minutes
+Flat-rate pricing for long rides on classic and docked bikes
+
+Unlimited weekend ride pass with membership
+ Targeted Pricing for Short & Medium Trips
+ 
+Members’ trips are shorter and more consistent, likely due to commuting patterns.
+Strategy: Offer a dynamic pricing structure that makes shorter casual trips less expensive with membership, nudging frequent casual riders to sign up.
+
+### 6. Trip Distance Analysis: Member vs. Casual Riders
+
+🎯 Bundled Ride Passes for Short & Medium Trips
+Casual riders frequently take short (under 2 miles) and medium trips (2-4 miles).
+Strategy: Offer discounted ride bundles for casual users, encouraging them to see membership as a cost-saving alternative.
+Example: “Buy 10 short rides for $XX” – showing savings vs. single-trip rates
+Offer multi-hour packages for long-distance riders
+🎯 Loyalty Rewards to Nudge Membership Upgrades
+Many casual riders take multiple rides per month but don’t commit to membership.
+Strategy: Implement a "Frequent Rider" program where casuals earn:
+Ride credits toward membership discounts
+Exclusive perks after 5+ rides in a month (e.g., free ride day, priority access)
+Dynamic pricing rewards (e.g., casual riders pay less per ride as they approach membership cost)
+
+
+
+🎯 Introduce a "First Ride Free" or "Trial Membership" Offer
+Many casual riders may hesitate to commit to a full membership without experiencing the benefits.
+Recommendation: Offer a "Try Before You Buy" model—after 3 casual trips within a month, users receive a free 7-day membership trial.
+
+3. Enhance Perks & Benefits for Casual Riders to Upgrade
+🎯 Create a "Frequent Rider" Program for Casual Users
+Some casual riders use Cyclistic regularly but haven't committed to membership.
+Recommendation: Introduce a loyalty-based discount system:
+Ride 5 times in a month? Get a discount on your next ride.
+Ride 10 times? Get a 25% discount on membership.
+This encourages casual users to see the value in upgrading.
+
+
+5. Improve Marketing & Communication Targeting Casual Riders
+🎯 Leverage App Notifications & Personalized Emails
+Many casual riders might not even be aware of membership benefits.
+Recommendation:
+Post-ride prompts: After a casual rider takes 3-5 rides, send a personalized notification:
+“You’ve taken 5 rides this month! A membership would have saved you $X. Try it for free!”
+Targeted emails: Send ride history recaps with estimated cost savings if they were members.
+
+6. Adjust Pricing & Plan Flexibility to Match Casual User Behavior
+
+🎯 Bundle Memberships with Other City Services
+Tourists and leisure riders may already be using other Chicago transit services.
+Recommendation: Partner with CTA (public transport), local hotels, or museums to offer discounted Cyclistic memberships as part of visitor packages.
 
 
 ---
