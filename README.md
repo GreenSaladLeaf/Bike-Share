@@ -67,14 +67,61 @@ These stations, primarily located in **downtown and lakefront areas**, reinforce
 
 ![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
 
+# Targeted Marketing Strategies to Convert Casual Riders to Members
+Based on the findings, tailor marketing efforts to casual riders’ specific behaviors and preferences, increasing the likelihood of converting them into members.
 
-Recommendations for Increasing Membership Conversions:
-Target Casual Riders During Peak Season:
-Promote membership heavily in summer months when casual ridership spikes.
-Offer limited-time discounts or loyalty rewards to frequent casual riders to encourage membership sign-ups.
-Leverage Station Data for Marketing:
-Place membership promotions at high-traffic casual rider stations, particularly near tourist-heavy locations.
-Add in-app membership reminders when casual riders frequently use the service.
-Enhance Pricing & Experience for Casual Riders:
-Introduce a short-term membership option (e.g., 1-month pass) to ease the transition from casual to full membership.
-Improve bike availability at peak casual rider stations to ensure a positive experience that increases repeat usage.
+### 1. Time-Based Promotions: Align with Peak Usage Patterns**
+Target Casual Riders During Their Peak Usage Windows
+  -**Evening Commuter Membership Offer (5 PM Peak Time)**
+    -**“Ride More for Less—Unlimited Evenings for $X/Month!”**
+      - Since 5 PM aligns with leisure hours, offer a "Sunset Rides Membership" where casual riders can ride unlimited after 4 PM for a fixed monthly fee.
+    -**Tourist-Focused Upsell at 5 PM**
+      - If a rider frequently starts trips near lakefront or downtown, show a **"Stay & Explore Membership"**:
+        - “Exploring the city? Get unlimited evening rides for your stay—only $X!”
+
+  -**Weekend Warrior Membership**
+    - Since casual riders **prefer weekends (Saturday highest)**, offer a **“Weekend Explorer Membership”** that covers unlimited rides for Saturdays & Sundays at a discounted rate.
+    - **Trial promotions on weekends**: “Your next 3 weekend rides are free when you sign up for a membership today!”
+
+  -**Seasonal Summer Campaign (Peak Casual Rider Activity in July)**
+    - Launch **“Ride More, Save More” summer membership promos** in **June-July**.
+    - Geo-targeted ads at **lakefront and downtown stations**, promoting **“Unlimited Summer Rides” memberships** for tourists and leisure riders.
+
+### 2. Bike Type-Based Incentives: Cater to Casual Riders’ Electric Bike Preference
+Encourage Memberships with Perks for Electric Bike Users
+  -**Exclusive Member Perks for Electric Bikes**
+    - Since casual riders slightly prefer electric bikes (52.2%), offer **priority access to electric bikes** for members.
+    - Introduce **member-exclusive discounts on electric bike rentals** (e.g., “Ride electric for less—join today and get 20% off per ride!”).
+  - **“Test Ride” Program for Frequent Casual Riders**
+    - If a casual rider chooses an electric bike 3+ times in a month, prompt them:
+      - “We see you love electric bikes! Get unlimited rides for just $X/month with a membership.”
+  -**Classic Bike Rider Upsell**
+    - Casual riders who use **classic bikes for longer trips (14 min avg.)** could benefit from **unlimited ride memberships**.
+    - “Taking long rides? Members get unlimited rides for less—sign up today!”
+      
+### 3. Location-Based Membership Targeting: Focus on Tourist & Downtown Stations
+Convert High-Traffic Casual Stations into Membership Hubs
+- **Lakefront & Downtown Station Signage & QR Code Sign-Ups**
+    - Streeter Dr & Grand Ave (74.4% casual riders)
+    - Dusable Lake Shore Dr & Monroe St (70.7% casual riders)
+    - Michigan Ave & Oak St (59.3% casual riders)
+    - Dusable Lake Shore Dr & North Blvd (57.6% casual riders)
+
+  - Place **QR code banners and digital screens** at these stations with an instant **one-click sign-up for a membership trial**.
+  - Offer a **“Tourist-Friendly Membership”** for short-term visitors (e.g., “Stay a week? Ride unlimited for $X with a 7-day membership!”).
+
+- **Hotel & Tourist Partnership Discounts**
+  - Collaborate with **hotels near lakefront and downtown** to offer bike-share memberships as an **added perk for guests**.
+
+- **Geo-Fenced In-App Membership Prompts**
+  - When a **casual rider starts or ends a trip at these stations**, show a  **personalized in-app message**:
+    - “Riding here often? Get a membership and save 30% per ride!”
+
+### 4. Ride-Based Upselling & Personalized Membership Offers
+Use Data-Driven Notifications to Nudge Casual Riders
+- **Frequent Rider Savings Report**
+  - After a casual rider completes 5+ trips in a month, send an email/app notification:
+    - “You spent $X on casual rides this month—members save $Y. Join now and get your first month free!”
+- **Membership Trial After High-Usage Events**
+  - If a casual rider takes a **long trip (>30 min) or multiple trips** in a day, prompt them with:
+    - “You’ve been riding a lot! Try a free 3-day membership and see how much you save.”
