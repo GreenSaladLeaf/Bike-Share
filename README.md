@@ -39,10 +39,20 @@ The files are structured to facilitate merging into a single dataset without los
   - Members most active in **August**, while casual riders see their highest activity in **July**, both during the warmer months.
   - **Casual riders** predominantly take trips on **weekends** (with **Saturday** being the highest), whereas **members** take more trips on **weekdays** (with **Wednesday** being the highest), indicating a strong commuting pattern among members.
 
+![image](https://github.com/user-attachments/assets/7468a3fd-ba0e-47f7-8857-36f4b47d9239)
+
+![image](https://github.com/user-attachments/assets/d45b51fa-c2eb-4cae-b462-40833c105b68)
+
+![image](https://github.com/user-attachments/assets/9cc4646c-5476-46c8-bdff-5a497aef7295)
+
 **2. Bike Type Preferences & Trip Characteristics**:
   - **casual riders** prefer **electric bikes (52.2%) over classic bikes (46.4%)**, while **members** show a slight preference for **classic bikes (51.6%) over electric bikes (48.4%)**.
   - **Casual riders** take longer trips on average (**10 mins for electric bikes, 14 mins for classic bikes**), while **members' median trip durations** are shorter (**8 mins for electric, 9 mins for classic**).
   - **Docked bikes** are used exclusively by **casual riders (1.45% of casual trips)**, indicating a strong preference for flexible, dockless options.
+
+![image](https://github.com/user-attachments/assets/7c6979c7-5005-4c1c-aab2-7e3fde1b163b)
+
+![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
 **3. Top Stations & Routes**:
   - Among the top 10 stations, the following stand out, with **over 55% of trips made by casual riders**:
