@@ -63,6 +63,11 @@ The files are structured to facilitate merging into a single dataset without los
 These stations, primarily located in **downtown and lakefront areas**, reinforce the idea that **casual riders are largely tourists or leisure users**.
   - These stations experience **higher casual rider traffic in summer, while member traffic remains steady**.
 
+![image](https://github.com/user-attachments/assets/5e0c2f1e-8b57-4ac5-8e17-fda82d353944)
+
+![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
+
+
 Recommendations for Increasing Membership Conversions:
 Target Casual Riders During Peak Season:
 Promote membership heavily in summer months when casual ridership spikes.
