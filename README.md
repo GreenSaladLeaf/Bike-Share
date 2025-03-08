@@ -35,18 +35,23 @@ The files are structured to facilitate merging into a single dataset without los
 
 # Executive Summary
 **1. Trip Trends by Time of Day and Season**:
-  - Both casual riders and members have a peak usage time of 5 PM, aligning with commute and leisure hours.
-  - Members most active in August and casual riders are have the highest activity in July, both in the warmer months.
-  - Casual riders predominantly take trips on weekends (Saturday highest), whereas members take more trips on weekdays (Wednesday highest), indicating a strong commuting pattern among members.
+  - Both casual riders and members have a peak usage time of **5 PM**, aligning with commute and leisure hours.
+  - Members most active in **August**, while casual riders see their highest activity in **July**, both during the warmer months.
+  - **Casual riders** predominantly take trips on **weekends** (with **Saturday** being the highest), whereas **members** take more trips on **weekdays** (with **Wednesday** being the highest), indicating a strong commuting pattern among members.
 
 **2. Bike Type Preferences & Trip Characteristics**:
-  - Electric bikes are the most popular among both casual riders and members due to their convenience and shorter trip times.
-  - Casual riders take longer trips on average (10 min for electric bikes, 14 min for classic bikes), while members' median trip durations are significantly shorter (8 min for electric, 9 min for classic).
-  - Docked bikes are used almost exclusively by casual riders (1.45% of casual trips), indicating a strong preference for flexible, dockless options.
+  - **casual riders** prefer **electric bikes (52.2%) over classic bikes (46.4%)**, while **members** show a slight preference for **classic bikes (51.6%) over electric bikes (48.4%)**.
+  - **Casual riders** take longer trips on average (**10 mins for electric bikes, 14 mins for classic bikes**), while **members' median trip durations** are shorter (**8 mins for electric, 9 mins for classic**).
+  - **Docked bikes** are used exclusively by **casual riders (1.45% of casual trips)**, indicating a strong preference for flexible, dockless options.
 
 **3. Top Stations & Routes**:
-  - The most popular stations amongs casual riders serve downtown and lakefront areas, suggesting that casual riders are likely tourists or leisure users.
-  - Certain stations experience higher casual rider traffic in summer, while member traffic remains steady.
+  - Among the top 10 stations, the following stand out, with **over 55% of trips made by casual riders**:
+    - **Streeter Dr & Grand Ave (74.4% casual riders)**
+    - **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
+    - **Michigan Ave & Oat St (59.3% casual riders)**
+    - **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
+These stations, primarily located in **downtown and lakefront areas**, reinforce the idea that **casual riders are largely tourists or leisure users**.
+  - These stations experience **higher casual rider traffic in summer, while member traffic remains steady**.
 
 Recommendations for Increasing Membership Conversions:
 Target Casual Riders During Peak Season:
