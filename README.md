@@ -67,10 +67,10 @@ These stations, primarily located in **downtown and lakefront areas**, reinforce
 
 ![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
 
-# Targeted Marketing Strategies to Convert Casual Riders to Members
-Based on the findings, tailor marketing efforts to casual riders’ specific behaviors and preferences, increasing the likelihood of converting them into members.
+# Recommendation: Targeted Marketing Strategies to Convert Casual Riders to Members
+Based on the findings, marketing efforts should be tailored to casual riders’ behaviors and preferences to maximize membership conversions.
 
-### 1. Time-Based Promotions: Align with Peak Usage Patterns
+#### 1. Time-Based Promotions: Align with Peak Usage Patterns
 Target Casual Riders During Their Peak Usage Windows.
 - **Evening Commuter Membership Offer (5 PM Peak Time)**
   - **“Ride More for Less—Unlimited Evenings for $X/Month!”**
@@ -87,7 +87,7 @@ Target Casual Riders During Their Peak Usage Windows.
   - Launch **“Ride More, Save More” summer membership promos** in **June-July**.
   - Geo-targeted ads at **lakefront and downtown stations**, promoting **“Unlimited Summer Rides” memberships** for tourists and leisure riders.
 
-### 2. Bike Type-Based Incentives: Cater to Casual Riders’ Electric Bike Preference
+#### 2. Bike Type-Based Incentives: Cater to Casual Riders’ Electric Bike Preference
 Encourage Memberships with Perks for Electric Bike Users
 - **Exclusive Member Perks for Electric Bikes**
   - Since casual riders slightly prefer electric bikes (52.2%), offer **priority access to electric bikes** for members.
@@ -101,7 +101,7 @@ Encourage Memberships with Perks for Electric Bike Users
   - Casual riders who use **classic bikes for longer trips (14 min avg.)** could benefit from **unlimited ride memberships**.
   - “Taking long rides? Members get unlimited rides for less—sign up today!”
       
-### 3. Location-Based Membership Targeting: Focus on Tourist & Downtown Stations
+#### 3. Location-Based Membership Targeting: Focus on Tourist & Downtown Stations
 Convert High-Traffic Casual Stations into Membership Hubs
 - **Lakefront & Downtown Station Signage & QR Code Sign-Ups**
     - Streeter Dr & Grand Ave (74.4% casual riders)
@@ -119,7 +119,7 @@ Convert High-Traffic Casual Stations into Membership Hubs
   - When a **casual rider starts or ends a trip at these stations**, show a  **personalized in-app message**:
     - “Riding here often? Get a membership and save 30% per ride!”
 
-### 4. Ride-Based Upselling & Personalized Membership Offers
+#### 4. Ride-Based Upselling & Personalized Membership Offers
 Use Data-Driven Notifications to Nudge Casual Riders
 - **Frequent Rider Savings Report**
   - After a casual rider completes 5+ trips in a month, send an email/app notification:
