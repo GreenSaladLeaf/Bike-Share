@@ -8,9 +8,9 @@ Insights and recommendations are provided on the following key areas:
 - Bike type preference: Analysis of bike type preferences among casual riders and members, including insights on trip duration and distance
 - Station comparisons: Comparison of station popularity, identifying high-traffic locations and seasonal variations.
 
-An interactive dashboard can be found here
+An interactive dashboard can be found [here](https://public.tableau.com/app/profile/rae.siow/viz/bike_share_17343442737480/Dashboard2)
 
-A comprehensive report can be found here
+A comprehensive report can be found [here](https://github.com/GreenSaladLeaf/bike_share/tree/main)
 
 The SQL queries to clean, organise and prepare data for the dashboard can be found here
 
