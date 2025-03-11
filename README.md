@@ -46,7 +46,7 @@ The files are structured to facilitate merging into a single dataset without los
 ![image](https://github.com/user-attachments/assets/9cc4646c-5476-46c8-bdff-5a497aef7295)
 
 **2. Bike Type Preferences & Trip Characteristics**:
-  - **casual riders** prefer **electric bikes (52.2%) over classic bikes (46.4%)**, while **members** show a slight preference for **classic bikes (51.6%) over electric bikes (48.4%)**.
+  - **Casual riders** prefer **electric bikes (52.2%) over classic bikes (46.4%)**, while **members** show a slight preference for **classic bikes (51.6%) over electric bikes (48.4%)**.
   - **Casual riders** take longer trips on average (**10 mins for electric bikes, 14 mins for classic bikes**), while **members' median trip durations** are shorter (**8 mins for electric, 9 mins for classic**).
   - **Docked bikes** are used exclusively by **casual riders (1.45% of casual trips)**, indicating a strong preference for flexible, dockless options.
 
@@ -54,7 +54,7 @@ The files are structured to facilitate merging into a single dataset without los
 
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
-**3. Top Stations & Routes**:
+**3. Popular Stations**:
   - Among the top 10 stations, the following stand out, with **over 55% of trips made by casual riders**:
     - **Streeter Dr & Grand Ave (74.4% casual riders)**
     - **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
@@ -67,64 +67,66 @@ These stations, primarily located in **downtown and lakefront areas**, reinforce
 
 ![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
 
-# Recommendation: Targeted Marketing Strategies to Convert Casual Riders to Members
-Based on the findings, marketing efforts should be tailored to casual riders’ behaviors and preferences to maximize membership conversions.
-
+# Recommendations for Increasing Membership Conversions:
 #### 1. Time-Based Promotions: Align with Peak Usage Patterns
 Target Casual Riders During Their Peak Usage Windows.
 - **Evening Commuter Membership Offer (5 PM Peak Time)**
-  - **“Ride More for Less—Unlimited Evenings for $X/Month!”**
-    - Since 5 PM aligns with leisure hours, offer a "Sunset Rides Membership" where casual riders can ride unlimited after 4 PM for a fixed monthly fee.
-  - **Tourist-Focused Upsell at 5 PM**
-    - If a rider frequently starts trips near lakefront or downtown, show a **"Stay & Explore Membership"**:
-      - “Exploring the city? Get unlimited evening rides for your stay—only $X!”
-
-- **Weekend Warrior Membership**
-  - Since casual riders **prefer weekends (Saturday highest)**, offer a **“Weekend Explorer Membership”** that covers unlimited rides for Saturdays & Sundays at a discounted rate.
-  - **Trial promotions on weekends**: “Your next 3 weekend rides are free when you sign up for a membership today!”
-
+  - Promote membership options during peak evening hours, especially for tourists using bikes for short leisure rides.
+- **Weekend Membership Trials**
+  - Offer trial memberships on weekends when casual ridership is highest.
 - **Seasonal Summer Campaign (Peak Casual Rider Activity in July)**
-  - Launch **“Ride More, Save More” summer membership promos** in **June-July**.
-  - Geo-targeted ads at **lakefront and downtown stations**, promoting **“Unlimited Summer Rides” memberships** for tourists and leisure riders.
+  - Heavily promote memberships in summer with special discounts or referral incentives.
 
 #### 2. Bike Type-Based Incentives: Cater to Casual Riders’ Electric Bike Preference
-Encourage Memberships with Perks for Electric Bike Users
+Encourage membership sign-ups by offering perks for electric bike users.
 - **Exclusive Member Perks for Electric Bikes**
-  - Since casual riders slightly prefer electric bikes (52.2%), offer **priority access to electric bikes** for members.
-  - Introduce **member-exclusive discounts on electric bike rentals** (e.g., “Ride electric for less—join today and get 20% off per ride!”).
-
-- **“Test Ride” Program for Frequent Casual Riders**
-  - If a casual rider chooses an electric bike 3+ times in a month, prompt them:
-  - “We see you love electric bikes! Get unlimited rides for just $X/month with a membership.”
-
-- **Classic Bike Rider Upsell**
-  - Casual riders who use **classic bikes for longer trips (14 min avg.)** could benefit from **unlimited ride memberships**.
-  - “Taking long rides? Members get unlimited rides for less—sign up today!”
+  - Since casual riders slightly prefer **electric bikes (52.2% of casual trips use them)**, offer priority access to electric bikes for members.
+- **Longer Trip Upsell for Casual Riders**
+  - Introduce **discounted extended ride times** for members to appeal to casual users who take longer trips.
       
-#### 3. Location-Based Membership Targeting: Focus on Tourist & Downtown Stations
-Convert High-Traffic Casual Stations into Membership Hubs
-- **Lakefront & Downtown Station Signage & QR Code Sign-Ups**
-    - Streeter Dr & Grand Ave (74.4% casual riders)
-    - Dusable Lake Shore Dr & Monroe St (70.7% casual riders)
-    - Michigan Ave & Oak St (59.3% casual riders)
-    - Dusable Lake Shore Dr & North Blvd (57.6% casual riders)
+#### 3. Location-Based Membership Targeting: Focus on High-Casual-Rider Stations
+Casual riders make up a significant share of trips at key downtown and lakefront stations. The following locations have the highest percentage of casual riders:
+- Streeter Dr & Grand Ave (74.4% casual riders)
+- Dusable Lake Shore Dr & Monroe St (70.7% casual riders)
+- Michigan Ave & Oak St (59.3% casual riders)
+- Dusable Lake Shore Dr & North Blvd (57.6% casual riders)
+Given these trends, **targeted membership promotions** at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
+- **In-app membership promotions** triggered when riders start trips at these locations.
+- **Partnership discounts with nearby hotels or attractions** to encourage tourists to sign up for memberships.
+- **On-site signage and QR codes** at high-casual-traffic stations to promote the benefits of membership.
 
-  - Place **QR code banners and digital screens** at these stations with an instant **one-click sign-up for a membership trial**.
-  - Offer a **“Tourist-Friendly Membership”** for short-term visitors (e.g., “Stay a week? Ride unlimited for $X with a 7-day membership!”).
+OR
 
-- **Hotel & Tourist Partnership Discounts**
-  - Collaborate with **hotels near lakefront and downtown** to offer bike-share memberships as an **added perk for guests**.
 
-- **Geo-Fenced In-App Membership Prompts**
-  - When a **casual rider starts or ends a trip at these stations**, show a  **personalized in-app message**:
-    - “Riding here often? Get a membership and save 30% per ride!”
+#### 1. Time-Based Membership Promotions: Align with Peak Usage Patterns
+Casual riders show distinct time-based usage patterns:
+- **Peak Hour: 5 PM**, indicating high evening commuter and tourist activity.
+- **Peak Days: Weekends**, suggesting leisure-based ridership.
+- **Peak Month: July**, when casual ridership is at its highest.
 
-#### 4. Ride-Based Upselling & Personalized Membership Offers
-Use Data-Driven Notifications to Nudge Casual Riders
-- **Frequent Rider Savings Report**
-  - After a casual rider completes 5+ trips in a month, send an email/app notification:
-    - “You spent $X on casual rides this month—members save $Y. Join now and get your first month free!”
+Based on these patterns, **targeted membership campaigns** could be more effective if launched during these peak periods.
 
-- **Membership Trial After High-Usage Events**
-  - If a casual rider takes a **long trip (>30 min) or multiple trips** in a day, prompt them with:
-    - “You’ve been riding a lot! Try a free 3-day membership and see how much you save.”
+Potential strategies include:
+- **Evening commuter membership promotions** during the 5 PM peak to encourage frequent riders to subscribe.
+- **Weekend-based trial memberships** to convert leisure riders into long-term users.
+- **Seasonal summer campaigns** when casual ridership spikes, reinforcing the value of membership for repeat use.
+
+#### 2. Bike Type Preferences: Casual Riders Favor Electric Bikes
+Analyzing bike type usage reveals:
+- **Electric bikes are slightly more popular among casual riders (52.2%)**, compared to members.
+- **Classic bike trips tend to be longer in duration**, especially for casual users.
+
+To leverage these insights:
+- Membership incentives could highlight **priority access to electric bikes**, addressing casual riders’ preferences.
+- Pricing adjustments or promotions on longer electric bike trips may encourage casual users to convert to members.
+
+#### 3. Location-Based Membership Targeting: Focus on High-Casual-Rider Stations
+Casual riders make up a significant share of trips at key downtown and lakefront stations. The following locations have the highest percentage of casual riders:
+- Streeter Dr & Grand Ave (74.4% casual riders)
+- Dusable Lake Shore Dr & Monroe St (70.7% casual riders)
+- Michigan Ave & Oak St (59.3% casual riders)
+- Dusable Lake Shore Dr & North Blvd (57.6% casual riders)
+Given these trends, **targeted membership promotions** at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
+- **In-app membership promotions** triggered when riders start trips at these locations.
+- **Partnership discounts with nearby hotels or attractions** to encourage tourists to sign up for memberships.
+- **On-site signage and QR codes** at high-casual-traffic stations to promote the benefits of membership.
