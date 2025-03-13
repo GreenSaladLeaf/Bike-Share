@@ -1381,7 +1381,7 @@ ORDER BY ride_count DESC, member_casual
 ![image](https://github.com/user-attachments/assets/7c6979c7-5005-4c1c-aab2-7e3fde1b163b)
 
 
-### 4. Top 10 Popular Routes
+### 4. Top 10 Popular Routes 
 #### 4.1 Overview of the Top 10 Routes
 - The most frequently used route is **Calumet Ave & 33rd St - State St & 33rd St** with **11,823 trips**.
 - Many top routes are clustered around **South Chicago**, highlighting areas of concentrated commuter and leisure activity.
@@ -1509,8 +1509,101 @@ ORDER BY
   num_of_trips DESC
 LIMIT 10
 ```
-
 ![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
+
+#### 4.4 Top 10 Most Popular Station
+Among the top 10 stations, the following stand out, with over 55% of trips made by casual riders:
+- **Streeter Dr & Grand Ave (74.4% casual riders)**
+- **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
+- **Michigan Ave & Oat St (59.3% casual riders)**
+- **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
+
+These stations, primarily located in downtown and lakefront areas, reinforce the idea that casual riders are mainly tourists or leisure users.
+
+```sql
+WITH station_name_unified AS (
+  SELECT DISTINCT
+    start_station_name AS station_name,
+    ride_id,
+    member_casual,
+    start_lat AS lat,
+    start_lng AS lng
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+  
+  UNION ALL
+  
+  SELECT DISTINCT 
+    end_station_name AS station_name,
+    ride_id,
+    member_casual,
+    end_lat AS lat,
+    end_lng AS lng
+  FROM `bike-share-case-study-430704.Bike_share.cleaned_table`
+)
+
+, top10_popular_station AS (
+  SELECT
+    station_name,
+    COUNT(*) AS total_trips
+  FROM station_name_unified
+  GROUP BY station_name
+  ORDER BY total_trips DESC
+  LIMIT 10
+)
+
+SELECT 
+  s.station_name,
+  s.total_trips,
+  ANY_VALUE(ct.lat) AS latitude,  -- Pick one latitude per station
+  ANY_VALUE(ct.lng) AS longitude, -- Pick one longitude per station
+  SUM(CASE WHEN ct.member_casual = 'member' THEN 1 ELSE 0 END) AS member_trips,
+  SUM(CASE WHEN ct.member_casual = 'casual' THEN 1 ELSE 0 END) AS casual_trips
+FROM top10_popular_station AS s
+LEFT JOIN station_name_unified AS ct
+  ON s.station_name = ct.station_name
+GROUP BY s.station_name, s.total_trips
+ORDER BY s.total_trips DESC;
+```
+![image](https://github.com/user-attachments/assets/5e0c2f1e-8b57-4ac5-8e17-fda82d353944)
+
+These stations experience **higher casual rider traffic in summer, while member traffic remains steady**.
+
+```sql
+WITH station_name_unified AS (
+  -- refer to the above
+),
+
+top10_popular_station AS (
+  -- refer to the above
+),
+
+seasonal_trips AS (
+  -- Assign seasons based on trip start month
+  SELECT 
+    s.station_name,
+    COUNT(*) AS trip_count,
+    CASE 
+      WHEN EXTRACT(MONTH FROM ct.cleaned_started_at) IN (12, 1, 2) THEN 'Winter'
+      WHEN EXTRACT(MONTH FROM ct.cleaned_started_at) IN (3, 4, 5) THEN 'Spring'
+      WHEN EXTRACT(MONTH FROM ct.cleaned_started_at) IN (6, 7, 8) THEN 'Summer'
+      WHEN EXTRACT(MONTH FROM ct.cleaned_started_at) IN (9, 10, 11) THEN 'Fall'
+    END AS season
+  FROM top10_popular_station AS s
+  JOIN `bike-share-case-study-430704.Bike_share.cleaned_table` AS ct
+    ON s.station_name = ct.start_station_name OR s.station_name = ct.end_station_name
+  GROUP BY s.station_name, season
+)
+
+-- Calculate seasonal percentage for each station
+SELECT 
+  station_name,
+  season,
+  trip_count,
+  ROUND((trip_count * 100.0) / SUM(trip_count) OVER (PARTITION BY station_name), 2) AS season_percentage
+  FROM
+    seasonal_trips
+```
+![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
 
 ### 5. Trip Duration Analysis: Member vs. Casual Riders
 To understand trip engagement levels, we analyzed trip duration by rider type and bike type.
