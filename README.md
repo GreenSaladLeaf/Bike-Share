@@ -1,4 +1,9 @@
-# Project Background
+# Case Study: Bike_share 
+**Author**: Siow Hui Hui
+
+**Date created**: 22 November 2024
+
+## Project Background
 Cyclistic is a bike-share program in Chicago, offering a fleet of over 5,800 bikes across 692 stations. Since its launch in 2016, Cyclistic has grown rapidly, providing a range of bike options, including traditional bikes, reclining bikes, hand tricycles, and cargo bikes, to meet the diverse needs of its riders. Approximately 30% of Cyclistic’s users commute to work, while others use the bikes for leisure.
 
 Cyclistic offers three pricing plans: single-ride passes, full-day passes, and annual memberships. While annual memberships are the most profitable for the company, casual riders—those using single-ride or full-day passes—make up a large portion of the customer base. Cyclistic’s marketing strategy has traditionally focused on broad awareness and attracting casual riders. However, the company’s financial analysts have found that annual members are significantly more profitable than casual riders. As a result, Cyclistic is shifting its focus to increasing the number of annual memberships, believing that converting casual riders into members will be key to achieving long-term, sustainable growth.
@@ -12,7 +17,7 @@ An interactive dashboard can be found [here](https://public.tableau.com/app/prof
 
 A comprehensive report with detailed SQL queries to clean, organise and prepare data for the dashboard can be found [here](https://github.com/GreenSaladLeaf/bike_share/blob/main/README_comprehensive.md))
 
-# Data Structure & Initial Checks
+## Data Structure & Initial Checks
 The dataset is structured as a series of trip-level records, with each record representing a single bike trip. The columns across all 12 CSV files are consistent and include:
 
 - **ride_id**: A unique identifier for each trip, ensuring each ride is distinct in the dataset.
@@ -31,7 +36,7 @@ The dataset is structured as a series of trip-level records, with each record re
 
 The files are structured to facilitate merging into a single dataset without losing important details.
 
-# Executive Summary
+## Executive Summary
 **1. Trip Trends by Time of Day and Season**:
   - Both casual riders and members have a peak usage time of **5 PM**, aligning with commute and leisure hours.
   - Members most active in **August**, while casual riders see their highest activity in **July**, both during the warmer months.
@@ -65,7 +70,7 @@ These stations, primarily located in **downtown and lakefront areas**, reinforce
 
 ![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
 
-# Recommendations for Increasing Membership Conversions:
+## Recommendations for Increasing Membership Conversions:
 #### 1. Time-Based Membership Promotions: Align with Peak Usage Patterns
 Casual riders show distinct time-based usage patterns:
 - **Peak Hour: 5 PM**, indicating high evening commuter and tourist activity.
