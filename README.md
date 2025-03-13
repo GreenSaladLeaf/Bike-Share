@@ -58,10 +58,10 @@ The files are structured to facilitate merging into a single dataset without los
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
 **3. Popular Stations**:
-  - Among the top 10 stations, the following stand out, with **over 55% of trips made by casual riders**:
+  - Among the top 10 stations, the following stand out, with **over 50% of trips made by casual riders**:
     - **Streeter Dr & Grand Ave (74.4% casual riders)**
     - **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
-    - **Michigan Ave & Oat St (59.3% casual riders)**
+    - **Michigan Ave & Oak St (59.3% casual riders)**
     - **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
 These stations, primarily located in **downtown and lakefront areas**, reinforce the idea that **casual riders are largely tourists or leisure users**.
   - These stations experience **higher casual rider traffic in summer, while member traffic remains steady**.
