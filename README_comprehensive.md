@@ -1512,13 +1512,15 @@ LIMIT 10
 ![image](https://github.com/user-attachments/assets/671c1bea-fafa-4393-b299-3947ced7877c)
 
 #### 4.4 Top 10 Most Popular Station
-Among the top 10 stations, the following stand out, with over 55% of trips made by casual riders:
-- **Streeter Dr & Grand Ave (74.4% casual riders)**
-- **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
-- **Michigan Ave & Oat St (59.3% casual riders)**
-- **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
+**Streeter Dr & Grand Ave** is the most popular station, with **110,639 total trips**. It also has the **highest casual rider percentage (74.4%)**, indicating it is heavily used by non-members, likely tourists or leisure riders.
 
-These stations, primarily located in downtown and lakefront areas, reinforce the idea that casual riders are mainly tourists or leisure users.
+Among the top 10 stations, several have a **high percentage of casual riders**, particularly those near **downtown and lakefront areas**, suggesting strong tourist and leisure usage:
+- **Streeter Dr & Grand Ave (74.4% casual riders)** – Located near **Navy Pier and the Chicago Riverwalk**, a major **tourist hub**.
+- **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)** – Positioned along **Lake Shore Drive**, adjacent to **Millennium Park and Grant Park**, both popular tourist destinations.
+- **Michigan Ave & Oak St (59.3% casual riders)** – Situated on **the Magnificent Mile**, a well-known downtown shopping and sightseeing district.
+- **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)** – Another **lakefront station**, reinforcing its appeal to tourists and leisure riders.
+
+These insights highlight an opportunity for **targeted marketing strategies** in these high-traffic areas, such as **short-term memberships** and **tourist-focused promotions** to encourage conversion to membership.
 
 ```sql
 WITH station_name_unified AS (
@@ -1564,9 +1566,19 @@ LEFT JOIN station_name_unified AS ct
 GROUP BY s.station_name, s.total_trips
 ORDER BY s.total_trips DESC;
 ```
+![image](https://github.com/user-attachments/assets/0cf2d5b7-6bf4-463c-bf78-ec3aa4f4e12f)
+
 ![image](https://github.com/user-attachments/assets/5e0c2f1e-8b57-4ac5-8e17-fda82d353944)
 
-These stations experience **higher casual rider traffic in summer, while member traffic remains steady**.
+#### 4.5 Seasonal Trends for the Top 10 Stations
+1. **Popular stations in summer**:
+- **Dusable Lake Shore Dr & North Blvd (58.6%), Michigan Ave & Oak St (51.2%), and Streeter Dr & Grand Ave (49.9%)** see the highest percentage of trips during **summer**.
+- These numbers drop significantly in **fall and winter**.
+- Over 50% of the trips at these stations are made by **casual riders**, indicating a seasonal surge in casual usage.
+  
+2. Stations with Stable Usage Across Seasons:
+- Stations like **Kingsbury St & Kinzie St, Clinton St & Madison St**, and **Clinton St & Washington Blvd** maintain more consistent ridership across seasons.
+- These stations are predominantly used by **members**, suggesting they are commuter-friendly locations, with a steady flow of member trips year-round.
 
 ```sql
 WITH station_name_unified AS (
