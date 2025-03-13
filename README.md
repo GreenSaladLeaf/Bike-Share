@@ -10,7 +10,7 @@ Insights and recommendations are provided on the following key areas:
 
 An interactive dashboard can be found [here](https://public.tableau.com/app/profile/rae.siow/viz/bike_share_17343442737480/Dashboard2)
 
-A comprehensive report with detailed SQL queries to clean, organise and prepare data for the dashboard can be found [here](https://github.com/GreenSaladLeaf/bike_share/tree/main)
+A comprehensive report with detailed SQL queries to clean, organise and prepare data for the dashboard can be found [here](https://github.com/GreenSaladLeaf/bike_share/blob/main/README_comprehensive.md))
 
 # Data Structure & Initial Checks
 The dataset is structured as a series of trip-level records, with each record representing a single bike trip. The columns across all 12 CSV files are consistent and include:
