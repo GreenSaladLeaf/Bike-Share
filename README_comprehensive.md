@@ -1576,7 +1576,7 @@ ORDER BY s.total_trips DESC;
 - These numbers drop significantly in **fall and winter**.
 - Over 50% of the trips at these stations are made by **casual riders**, indicating a seasonal surge in casual usage.
   
-2. Stations with Stable Usage Across Seasons:
+2. **Stations with Stable Usage Across Seasons**:
 - Stations like **Kingsbury St & Kinzie St, Clinton St & Madison St**, and **Clinton St & Washington Blvd** maintain more consistent ridership across seasons.
 - These stations are predominantly used by **members**, suggesting they are commuter-friendly locations, with a steady flow of member trips year-round.
 
