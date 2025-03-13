@@ -10,9 +10,7 @@ Insights and recommendations are provided on the following key areas:
 
 An interactive dashboard can be found [here](https://public.tableau.com/app/profile/rae.siow/viz/bike_share_17343442737480/Dashboard2)
 
-A comprehensive report can be found [here](https://github.com/GreenSaladLeaf/bike_share/tree/main)
-
-The SQL queries to clean, organise and prepare data for the dashboard can be found here
+A comprehensive report with detailed SQL queries to clean, organise and prepare data for the dashboard can be found [here](https://github.com/GreenSaladLeaf/bike_share/tree/main)
 
 # Data Structure & Initial Checks
 The dataset is structured as a series of trip-level records, with each record representing a single bike trip. The columns across all 12 CSV files are consistent and include:
@@ -68,37 +66,6 @@ These stations, primarily located in **downtown and lakefront areas**, reinforce
 ![image](https://github.com/user-attachments/assets/cc4d8c51-91ac-4e91-b5e6-f2bd04c80b75)
 
 # Recommendations for Increasing Membership Conversions:
-#### 1. Time-Based Promotions: Align with Peak Usage Patterns
-Target Casual Riders During Their Peak Usage Windows.
-- **Evening Commuter Membership Offer (5 PM Peak Time)**
-  - Promote membership options during peak evening hours, especially for tourists using bikes for short leisure rides.
-- **Weekend Membership Trials**
-  - Offer trial memberships on weekends when casual ridership is highest.
-- **Seasonal Summer Campaign (Peak Casual Rider Activity in July)**
-  - Heavily promote memberships in summer with special discounts or referral incentives.
-
-#### 2. Bike Type-Based Incentives: Cater to Casual Riders’ Electric Bike Preference
-Encourage membership sign-ups by offering perks for electric bike users.
-- **Exclusive Member Perks for Electric Bikes**
-  - Since casual riders slightly prefer **electric bikes (52.2% of casual trips use them)**, offer priority access to electric bikes for members.
-- **Longer Trip Upsell for Casual Riders**
-  - Introduce **discounted extended ride times** for members to appeal to casual users who take longer trips.
-      
-#### 3. Location-Based Membership Targeting: Focus on High-Casual-Rider Stations
-Casual riders make up a significant share of trips at key downtown and lakefront stations. The following locations have the highest percentage of casual riders:
-- Streeter Dr & Grand Ave (74.4% casual riders)
-- Dusable Lake Shore Dr & Monroe St (70.7% casual riders)
-- Michigan Ave & Oak St (59.3% casual riders)
-- Dusable Lake Shore Dr & North Blvd (57.6% casual riders)
-
-Given these trends, **targeted membership promotions** at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
-- **In-app membership promotions** triggered when riders start trips at these locations.
-- **Partnership discounts with nearby hotels or attractions** to encourage tourists to sign up for memberships.
-- **On-site signage and QR codes** at high-casual-traffic stations to promote the benefits of membership.
-
-OR
-
-
 #### 1. Time-Based Membership Promotions: Align with Peak Usage Patterns
 Casual riders show distinct time-based usage patterns:
 - **Peak Hour: 5 PM**, indicating high evening commuter and tourist activity.
@@ -119,14 +86,14 @@ Analyzing bike type usage reveals:
 
 To leverage these insights:
 - Membership incentives could highlight **priority access to electric bikes**, addressing casual riders’ preferences.
-- Pricing adjustments or promotions on longer electric bike trips may encourage casual users to convert to members.
+- **Pricing adjustments or promotions on longer bike trips** may encourage casual users to convert to members.
 
 #### 3. Location-Based Membership Targeting: Focus on High-Casual-Rider Stations
 Casual riders make up a significant share of trips at key downtown and lakefront stations. The following locations have the highest percentage of casual riders:
-- Streeter Dr & Grand Ave (74.4% casual riders)
-- Dusable Lake Shore Dr & Monroe St (70.7% casual riders)
-- Michigan Ave & Oak St (59.3% casual riders)
-- Dusable Lake Shore Dr & North Blvd (57.6% casual riders)
+- **Streeter Dr & Grand Ave (74.4% casual riders)**
+- **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
+- **Michigan Ave & Oak St (59.3% casual riders)**
+- **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
 
 Given these trends, **targeted membership promotions** at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
 - **In-app membership promotions** triggered when riders start trips at these locations.
