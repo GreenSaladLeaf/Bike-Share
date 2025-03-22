@@ -1,7 +1,7 @@
-# Case Study: Bike_share 
-**Author**: Siow Hui Hui
+# Case Study: Bike Share 
+**Author**: Hui Hui Siow
 
-**Date created**: 22 November 2024
+**Updated**: 22 March 2025
 
 ## Project Background
 Cyclistic is a rapidly growing bike-share program in Chicago, offering over 5,800 bikes across 692 stations. Since its 2016 launch, it has provided various bike options to serve both commuters (30% of users) and leisure riders. Cyclistic offers single-ride, full-day, and annual membership plans, with annual memberships being the most profitable. While casual riders make up a large portion of the customer base, the company is shifting its focus to converting them into members, as annual memberships offer higher long-term profitability and sustainable growth.
@@ -11,7 +11,7 @@ Insights and recommendations are provided on the following key areas:
 - Bike type preference: Analysis of bike type preferences among casual riders and members, including insights on trip duration and distance
 - Station comparisons: Comparison of station popularity, identifying high-traffic locations and seasonal variations.
 
-An interactive dashboard can be found [here](https://public.tableau.com/app/profile/rae.siow/viz/bike_share_17343442737480/Dashboard2)
+An interactive dashboard can be found [here](https://public.tableau.com/app/profile/rae.siow/viz/BikeShare_17426202696680/Dashboard)
 
 A comprehensive report with detailed SQL queries to clean, organise and prepare data for the dashboard can be found [here](https://github.com/GreenSaladLeaf/bike_share/blob/main/README_comprehensive.md))
 
