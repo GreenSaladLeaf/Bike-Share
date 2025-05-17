@@ -1,5 +1,5 @@
 # Case Study: Bike_share  
-**Author**: Siow Hui Hui
+**Author**: Siow Hui Hui (Rae)
 
 **Date created**: 22 November 2024
 
