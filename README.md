@@ -1,5 +1,5 @@
 # Case Study: Bike Share 
-**Author**: Hui Hui Siow (Rae)
+**Author**: Rae Siow
 
 **Updated**: 22 March 2025
 
