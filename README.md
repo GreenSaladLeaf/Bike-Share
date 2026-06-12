@@ -9,9 +9,9 @@
 Cyclistic is a rapidly growing bike-share program in Chicago, offering over 5,800 bikes across 692 stations. Since its 2016 launch, it has provided various bike options to serve both commuters (30% of users) and leisure riders. Cyclistic offers single ride, full day, and annual membership plans, with annual memberships being the most profitable. While casual riders make up a large portion of the customer base, the company is shifting its focus to converting them into members, as annual memberships offer higher long-term profitability and sustainable growth.
 
 Insights and recommendations are provided on the following key areas:
-- Hourly, weekly and monthly trends analysis:  Evaluation of trip frequency patterns by rider type across different timeframes (hourly, weekly, and monthly)
-- Bike type preference: Analysis of bike type preferences among casual riders and members, including insights on trip duration and distance
-- Station comparisons: Comparison of station popularity, identifying high-traffic locations and seasonal variations.
+- **Hourly, weekly and monthly trends analysis**:  Evaluation of trip frequency patterns by rider type across different timeframes (hourly, weekly, and monthly)
+- **Bike type preference**: Analysis of bike type preferences among casual riders and members, including insights on trip duration and distance
+- **Station comparisons**: Comparison of station popularity, identifying high-traffic locations and seasonal variations.
 
 An interactive dashboard can be found [here](https://public.tableau.com/app/profile/rae.siow/viz/BikeShare_17426202696680/Dashboard)
 
@@ -63,8 +63,9 @@ The files are structured to facilitate merging into a single dataset without los
     - **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
     - **Michigan Ave & Oak St (59.3% casual riders)**
     - **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
-These stations, primarily located in downtown and lakefront areas, reinforce the idea that casual riders are largely tourists or leisure users.
-  - These stations experience higher casual rider traffic in summer, while member traffic remains steady.
+
+  - These stations, primarily located in downtown and lakefront areas, reinforce the idea that casual riders are largely tourists or leisure users.
+
 
 ![image](https://github.com/user-attachments/assets/0cf2d5b7-6bf4-463c-bf78-ec3aa4f4e12f)
 
