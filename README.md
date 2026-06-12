@@ -3,8 +3,10 @@
 
 **Updated**: 22 March 2025
 
+**Tools used**: SQL, Tableau
+
 ## Project Background
-Cyclistic is a rapidly growing bike-share program in Chicago, offering over 5,800 bikes across 692 stations. Since its 2016 launch, it has provided various bike options to serve both commuters (30% of users) and leisure riders. Cyclistic offers single-ride, full-day, and annual membership plans, with annual memberships being the most profitable. While casual riders make up a large portion of the customer base, the company is shifting its focus to converting them into members, as annual memberships offer higher long-term profitability and sustainable growth.
+Cyclistic is a rapidly growing bike-share program in Chicago, offering over 5,800 bikes across 692 stations. Since its 2016 launch, it has provided various bike options to serve both commuters (30% of users) and leisure riders. Cyclistic offers single ride, full day, and annual membership plans, with annual memberships being the most profitable. While casual riders make up a large portion of the customer base, the company is shifting its focus to converting them into members, as annual memberships offer higher long-term profitability and sustainable growth.
 
 Insights and recommendations are provided on the following key areas:
 - Hourly, weekly and monthly trends analysis:  Evaluation of trip frequency patterns by rider type across different timeframes (hourly, weekly, and monthly)
@@ -22,7 +24,7 @@ The dataset is structured as a series of trip-level records, with each record re
 
 - **rideable_type**: The type of bike used, allowing for comparison of bike preferences between annual members and casual riders.
 
-- **started_at** and **ended_at**: Timestamps marking the start and end of each trip, useful for calculating trip duration and analyzing peak usage times.
+- **started_at** and **ended_at**: Timestamps marking the start and end of each trip, useful for calculating trip duration and analysing peak usage times.
 
 - **start_station_name** and **end_station_name**: The names of the stations where trips began and ended, providing insights into popular stations and bike routes.
 
@@ -36,9 +38,9 @@ The files are structured to facilitate merging into a single dataset without los
 
 ## Executive Summary
 **1. Trip Trends by Time of Day and Season**:
-  - Both casual riders and members have a peak usage time of **5 PM**, aligning with commute and leisure hours.
-  - Members most active in **August**, while casual riders see their highest activity in **July**, both during the warmer months.
-  - **Casual riders** predominantly take trips on **weekends** (with **Saturday** being the highest), whereas **members** take more trips on **weekdays** (with **Wednesday** being the highest), indicating a strong commuting pattern among members.
+  - Both casual riders and members have a peak usage time of 5 PM, aligning with commute and leisure hours.
+  - Members most active in August, while casual riders see their highest activity in July, both during the warmer months.
+  - Casual riders predominantly take trips on weekends (with Saturday being the highest), whereas members take more trips on weekdays (with Wednesday being the highest), indicating a strong commuting pattern among members.
 
 ![image](https://github.com/user-attachments/assets/7468a3fd-ba0e-47f7-8857-36f4b47d9239)
 
@@ -47,22 +49,22 @@ The files are structured to facilitate merging into a single dataset without los
 ![image](https://github.com/user-attachments/assets/9cc4646c-5476-46c8-bdff-5a497aef7295)
 
 **2. Bike Type Preferences & Trip Characteristics**:
-  - **Casual riders** prefer **electric bikes (52.2%) over classic bikes (46.4%)**, while **members** show a slight preference for **classic bikes (51.6%) over electric bikes (48.4%)**.
-  - **Casual riders** take longer trips on average (**10 mins for electric bikes, 14 mins for classic bikes**), while **members' median trip durations** are shorter (**8 mins for electric, 9 mins for classic**).
-  - **Docked bikes** are used exclusively by **casual riders (1.45% of casual trips)**, indicating a strong preference for flexible, dockless options.
+  - Casual riders prefer electric bikes (52.2%) over classic bikes (46.4%), while members show a slight preference for classic bikes (51.6%) over electric bikes (48.4%).
+  - Casual riders take longer trips on average (10 mins for electric bikes, 14 mins for classic bikes), while members' median trip durations are shorter (8 mins for electric, 9 mins for classic).
+  - Docked bikes are used exclusively by casual riders (1.45% of casual trips), indicating a strong preference for flexible, dockless options.
 
 ![image](https://github.com/user-attachments/assets/7c6979c7-5005-4c1c-aab2-7e3fde1b163b)
 
 ![image](https://github.com/user-attachments/assets/d1b30bb5-99c4-4467-9951-19af683a56e8)
 
 **3. Popular Stations**:
-  - Among the top 10 stations, the following stand out, with **over 50% of trips made by casual riders**:
+  - Among the top 10 stations, the following stand out, with over 50% of trips made by casual riders:
     - **Streeter Dr & Grand Ave (74.4% casual riders)**
     - **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
     - **Michigan Ave & Oak St (59.3% casual riders)**
     - **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
-These stations, primarily located in **downtown and lakefront areas**, reinforce the idea that **casual riders are largely tourists or leisure users**.
-  - These stations experience **higher casual rider traffic in summer, while member traffic remains steady**.
+These stations, primarily located in downtown and lakefront areas, reinforce the idea that casual riders are largely tourists or leisure users.
+  - These stations experience higher casual rider traffic in summer, while member traffic remains steady.
 
 ![image](https://github.com/user-attachments/assets/0cf2d5b7-6bf4-463c-bf78-ec3aa4f4e12f)
 
@@ -77,7 +79,7 @@ Casual riders show distinct time-based usage patterns:
 - **Peak Days: Weekends**, suggesting leisure-based ridership.
 - **Peak Month: July**, when casual ridership is at its highest.
 
-Based on these patterns, **targeted membership campaigns** could be more effective if launched during these peak periods.
+Based on these patterns, targeted membership campaigns could be more effective if launched during these peak periods.
 
 Potential strategies include:
 - **Evening commuter membership promotions** during the 5 PM peak to encourage frequent riders to subscribe.
@@ -85,13 +87,13 @@ Potential strategies include:
 - **Seasonal summer campaigns** when casual ridership spikes, reinforcing the value of membership for repeat use.
 
 #### 2. Bike Type Preferences: Casual Riders Favor Electric Bikes
-Analyzing bike type usage reveals:
-- **Electric bikes are slightly more popular among casual riders (52.2%)**, compared to members.
-- **Classic bike trips tend to be longer in duration**, especially for casual users.
+Analysing bike type usage reveals:
+- Electric bikes are slightly more popular among casual riders (52.2%), compared to members.
+- Classic bike trips tend to be longer in duration, especially for casual users.
 
 To leverage these insights:
-- Membership incentives could highlight **priority access to electric bikes**, addressing casual riders’ preferences.
-- **Pricing adjustments or promotions on longer bike trips** may encourage casual users to convert to members.
+- Membership incentives could highlight priority access to electric bikes, addressing casual riders’ preferences.
+- Pricing adjustments or promotions on longer bike trips may encourage casual users to convert to members.
 
 #### 3. Location-Based Membership Targeting: Focus on High-Casual-Rider Stations
 Casual riders make up a significant share of trips at key downtown and lakefront stations. The following locations have the highest percentage of casual riders:
@@ -100,7 +102,7 @@ Casual riders make up a significant share of trips at key downtown and lakefront
 - **Michigan Ave & Oak St (59.3% casual riders)**
 - **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
 
-Given these trends, **targeted membership promotions** at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
+Given these trends, targeted membership promotions at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
 - **In-app membership promotions** triggered when riders start trips at these locations.
 - **Partnership discounts with nearby hotels or attractions** to encourage tourists to sign up for memberships.
-- **On-site signage and QR codes** at high-casual-traffic stations to promote the benefits of membership.
+- **On site signage and QR codes** at high casual traffic stations to promote the benefits of membership.
