@@ -96,7 +96,7 @@ To leverage these insights:
 - Membership incentives could highlight priority access to electric bikes, addressing casual riders’ preferences.
 - Pricing adjustments or promotions on longer bike trips may encourage casual users to convert to members.
 
-#### 3. Location-Based Membership Targeting: Focus on High-Casual-Rider Stations
+#### 3. Location Based Membership Targeting: Focus on High Casual Rider Stations
 Casual riders make up a significant share of trips at key downtown and lakefront stations. The following locations have the highest percentage of casual riders:
 - **Streeter Dr & Grand Ave (74.4% casual riders)**
 - **Dusable Lake Shore Dr & Monroe St (70.7% casual riders)**
@@ -104,6 +104,6 @@ Casual riders make up a significant share of trips at key downtown and lakefront
 - **Dusable Lake Shore Dr & North Blvd (57.6% casual riders)**
 
 Given these trends, targeted membership promotions at these stations could be effective in converting casual riders. Potential strategies Cyclistic could explore include:
-- **In-app membership promotions** triggered when riders start trips at these locations.
+- **In app membership promotions** triggered when riders start trips at these locations.
 - **Partnership discounts with nearby hotels or attractions** to encourage tourists to sign up for memberships.
 - **On site signage and QR codes** at high casual traffic stations to promote the benefits of membership.
